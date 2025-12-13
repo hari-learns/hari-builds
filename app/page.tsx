@@ -1,4 +1,5 @@
 import StarField from "./components/StarField";
+import Spaceship from "./components/Spaceship";
 import Navbar from "./components/Navbar";
 import Hero from "./components/Hero";
 import About from "./components/About";
@@ -11,6 +12,8 @@ export default function Home() {
   return (
     <main className="min-h-screen bg-[#0a0a0f] text-[#e4e4e7] overflow-x-hidden">
       <StarField />
+      <Spaceship />
+      <Spaceship />
       <Navbar />
       <Hero />
       <About />
