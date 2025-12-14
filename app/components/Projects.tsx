@@ -105,7 +105,7 @@ const Projects = () => {
                             More Ideas in the Lab
                         </h3>
                         <p className="text-[#a1a1aa] max-w-2xl mx-auto text-lg">
-                            I'm constantly experimenting with AI agents, scalable systems, and new ways to solve old problems.
+                            I'm constantly experimenting with AI agents, scalable systems, and Consistently learning.
                             Something big is always compiling.
                         </p>
                     </div>

@@ -15,6 +15,8 @@ import TechHUD from "./components/TechHUD";
 import BootSequence from "./components/BootSequence";
 import ScrollAnimations from "./components/ScrollAnimations";
 
+import Workflow from "./components/Workflow";
+
 export default function Home() {
   return (
     <main className="min-h-screen bg-[#0a0a0f] text-[#e4e4e7] overflow-x-hidden relative transition-colors duration-500 pb-40">
@@ -33,6 +35,7 @@ export default function Home() {
       <Projects />
       <Standout />
       <Value />
+      <Workflow />
       <Contact />
       <Footer />
     </main>

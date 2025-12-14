@@ -21,14 +21,14 @@ const Hero = () => {
                     <h1
                         className="text-4xl md:text-7xl font-bold text-[#e4e4e7] mb-6 tracking-tight"
                     >
-                        I can build things that <br />
-                        <span className="text-[#c084fc]">solve real problems.</span>
+                        I can help you <br />
+                        <span className="text-[#c084fc]">build anything.</span>
                     </h1>
 
                     <p
                         className="hero-text text-lg text-[#a1a1aa] max-w-2xl mb-10 leading-relaxed"
                     >
-                        I'm an AI-native developer who ships products that work, scale, and matter. I use AI as a force multiplier - not just for myself, but for entire teams.
+                        I'm an AI-native developer who ships products that work, scale, and matter. I use AI as a force multiplier
                         <br /><br />
                         I'm driven by curiosity and I stay ahead of the curve. Whether it's architecting backend systems, optimizing AI workflows, or leading teams to ship faster <br /> I get things done.
                     </p>

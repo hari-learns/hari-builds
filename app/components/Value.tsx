@@ -33,7 +33,7 @@ const Value = () => {
                         </div>
                         <h3 className="text-2xl font-bold text-[#e4e4e7] mb-4">The 10x Engineer Mindset</h3>
                         <p className="text-[#a1a1aa] leading-relaxed mb-6">
-                            I don't just fix bugs; I build systems that prevent them. At RNTBCI, I turned a security bottleneck into an automated workflow, saving hours per sprint for the entire team.
+                            Its vital we build systems that prevent bugs. recently at my work, I turned a security bottleneck into an automated workflow, saving hours per sprint for the entire team.
                         </p>
                         <div className="pl-4 border-l-2 border-[#c084fc]">
                             <p className="text-[#e4e4e7] font-medium italic">
@@ -54,7 +54,7 @@ const Value = () => {
                         </div>
                         <h3 className="text-2xl font-bold text-[#e4e4e7] mb-4">Strategic AI Integration</h3>
                         <p className="text-[#a1a1aa] leading-relaxed mb-4">
-                            AI isn't a magic wand; it's a precision tool. I architect workflows where LLMs handle the heavy lifting so humans can focus on high-level logic.
+                            I architect workflows where LLMs handle the heavy lifting so humans can focus on high-level logic.
                         </p>
                         <ul className="space-y-2 text-[#a1a1aa] font-mono text-sm">
                             <li className="flex items-center gap-2">
@@ -100,10 +100,10 @@ const Value = () => {
                         </div>
                         <div className="p-6 bg-[#111118]/50 rounded-lg border border-[#27272a] hover:border-[#c084fc]/30 transition-colors">
                             <h4 className="text-[#c084fc] font-bold mb-3 flex items-center gap-2">
-                                <Users size={18} /> The "Yes, And"
+                                <Users size={18} /> The Force Multiplier
                             </h4>
                             <p className="text-[#a1a1aa] text-sm">
-                                When faced with a challenge, I don't say "it's hard". I say "here's how we solve it". I bring solutions, not just problems.
+                                I don't just write code. I amplify the team. Whether it's automating workflows or mentoring, I believe I make my colleagues around me better.
                             </p>
                         </div>
                     </div>

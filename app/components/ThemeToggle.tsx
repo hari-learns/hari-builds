@@ -12,7 +12,7 @@ const ThemeToggle = () => {
         <div className="fixed top-24 right-6 z-[100] flex items-center gap-4">
             <motion.button
                 onClick={toggleTheme}
-                className={`relative flex items-center gap-3 px-5 py-2.5 rounded-full border-2 transition-all duration-500 overflow-hidden group ${theme === 'tech'
+                className={`relative flex items-center gap-2 px-3 py-1.5 rounded-full border-2 transition-all duration-500 overflow-hidden group ${theme === 'tech'
                     ? 'bg-[#0a0a0f] border-[#4a7dff] shadow-[0_0_20px_rgba(74,125,255,0.3)]'
                     : 'bg-[#111118] border-[#c084fc] shadow-[0_0_25px_rgba(192,132,252,0.4)] hover:shadow-[0_0_35px_rgba(192,132,252,0.6)]'
                     }`}
@@ -39,16 +39,16 @@ const ThemeToggle = () => {
                     <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-1000" />
                 )}
 
-                <div className={`relative z-10 flex items-center gap-2 font-mono text-xs font-bold tracking-widest ${theme === 'tech' ? 'text-[#4a7dff]' : 'text-[#c084fc]'
+                <div className={`relative z-10 flex items-center gap-1.5 font-mono text-[10px] font-bold tracking-widest ${theme === 'tech' ? 'text-[#4a7dff]' : 'text-[#c084fc]'
                     }`}>
                     {theme === 'tech' ? (
                         <>
-                            <Moon size={16} />
+                            <Moon size={14} />
                             <span>STAY MINIMAL</span>
                         </>
                     ) : (
                         <>
-                            <Zap size={16} className="animate-pulse" />
+                            <Zap size={14} className="animate-pulse" />
                             <span>ENTER THE MATRIX</span>
                         </>
                     )}

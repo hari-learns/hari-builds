@@ -102,10 +102,10 @@ const Standout = () => {
         { icon: <Lightbulb className="w-4 h-4" />, text: "Versatility" },
         { icon: <MessageSquare className="w-4 h-4" />, text: "Marketing" },
         { icon: <Brain className="w-4 h-4" />, text: "Math" },
-        { icon: <Zap className="w-4 h-4" />, text: "Learn" },
-        { icon: <MessageSquare className="w-4 h-4" />, text: "Communicate" },
+        { icon: <Zap className="w-4 h-4" />, text: "Learn fast" },
+        { icon: <MessageSquare className="w-4 h-4" />, text: "Communicate well" },
         { icon: <Target className="w-4 h-4" />, text: "Analysis" },
-        { icon: <Award className="w-4 h-4" />, text: "Chess" }
+        { icon: <Award className="w-4 h-4" />, text: "actually funny" }
     ];
 
     return (

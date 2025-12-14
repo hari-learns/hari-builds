@@ -28,16 +28,19 @@ const About = () => {
                         className="text-[#a1a1aa] text-lg leading-relaxed space-y-6"
                     >
                         <p>
-                            I've been building software for 4+ years, and here's what sets me apart: I don't just use AI—I understand how to get the best out of it, and I help teams do the same.
+                            I've been building software for 4+ years, and here's what sets me apart: I don't just use AI, I understand how to get the best out of it, and I help teams do the same.
                         </p>
                         <p>
-                            When AI tools first hit our teams, everyone was a bit confused about how to properly utilize them. A single prompt could either give you nothing or build an entire feature. It all depended on how you used it. I learned through curiosity and experimentation, then drove my team to level up alongside me.
+                            Pursued linear algebra to grasp the core mathematical principles that enable vector-based representations in large language models. (NPTEL)
+                        </p>
+                        <p>
+                            When AI tools first hit our teams, everyone was a bit confused about how to properly utilize them. A single prompt could either give you a sentence or build an entire feature. It all depended on how you used it. I learned through curiosity and experimentation, then drove my team to level up alongside me.
                         </p>
                         <p>
                             I might not have every algorithm memorized, but if there's a better solution for a problem, I'll research it, understand it deeply, and implement it correctly. The difference? Curiosity and a relentless drive to learn.
                         </p>
                         <p className="text-[#e4e4e7] font-medium border-l-2 border-[#c084fc] pl-4 italic">
-                            My approach: AI is a tool, not magic. I focus on building systems that are simple, secure, and scalable. The best code is code you don't have to explain.
+                            For me: Obsession and hardwork beats talent. Find happiness in building and creation
                         </p>
                     </motion.div>
 
