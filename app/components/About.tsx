@@ -15,8 +15,8 @@ const About = () => {
                     transition={{ duration: 0.6 }}
                     className="flex items-center gap-4 mb-12"
                 >
-                    <span className="text-[#22d3ee] font-mono text-xl">01.</span>
-                    <h2 className="text-3xl md:text-4xl font-bold text-[#e4e4e7]">About Me</h2>
+                    <span className="text-[#c084fc] font-mono text-xl">01.</span>
+                    <h2 className="text-3xl md:text-4xl font-bold text-[#e4e4e7]">The AI-Native Developer</h2>
                     <div className="h-[1px] bg-[#1a1a24] flex-grow ml-4 max-w-xs"></div>
                 </motion.div>
 
@@ -26,33 +26,20 @@ const About = () => {
                         whileInView={{ opacity: 1, y: 0 }}
                         viewport={{ once: true }}
                         transition={{ duration: 0.6, delay: 0.2 }}
-                        className="text-[#71717a] text-lg leading-relaxed space-y-6"
+                        className="text-[#a1a1aa] text-lg leading-relaxed space-y-6"
                     >
                         <p>
-                            I am a Full-stack engineer with over 4 years of experience building enterprise systems and modern SaaS applications. My expertise lies in AI-augmented development, where I leverage LLMs, context management, and prompt engineering to significantly accelerate the development lifecycle.
+                            I've been building software for 4+ years, and here's what sets me apart: I don't just use AI—I understand how to get the best out of it, and I help teams do the same.
                         </p>
                         <p>
-                            I have a proven track record of architecting, building, and deploying complete web applications globally using Next.js, React, and cloud infrastructure. From database design to production deployment, I handle the entire stack independently.
+                            When AI tools first hit our teams, everyone was a bit confused about how to properly utilize them. A single prompt could either give you nothing or build an entire feature. It all depended on how you used it. I learned through curiosity and experimentation, then drove my team to level up alongside me.
                         </p>
                         <p>
-                            I hold a B.TECH specialization in IoT from VIT University, Vellore. Currently, I am focused on building scalable solutions for high-impact business problems and advancing with AI.
+                            I might not have every algorithm memorized, but if there's a better solution for a problem, I'll research it, understand it deeply, and implement it correctly. The difference? Curiosity and a relentless drive to learn.
                         </p>
-
-                        <div className="mt-8">
-                            <p className="mb-4 font-mono text-sm text-[#e4e4e7]">Here are a few technologies I work with:</p>
-                            <div className="flex flex-wrap gap-2">
-                                {[
-                                    "JavaScript/TypeScript", "React", "Next.js", "Angular",
-                                    "Java", "Spring Boot", "Node.js", "Python",
-                                    "AWS", "GCP", "Docker", "Kubernetes",
-                                    "PostgreSQL", "MySQL", "Supabase"
-                                ].map((tech) => (
-                                    <span key={tech} className="tech-tag">
-                                        {tech}
-                                    </span>
-                                ))}
-                            </div>
-                        </div>
+                        <p className="text-[#e4e4e7] font-medium border-l-2 border-[#c084fc] pl-4 italic">
+                            My approach: AI is a tool, not magic. I focus on building systems that are simple, secure, and scalable. The best code is code you don't have to explain.
+                        </p>
                     </motion.div>
 
                     <motion.div
@@ -62,11 +49,13 @@ const About = () => {
                         transition={{ duration: 0.6, delay: 0.4 }}
                         className="relative"
                     >
-                        <div className="image-wrapper w-48 h-48 mx-auto md:mx-0 rounded-full overflow-hidden border-2 border-[#22d3ee]">
-                            {/* Placeholder image - user can replace later */}
-                            <div className="w-full h-full bg-[#1a1a24] flex items-center justify-center text-[#71717a] flex-col gap-2 p-4 text-center">
-                                <span className="text-2xl">👨‍💻</span>
-                            </div>
+                        <div className="image-wrapper w-64 h-64 mx-auto md:mx-0 rounded-full overflow-hidden border-2 border-[#c084fc] shadow-[0_0_30px_rgba(192,132,252,0.3)] relative group">
+                            <Image
+                                src="/picture.jpeg"
+                                alt="Hariharan R P"
+                                fill
+                                className="object-cover object-[center_60%] transition-transform duration-500 group-hover:scale-110"
+                            />
                         </div>
                     </motion.div>
                 </div>

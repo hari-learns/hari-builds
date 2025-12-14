@@ -2,7 +2,7 @@
 
 import React from "react";
 import { motion } from "framer-motion";
-import { Github, Linkedin, Mail, FileText, Globe } from "lucide-react";
+import { Linkedin, Mail, FileText, Twitter } from "lucide-react";
 
 const Contact = () => {
     return (
@@ -15,24 +15,24 @@ const Contact = () => {
                     transition={{ duration: 0.6 }}
                     className="text-center max-w-2xl mx-auto"
                 >
-                    <span className="text-[#22d3ee] font-mono text-xl block mb-4">04. What's Next?</span>
-                    <h2 className="contact-heading">Get In Touch</h2>
+                    <span className="text-[#c084fc] font-mono text-xl block mb-4">04. Let's Connect</span>
+                    <h2 className="contact-heading">Ready to Ship?</h2>
 
                     <p className="contact-description">
-                        I'm currently looking for new opportunities and my inbox is always open.
-                        Whether you have a question or just want to say hi, I'll get back to you!
+                        Consistently learning and unlearning. Let's stay ahead of what's next in AI-augmented development.
+                        <br /><br />
+                        If you're looking for someone who can ship, lead, and level up how your team works, let's talk.
                     </p>
 
-                    <a href="mailto:hariharanrp.dev@gmail.com" className="contact-button">
-                        Say Hello
+                    <a href="mailto:hariharanrp.dev@gmail.com" className="inline-block px-8 py-4 bg-[#c084fc]/10 text-[#c084fc] border border-[#c084fc]/20 rounded-lg hover:bg-[#c084fc]/20 transition-all font-bold mb-12">
+                        Start a Conversation
                     </a>
 
                     <div className="social-links">
                         <a href="mailto:hariharanrp.dev@gmail.com" aria-label="Email"><Mail /></a>
-                        <a href="https://hari-builds.tech" aria-label="Website" target="_blank" rel="noopener noreferrer"><Globe /></a>
-                        <a href="#" aria-label="GitHub"><Github /></a>
-                        <a href="#" aria-label="LinkedIn"><Linkedin /></a>
-                        <a href="#" aria-label="Resume"><FileText /></a>
+                        <a href="https://www.linkedin.com/in/hariharan-rp-3b4770242/" aria-label="LinkedIn" target="_blank" rel="noopener noreferrer"><Linkedin /></a>
+                        <a href="https://x.com/hxharan" aria-label="X (Twitter)" target="_blank" rel="noopener noreferrer"><Twitter /></a>
+                        <a href="/resume.pdf" aria-label="Resume" target="_blank" rel="noopener noreferrer" download><FileText /></a>
                     </div>
                 </motion.div>
             </div>

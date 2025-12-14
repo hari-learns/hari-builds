@@ -98,7 +98,7 @@ const Spaceship = () => {
                         exit={{ opacity: 0, scale: 0.8 }}
                         className="absolute left-1/2 -translate-x-1/2 bg-white text-[#0a0a0f] px-4 py-2 rounded-xl text-xs font-bold whitespace-nowrap shadow-[0_0_20px_rgba(34,211,238,0.6)] border-2 border-[#22d3ee] z-50 pointer-events-none"
                     >
-                        Hire me and we go to moon together! 🚀🌕
+                        Glad to see you here! you are Awesome.
                         <div className="absolute -bottom-2 left-1/2 -translate-x-1/2 w-3 h-3 bg-white rotate-45 border-r-2 border-b-2 border-[#22d3ee]"></div>
                     </motion.div>
                 )}

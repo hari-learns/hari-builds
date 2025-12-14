@@ -3,8 +3,10 @@ import Spaceship from "./components/Spaceship";
 import Navbar from "./components/Navbar";
 import Hero from "./components/Hero";
 import About from "./components/About";
-import Projects from "./components/Projects";
 import Experience from "./components/Experience";
+import Projects from "./components/Projects";
+import Standout from "./components/Standout";
+import Value from "./components/Value";
 import Contact from "./components/Contact";
 import Footer from "./components/Footer";
 
@@ -17,8 +19,10 @@ export default function Home() {
       <Navbar />
       <Hero />
       <About />
-      <Projects />
       <Experience />
+      <Projects />
+      <Standout />
+      <Value />
       <Contact />
       <Footer />
     </main>

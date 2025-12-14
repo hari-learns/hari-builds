@@ -13,36 +13,30 @@ const Hero = () => {
                         initial={{ opacity: 0, y: 20 }}
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ duration: 0.6, delay: 0.1 }}
-                        className="block text-[#22d3ee] font-mono text-base mb-5"
+                        className="block text-[#c084fc] font-mono text-base mb-5"
                     >
-                        Hi, my name is
+                        Hi, Hari here and
                     </motion.span>
 
                     <motion.h1
                         initial={{ opacity: 0, y: 20 }}
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ duration: 0.6, delay: 0.2 }}
-                        className="text-4xl md:text-7xl font-bold text-[#e4e4e7] mb-4 tracking-tight"
+                        className="text-4xl md:text-7xl font-bold text-[#e4e4e7] mb-6 tracking-tight"
                     >
-                        Hariharan R P
+                        I can build things that <br />
+                        <span className="text-[#c084fc]">solve real problems.</span>
                     </motion.h1>
-
-                    <motion.h2
-                        initial={{ opacity: 0, y: 20 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{ duration: 0.6, delay: 0.3 }}
-                        className="text-2xl md:text-5xl font-semibold text-[#71717a] mb-6 tracking-tight"
-                    >
-                        Fullstack/AI Engineer
-                    </motion.h2>
 
                     <motion.p
                         initial={{ opacity: 0, y: 20 }}
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ duration: 0.6, delay: 0.4 }}
-                        className="text-lg text-[#71717a] max-w-2xl mb-10 leading-relaxed"
+                        className="text-lg text-[#a1a1aa] max-w-2xl mb-10 leading-relaxed"
                     >
-                        Full-stack engineer with 4+ years building enterprise systems and modern SaaS applications. Specialized in AI-augmented development leveraging LLMs, context management, and prompt engineering to ship production-grade applications 10x faster.
+                        I'm an AI-native developer who ships products that work, scale, and matter. I use AI as a force multiplier - not just for myself, but for entire teams.
+                        <br /><br />
+                        I'm driven by curiosity and I stay ahead of the curve. Whether it's architecting backend systems, optimizing AI workflows, or leading teams to ship faster <br /> I get things done.
                     </motion.p>
 
                     <motion.div
@@ -50,9 +44,9 @@ const Hero = () => {
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ duration: 0.6, delay: 0.5 }}
                     >
-                        <a href="#projects" className="hero-cta group">
+                        <a href="#projects" className="inline-flex items-center gap-2 px-6 py-3 bg-[#c084fc]/10 text-[#c084fc] border border-[#c084fc]/20 rounded-lg hover:bg-[#c084fc]/20 transition-all group">
                             View My Work
-                            <ArrowDown className="w-4 h-4 arrow group-hover:translate-y-1 transition-transform" />
+                            <ArrowDown className="w-4 h-4 group-hover:translate-y-1 transition-transform" />
                         </a>
                     </motion.div>
                 </div>

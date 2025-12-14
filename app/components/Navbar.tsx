@@ -7,8 +7,8 @@ import { motion, AnimatePresence } from "framer-motion";
 
 const navLinks = [
     { name: "About", href: "#about" },
-    { name: "Projects", href: "#projects" },
     { name: "Experience", href: "#experience" },
+    { name: "Projects", href: "#projects" },
     { name: "Contact", href: "#contact" },
 ];
 
@@ -31,7 +31,7 @@ const Navbar = () => {
         >
             <div className="container-custom h-full flex items-center justify-between">
                 <Link href="/" className="text-xl font-bold text-[#e4e4e7]">
-                    Hariharan<span className="text-[#22d3ee]">.</span>
+                    Hariharan<span className="text-[#c084fc]">.</span>
                 </Link>
 
                 {/* Desktop Nav */}
@@ -43,7 +43,7 @@ const Navbar = () => {
                             className="text-sm font-medium text-[#71717a] hover:text-[#e4e4e7] transition-colors relative group"
                         >
                             {link.name}
-                            <span className="absolute left-0 bottom-[-4px] w-0 h-[2px] bg-[#22d3ee] transition-all duration-300 group-hover:w-full" />
+                            <span className="absolute left-0 bottom-[-4px] w-0 h-[2px] bg-[#c084fc] transition-all duration-300 group-hover:w-full" />
                         </Link>
                     ))}
                 </div>
@@ -77,7 +77,7 @@ const Navbar = () => {
                             <Link
                                 key={link.name}
                                 href={link.href}
-                                className="text-2xl font-bold text-[#e4e4e7] hover:text-[#22d3ee] transition-colors"
+                                className="text-2xl font-bold text-[#e4e4e7] hover:text-[#c084fc] transition-colors"
                                 onClick={() => setMobileMenuOpen(false)}
                             >
                                 {link.name}
