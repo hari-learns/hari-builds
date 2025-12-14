@@ -15,7 +15,6 @@ const About = () => {
                     transition={{ duration: 0.6 }}
                     className="flex items-center gap-4 mb-12"
                 >
-                    <span className="text-[#c084fc] font-mono text-xl">01.</span>
                     <h2 className="text-3xl md:text-4xl font-bold text-[#e4e4e7]">The AI-Native Developer</h2>
                     <div className="h-[1px] bg-[#1a1a24] flex-grow ml-4 max-w-xs"></div>
                 </motion.div>

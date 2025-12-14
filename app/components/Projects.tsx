@@ -45,7 +45,6 @@ const Projects = () => {
                     transition={{ duration: 0.6 }}
                     className="flex items-center gap-4 mb-16"
                 >
-                    <span className="text-[#c084fc] font-mono text-xl">02.</span>
                     <h2 className="text-3xl md:text-4xl font-bold text-[#e4e4e7]">What I Build</h2>
                     <div className="h-[1px] bg-[#1a1a24] flex-grow ml-4 max-w-xs"></div>
                 </motion.div>
@@ -54,11 +53,12 @@ const Projects = () => {
                     {featuredProjects.map((project, index) => (
                         <motion.div
                             key={index}
+                            id={project.title === "Lemonade Stand" ? "lemonade-stand-card" : undefined}
                             initial={{ opacity: 0, y: 20 }}
                             whileInView={{ opacity: 1, y: 0 }}
                             viewport={{ once: true }}
                             transition={{ duration: 0.6 }}
-                            className={`grid grid-cols-1 md:grid-cols-12 gap-8 items-center`}
+                            className={`card grid grid-cols-1 md:grid-cols-12 gap-8 items-center`}
                         >
                             <div className={`md:col-span-7 relative ${index % 2 === 0 ? 'md:order-1' : 'md:order-2'}`}>
                                 <div className="aspect-video bg-[#1a1a24] flex items-center justify-center text-[#71717a] border border-[#c084fc]/10 rounded-lg overflow-hidden group-hover:border-[#c084fc]/30 transition-colors">
@@ -85,6 +85,31 @@ const Projects = () => {
                         </motion.div>
                     ))}
                 </div>
+
+                {/* More Cooking Section */}
+                <motion.div
+                    initial={{ opacity: 0, y: 20 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true }}
+                    transition={{ duration: 0.6 }}
+                    className="relative p-8 md:p-12 rounded-lg border border-dashed border-[#c084fc]/20 bg-[#c084fc]/5 text-center overflow-hidden group"
+                >
+                    <div className="absolute inset-0 bg-gradient-to-r from-transparent via-[#c084fc]/5 to-transparent translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-1000" />
+
+                    <div className="relative z-10">
+                        <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#c084fc]/10 text-[#c084fc] text-xs font-mono mb-4 border border-[#c084fc]/20">
+                            <span className="w-2 h-2 rounded-full bg-[#c084fc] animate-pulse" />
+                            R&D ACTIVE
+                        </div>
+                        <h3 className="text-2xl md:text-3xl font-bold text-[#e4e4e7] mb-4">
+                            More Ideas in the Lab
+                        </h3>
+                        <p className="text-[#a1a1aa] max-w-2xl mx-auto text-lg">
+                            I'm constantly experimenting with AI agents, scalable systems, and new ways to solve old problems.
+                            Something big is always compiling.
+                        </p>
+                    </div>
+                </motion.div>
             </div>
         </section>
     );

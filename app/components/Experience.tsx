@@ -74,7 +74,9 @@ const ExperienceCard = ({ exp, index }: { exp: any; index: number }) => {
                     {/* "Secret" Background Code Effect */}
                     <div className="absolute inset-0 opacity-5 pointer-events-none font-mono text-[10px] leading-3 overflow-hidden">
                         {Array(20).fill(0).map((_, i) => (
-                            <div key={i}>{Math.random().toString(36).substring(2)}</div>
+                            <div key={i}>
+                                {((i * 1337 + index * 42).toString(16) + "x86_64" + (i * index).toString(16)).substring(0, 12)}
+                            </div>
                         ))}
                     </div>
 
@@ -139,7 +141,6 @@ const Experience = () => {
                     transition={{ duration: 0.6 }}
                     className="text-center mb-20"
                 >
-                    <span className="text-[#c084fc] font-mono text-xl block mb-4">03. Career History</span>
                     <h2 className="text-3xl md:text-5xl font-bold text-[#e4e4e7] mb-6">
                         Mission <span className="text-[#c084fc]">Logs</span>
                     </h2>

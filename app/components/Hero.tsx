@@ -18,26 +18,20 @@ const Hero = () => {
                         Hi, Hari here and
                     </motion.span>
 
-                    <motion.h1
-                        initial={{ opacity: 0, y: 20 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{ duration: 0.6, delay: 0.2 }}
+                    <h1
                         className="text-4xl md:text-7xl font-bold text-[#e4e4e7] mb-6 tracking-tight"
                     >
                         I can build things that <br />
                         <span className="text-[#c084fc]">solve real problems.</span>
-                    </motion.h1>
+                    </h1>
 
-                    <motion.p
-                        initial={{ opacity: 0, y: 20 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{ duration: 0.6, delay: 0.4 }}
-                        className="text-lg text-[#a1a1aa] max-w-2xl mb-10 leading-relaxed"
+                    <p
+                        className="hero-text text-lg text-[#a1a1aa] max-w-2xl mb-10 leading-relaxed"
                     >
                         I'm an AI-native developer who ships products that work, scale, and matter. I use AI as a force multiplier - not just for myself, but for entire teams.
                         <br /><br />
                         I'm driven by curiosity and I stay ahead of the curve. Whether it's architecting backend systems, optimizing AI workflows, or leading teams to ship faster <br /> I get things done.
-                    </motion.p>
+                    </p>
 
                     <motion.div
                         initial={{ opacity: 0, y: 20 }}
