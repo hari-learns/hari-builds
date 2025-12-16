@@ -53,7 +53,7 @@ const exo2 = Exo_2({
 });
 
 export const metadata: Metadata = {
-  title: "Hariharan | AI-Native Developer",
+  title: "Hariharan | SDE",
   description: "Portfolio of an AI-Native Developer building the future.",
 };
 
