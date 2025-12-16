@@ -4,18 +4,15 @@ import React from 'react';
 import { Container } from './components/gharbi/Container';
 import { Section } from './components/gharbi/Section';
 import { Hero } from './components/gharbi/Hero';
-import { ContentItem } from './components/gharbi/ContentItem';
 import { ExperienceItem } from './components/gharbi/ExperienceItem';
 import { FeaturedProject } from './components/gharbi/FeaturedProject';
 import { ThemeToggle } from './components/gharbi/ThemeToggle';
-import { Footer } from './components/gharbi/Footer';
 import { Lifecycle } from './components/gharbi/Lifecycle';
 import { SystemDesign } from './components/gharbi/SystemDesign';
 import { Skillset } from './components/gharbi/Skillset';
 import { ProjectPhilosophy } from './components/gharbi/ProjectPhilosophy';
 import { RoamingCube } from './components/gharbi/RoamingCube';
 import { CustomCursor } from './components/gharbi/CustomCursor';
-import { ArchitectCard } from './components/gharbi/ArchitectCard';
 import { ContactSection } from './components/gharbi/ContactSection';
 
 const experiences = [
@@ -23,7 +20,7 @@ const experiences = [
     title: 'Fullstack Engineer',
     subtitle: 'at RNTBCI',
     date: '2024 — Present',
-    description: 'Engineered features for enterprise-level parts nomenclature management system. Optimized database queries reducing GCP costs by 30%.',
+    description: 'Engineered features for enterprise-level parts nomenclature management system. Modernized , Migrated to cloud and much more.',
     techStack: ['GCP', 'GKE', 'Fullstack'],
   },
   {
