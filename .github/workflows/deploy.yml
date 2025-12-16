@@ -3,7 +3,7 @@ name: Deploy to GitHub Pages
 on:
   push:
     branches:
-      - new-design-cursor
+      - main
   workflow_dispatch:
 
 permissions:
@@ -21,8 +21,6 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-        with:
-          ref: new-design-cursor
       
       - name: Setup Node.js
         uses: actions/setup-node@v4
