@@ -174,7 +174,7 @@ export const FeaturedProject: React.FC<FeaturedProjectProps> = ({
         <div
           style={{
             fontSize: 'var(--text-small)',
-            color: 'var(--text-muted)',
+            color: 'var(--text-secondary)',
             display: 'flex',
             flexWrap: 'wrap',
             gap: '0.5rem',

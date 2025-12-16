@@ -107,9 +107,10 @@ export const Hero: React.FC = () => {
           <div
             style={{
               flexShrink: 0,
-              display: 'none',
+              width: '100%',
+              maxWidth: '320px',
+              margin: '0 auto',
             }}
-            className="md:block"
           >
             <ArchitectCard />
           </div>

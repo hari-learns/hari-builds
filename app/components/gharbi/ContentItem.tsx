@@ -136,7 +136,7 @@ export const ContentItem: React.FC<ContentItemProps> = ({
         <div
           style={{
             fontSize: 'var(--text-small)',
-            color: 'var(--text-muted)',
+            color: 'var(--text-secondary)',
             display: 'flex',
             flexWrap: 'wrap',
             gap: '0.5rem',
