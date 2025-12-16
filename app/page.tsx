@@ -11,6 +11,8 @@ import { ThemeToggle } from './components/gharbi/ThemeToggle';
 import { Footer } from './components/gharbi/Footer';
 import { Lifecycle } from './components/gharbi/Lifecycle';
 import { SystemDesign } from './components/gharbi/SystemDesign';
+import { Skillset } from './components/gharbi/Skillset';
+import { ProjectPhilosophy } from './components/gharbi/ProjectPhilosophy';
 import { RoamingCube } from './components/gharbi/RoamingCube';
 import { CustomCursor } from './components/gharbi/CustomCursor';
 import { ArchitectCard } from './components/gharbi/ArchitectCard';
@@ -26,14 +28,14 @@ const experiences = [
   },
   {
     title: 'Java Developer',
-    subtitle: 'at Mphasis Limited',
+    subtitle: 'at Mphasis Limited [Banking]',
     date: '2022 — 2024',
     description: 'Modernized legacy mainframe system for world\'s largest logistics company. Re-platformed to Java microservices managing global delivery routes.',
     techStack: ['Java', 'Spring Boot', 'Microservices'],
   },
   {
     title: 'Associate Developer',
-    subtitle: 'at Mphasis Limited',
+    subtitle: 'at Mphasis Limited [Logistics]',
     date: '2021 — 2022',
     description: 'Architected and maintained AWS data pipelines processing 10M+ customer records daily. Migrated Oracle database to Amazon Redshift.',
     techStack: ['AWS', 'Redshift', 'Python'],
@@ -42,32 +44,17 @@ const experiences = [
 
 const featuredProject = {
   title: 'Lemonade Stand',
-  description: 'Transforms complex news into different styles and languages using AI. Adapt content to your language, level, and preferred style.',
-  longDescription: 'Imagine explaining tariffs to your grandparent vs a policy expert. Lemonade Stand uses AI to adapt content to your language, level, and preferred style. Built as a production-ready SaaS platform with a focus on user experience and scalability.',
+  description: 'A fun experiment with AI to transform complex news into different styles and languages. Built to explore how content can adapt to different audiences.',
+  longDescription: 'Imagine explaining tariffs to your grandparent vs a policy expert. This side project uses AI to adapt content to your language, level, and preferred style. A weekend experiment that turned into something interesting.',
   link: 'https://lemonade-stand-zeta.vercel.app/',
-  techStack: ['Next.js', 'AI', 'SaaS', 'Production'],
+  techStack: ['AI', 'Fun-news', 'Experiment'],
   highlights: [
-    'AI-powered content transformation engine',
-    'Multi-language support with style adaptation',
-    'Production-ready SaaS platform',
-    'Scalable architecture for high traffic',
+    'AI-powered content transformation',
+    'Multi-language support',
+    'Built for learning and experimentation',
+    'Open to explore and play around',
   ],
 };
-
-const otherProjects = [
-  {
-    title: 'Yeeeeetcode',
-    description: 'Youtube channel and platform for solving DSA problems. Educational content for developers.',
-    link: '#',
-    techStack: ['Content', 'DSA', 'Education'],
-  },
-  {
-    title: 'HariOnCloud9',
-    description: 'Leetcode solutions and problem-solving repository. A collection of optimized algorithms.',
-    link: '#',
-    techStack: ['Algorithms', 'Problem Solving'],
-  },
-];
 
 export default function Home() {
   return (
@@ -118,18 +105,17 @@ export default function Home() {
             link={featuredProject.link}
             highlights={featuredProject.highlights}
           />
-          {otherProjects.map((project, index) => (
-            <ContentItem
-              key={index}
-              title={project.title}
-              description={project.description}
-              techStack={project.techStack}
-              link={project.link}
-            />
-          ))}
+          <FeaturedProject
+            title="Brewing"
+            description="Currently working on new projects and ideas. Building solutions that matter, one commit at a time."
+            longDescription="In active development. Exploring new technologies, providing great service, and shipping products that make a difference."
+            techStack={['In Progress', 'Having fun']}
+          />
         </Section>
       </Container>
       <SystemDesign />
+      <Skillset />
+      <ProjectPhilosophy />
       <Lifecycle />
       <ContactSection />
     </main>

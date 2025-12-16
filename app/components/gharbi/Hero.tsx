@@ -2,7 +2,7 @@
 
 import React from 'react';
 import { Container } from './Container';
-import { Github, Linkedin, Mail, Twitter } from 'lucide-react';
+import { Linkedin, Mail, Twitter } from 'lucide-react';
 import { ArchitectCard } from './ArchitectCard';
 
 interface SocialLink {
@@ -12,10 +12,9 @@ interface SocialLink {
 }
 
 const socialLinks: SocialLink[] = [
-  { name: 'GitHub', url: 'https://github.com', icon: <Github size={20} /> },
-  { name: 'LinkedIn', url: 'https://linkedin.com', icon: <Linkedin size={20} /> },
-  { name: 'Twitter', url: 'https://twitter.com', icon: <Twitter size={20} /> },
-  { name: 'Email', url: 'mailto:hello@example.com', icon: <Mail size={20} /> },
+  { name: 'Twitter', url: 'https://x.com/hxharan', icon: <Twitter size={20} /> },
+  { name: 'LinkedIn', url: 'https://www.linkedin.com/in/hariharan-rp-3b4770242/', icon: <Linkedin size={20} /> },
+  { name: 'Email', url: 'mailto:hariharanrp.dev@gmail.com', icon: <Mail size={20} /> },
 ];
 
 export const Hero: React.FC = () => {

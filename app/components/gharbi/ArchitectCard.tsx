@@ -13,8 +13,8 @@ interface ArchitectCardProps {
 export const ArchitectCard: React.FC<ArchitectCardProps> = ({
   imageUrl,
   name = "Hariharan",
-  title = "AI-Augmented Full-Stack Engineer",
-  idNumber = "ARCH-001",
+  title = "Software Engineer",
+  idNumber = "CHENNAI, IND",
 }) => {
   const [hasDropped, setHasDropped] = useState(false);
   const cardRef = useRef<HTMLDivElement>(null);
@@ -152,7 +152,7 @@ export const ArchitectCard: React.FC<ArchitectCardProps> = ({
                     animation: 'pulse 2s infinite'
                   }} 
                 />
-                <span style={{ fontSize: '10px', fontFamily: 'monospace', color: 'var(--text-muted)' }}>VERIFIED</span>
+                <span style={{ fontSize: '10px', fontFamily: 'monospace', color: 'var(--text-muted)' }}>AVAILABLE TO WORK</span>
               </div>
               <span style={{ fontSize: '10px', fontFamily: 'monospace', color: 'var(--text-muted)' }}>{idNumber}</span>
             </div>

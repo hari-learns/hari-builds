@@ -100,7 +100,7 @@ export const SystemDesign: React.FC = () => {
                 margin: 0,
               }}
             >
-              With AI handling implementation, my focus has shifted to system architecture and design. Given clear requirements and constraints, I can design accurate, scalable systems that solve real problems.
+              With AI handling implementation, my focus has shifted to system architecture and design. I am working on acquiring the skills to design any application with any constraints to make things work. I believe there is always a way and there are solutions beyond what exists today. lets dive into the ocean together?
             </p>
           </div>
 
