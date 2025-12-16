@@ -9,7 +9,7 @@ const experiences = [
         role: "Fullstack Engineer",
         date: "2024 — Present",
         description: "Engineered features for enterprise-level parts nomenclature management system. Optimized database queries reducing GCP costs by 30%.",
-        tech: ["GCP", "GKE", "Fullstack"]
+        tech: ["Fullstack", "GCP", "GKE"]
     },
     {
         company: "Mphasis Limited",

@@ -16,7 +16,7 @@ const experiences = [
             "Optimized database queries reducing GCP infrastructure costs by 30%.",
             "Migrated legacy infrastructure to Google Cloud Platform with GKE."
         ],
-        tech: ["GCP", "GKE", "Fullstack", "Optimization"],
+        tech: ["Fullstack", "GCP", "GKE", "Optimization"],
         icon: <Briefcase size={20} />,
         color: "#c084fc"
     },

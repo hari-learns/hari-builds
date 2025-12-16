@@ -80,13 +80,41 @@ export const CustomCursor: React.FC = () => {
 
   return (
     <motion.div
-      className={isHovering ? 'custom-cursor hover' : 'custom-cursor'}
+      className="custom-cursor"
       style={{
         x: springX,
         y: springY,
         opacity: isVisible ? 1 : 0,
+        position: 'fixed',
+        top: 0,
+        left: 0,
+        pointerEvents: 'none',
+        zIndex: 9999,
       }}
-    />
+    >
+      <motion.svg
+        width="24"
+        height="24"
+        viewBox="0 0 24 24"
+        fill="none"
+        xmlns="http://www.w3.org/2000/svg"
+        animate={{
+          scale: isHovering ? 1.5 : 1,
+        }}
+        transition={{
+          duration: 0.2,
+          ease: "easeInOut"
+        }}
+      >
+        <path
+          d="M3 3L10.07 19.97L12.58 12.58L19.97 10.07L3 3Z"
+          fill="var(--text-primary)"
+          stroke="var(--bg-primary)"
+          strokeWidth="1"
+          strokeLinejoin="round"
+        />
+      </motion.svg>
+    </motion.div>
   );
 };
 

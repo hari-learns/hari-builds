@@ -158,17 +158,40 @@ export const Lifecycle: React.FC = () => {
                           transform: 'translateX(-50%)',
                           padding: 'var(--space-xs) var(--space-sm)',
                           backgroundColor: 'var(--bg-primary)',
-                          border: '1px solid var(--border)',
+                          border: '1px solid transparent',
                           borderRadius: '4px',
                           fontSize: 'var(--text-xs)',
-                          color: 'var(--text-primary)',
                           whiteSpace: 'nowrap',
                           zIndex: 100,
-                          fontWeight: 'var(--weight-medium)',
+                          fontWeight: 'var(--weight-bold)',
                           letterSpacing: '0.05em',
+                          background: `
+                            linear-gradient(var(--bg-primary), var(--bg-primary)) padding-box,
+                            linear-gradient(90deg, var(--border) 0%, var(--text-primary) 50%, var(--border) 100%) border-box
+                          `,
+                          backgroundSize: '200% 100%',
+                          animation: 'shimmerBorder 3s linear infinite',
                         }}
                       >
-                        10X FASTER WITH AI
+                        <style jsx>{`
+                          @keyframes shimmerBorder {
+                            0% { background-position: 100% 0; }
+                            100% { background-position: -100% 0; }
+                          }
+                          .gradient-text {
+                            background: linear-gradient(90deg, var(--text-primary) 0%, var(--text-muted) 50%, var(--text-primary) 100%);
+                            background-size: 200% auto;
+                            color: transparent;
+                            -webkit-background-clip: text;
+                            background-clip: text;
+                            animation: shimmerText 3s linear infinite;
+                          }
+                          @keyframes shimmerText {
+                            0% { background-position: 100% 0; }
+                            100% { background-position: -100% 0; }
+                          }
+                        `}</style>
+                        <span className="gradient-text">10X FASTER WITH AI</span>
                       </div>
                     )}
 

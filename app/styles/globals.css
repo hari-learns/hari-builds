@@ -164,21 +164,16 @@
 
   .custom-cursor {
     position: fixed;
-    width: 20px;
-    height: 20px;
-    border: 1px solid var(--text-primary);
-    border-radius: 50%;
+    top: 0;
+    left: 0;
     pointer-events: none;
     z-index: 9999;
-    transform: translate(-50%, -50%);
-    transition: width 0.2s ease, height 0.2s ease, border-color 0.2s ease;
-    mix-blend-mode: difference;
+    /* Removed default circle styles to allow SVG to control shape */
+    mix-blend-mode: difference; 
   }
 
   .custom-cursor.hover {
-    width: 40px;
-    height: 40px;
-    border-color: var(--accent);
+    /* Hover state handled by Framer Motion animation in component */
   }
 
   a, button, .link-gharbi {
