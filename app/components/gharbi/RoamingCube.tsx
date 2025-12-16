@@ -68,12 +68,12 @@ const Cube3D: React.FC = () => {
   return (
     <div
       style={{
-        width: '80px',
-        height: '80px',
+        width: '50px',
+        height: '50px',
         position: 'relative',
         transformStyle: 'preserve-3d',
         animation: 'rotateCube 20s infinite linear',
-        opacity: 0.25,
+        opacity: 0.3,
       }}
     >
       <style jsx>{`
@@ -86,66 +86,48 @@ const Cube3D: React.FC = () => {
           }
         }
       `}</style>
-      {/* Front face */}
-      <div
-        style={{
-          position: 'absolute',
-          width: '80px',
-          height: '80px',
-          border: '1px solid var(--text-primary)',
-          transform: 'translateZ(40px)',
-        }}
-      />
-      {/* Back face */}
-      <div
-        style={{
-          position: 'absolute',
-          width: '80px',
-          height: '80px',
-          border: '1px solid var(--text-primary)',
-          transform: 'translateZ(-40px)',
-        }}
-      />
-      {/* Top face */}
-      <div
-        style={{
-          position: 'absolute',
-          width: '80px',
-          height: '80px',
-          border: '1px solid var(--text-secondary)',
-          transform: 'rotateX(90deg) translateZ(40px)',
-        }}
-      />
-      {/* Bottom face */}
-      <div
-        style={{
-          position: 'absolute',
-          width: '80px',
-          height: '80px',
-          border: '1px solid var(--text-secondary)',
-          transform: 'rotateX(-90deg) translateZ(40px)',
-        }}
-      />
-      {/* Right face */}
-      <div
-        style={{
-          position: 'absolute',
-          width: '80px',
-          height: '80px',
-          border: '1px solid var(--text-muted)',
-          transform: 'rotateY(90deg) translateZ(40px)',
-        }}
-      />
-      {/* Left face */}
-      <div
-        style={{
-          position: 'absolute',
-          width: '80px',
-          height: '80px',
-          border: '1px solid var(--text-muted)',
-          transform: 'rotateY(-90deg) translateZ(40px)',
-        }}
-      />
+      
+      {/* Front face edges */}
+      <div style={{ position: 'absolute', width: '50px', height: '1px', backgroundColor: 'var(--text-primary)', transform: 'translateZ(25px)' }} />
+      <div style={{ position: 'absolute', width: '50px', height: '1px', backgroundColor: 'var(--text-primary)', transform: 'translateZ(25px) translateY(49px)' }} />
+      <div style={{ position: 'absolute', width: '1px', height: '50px', backgroundColor: 'var(--text-primary)', transform: 'translateZ(25px)' }} />
+      <div style={{ position: 'absolute', width: '1px', height: '50px', backgroundColor: 'var(--text-primary)', transform: 'translateZ(25px) translateX(49px)' }} />
+
+      {/* Back face edges */}
+      <div style={{ position: 'absolute', width: '50px', height: '1px', backgroundColor: 'var(--text-primary)', transform: 'translateZ(-25px)' }} />
+      <div style={{ position: 'absolute', width: '50px', height: '1px', backgroundColor: 'var(--text-primary)', transform: 'translateZ(-25px) translateY(49px)' }} />
+      <div style={{ position: 'absolute', width: '1px', height: '50px', backgroundColor: 'var(--text-primary)', transform: 'translateZ(-25px)' }} />
+      <div style={{ position: 'absolute', width: '1px', height: '50px', backgroundColor: 'var(--text-primary)', transform: 'translateZ(-25px) translateX(49px)' }} />
+
+      {/* Connecting edges (front to back) */}
+      <div style={{ position: 'absolute', width: '50px', height: '1px', backgroundColor: 'var(--text-primary)', transform: 'rotateY(90deg) translateZ(25px)' }} />
+      <div style={{ position: 'absolute', width: '50px', height: '1px', backgroundColor: 'var(--text-primary)', transform: 'rotateY(90deg) translateZ(-25px)' }} />
+      <div style={{ position: 'absolute', width: '50px', height: '1px', backgroundColor: 'var(--text-primary)', transform: 'rotateY(90deg) translateZ(25px) translateY(49px)' }} />
+      <div style={{ position: 'absolute', width: '50px', height: '1px', backgroundColor: 'var(--text-primary)', transform: 'rotateY(90deg) translateZ(-25px) translateY(49px)' }} />
+
+      {/* Corner vertices (minimal dots) */}
+      {[
+        { x: 0, y: 0, z: 25 },
+        { x: 49, y: 0, z: 25 },
+        { x: 0, y: 49, z: 25 },
+        { x: 49, y: 49, z: 25 },
+        { x: 0, y: 0, z: -25 },
+        { x: 49, y: 0, z: -25 },
+        { x: 0, y: 49, z: -25 },
+        { x: 49, y: 49, z: -25 },
+      ].map((vertex, i) => (
+        <div
+          key={i}
+          style={{
+            position: 'absolute',
+            width: '3px',
+            height: '3px',
+            borderRadius: '50%',
+            backgroundColor: 'var(--text-primary)',
+            transform: `translate3d(${vertex.x - 1.5}px, ${vertex.y - 1.5}px, ${vertex.z}px)`,
+          }}
+        />
+      ))}
     </div>
   );
 };
