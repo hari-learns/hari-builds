@@ -25,14 +25,14 @@ const experiences = [
   },
   {
     title: 'Java Developer',
-    subtitle: 'at Mphasis Limited [Banking]',
+    subtitle: 'at Mphasis Limited [Logistics]',
     date: '2022 — 2024',
     description: 'Modernized legacy mainframe system for world\'s largest logistics company. Re-platformed to Java microservices managing global delivery routes.',
     techStack: ['Java', 'Spring Boot', 'Microservices'],
   },
   {
     title: 'Associate Developer',
-    subtitle: 'at Mphasis Limited [Logistics]',
+    subtitle: 'at Mphasis Limited [Banking]',
     date: '2021 — 2022',
     description: 'Architected and maintained AWS data pipelines processing 10M+ customer records daily. Migrated Oracle database to Amazon Redshift.',
     techStack: ['AWS', 'Redshift', 'Python'],
