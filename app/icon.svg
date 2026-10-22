@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+  <defs>
+    <linearGradient id="base" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#03140b"/>
+      <stop offset=".55" stop-color="#1f7a34"/>
+      <stop offset="1" stop-color="#0b3a1d"/>
+    </linearGradient>
+    <linearGradient id="streak" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#d6ffe6" stop-opacity=".95"/>
+      <stop offset=".5" stop-color="#52c7a0" stop-opacity=".7"/>
+      <stop offset="1" stop-color="#52c7a0" stop-opacity="0"/>
+    </linearGradient>
+    <clipPath id="box"><rect width="64" height="64"/></clipPath>
+  </defs>
+  <g clip-path="url(#box)">
+    <rect width="64" height="64" fill="url(#base)"/>
+    <polygon points="14,0 26,0 14,64 2,64" fill="url(#streak)" opacity=".55"/>
+    <polygon points="34,0 42,0 30,64 22,64" fill="url(#streak)" opacity=".95"/>
+    <polygon points="52,0 62,0 50,64 40,64" fill="url(#streak)" opacity=".5"/>
+  </g>
+</svg>
