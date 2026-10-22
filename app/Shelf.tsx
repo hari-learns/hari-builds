@@ -89,7 +89,7 @@ export function Shelf({ books }: { books: Book[] }) {
             </span>
 
             <span className="book-clip">
-            <ShaderCanvas colors={theme === "dark" ? b.dark : b.colors} hover={open} pointer={pointer} />
+            <ShaderCanvas colors={theme === "dark" ? b.dark : b.colors} hover={open} pointer={pointer} paused={active !== null && !open} />
             <span className="book-shade" aria-hidden />
 
             <span className="spine" aria-hidden={open}>
@@ -102,7 +102,7 @@ export function Shelf({ books }: { books: Book[] }) {
                 <span className="cover-frame">
                   <span className="cover-bar"><i /><i /><i /><span>{b.href?.replace("https://", "")}</span></span>
                   {b.video ? (
-                    <video ref={(el) => { videos.current[i] = el; }} src={b.video} poster={b.preview} muted loop playsInline preload="none" />
+                    <video ref={(el) => { videos.current[i] = el; }} src={b.video} poster={b.preview} muted loop playsInline preload="auto" disableRemotePlayback />
                   ) : (
                     <img src={b.preview} alt="" loading="lazy" />
                   )}

@@ -2,7 +2,7 @@
 
 import { useEffect, useRef } from "react";
 
-type Props = { colors: [string, string, string, string]; hover: boolean; pointer: { x: number; y: number } };
+type Props = { colors: [string, string, string, string]; hover: boolean; pointer: { x: number; y: number }; paused?: boolean };
 
 const VERT = `attribute vec2 p; void main(){ gl_Position = vec4(p, 0., 1.); }`;
 const FRAG = `
@@ -38,12 +38,13 @@ void main(){
 
 const rgb = (hex: string) => [1, 3, 5].map((i) => parseInt(hex.slice(i, i + 2), 16) / 255);
 
-export function ShaderCanvas({ colors, hover, pointer }: Props) {
+export function ShaderCanvas({ colors, hover, pointer, paused = false }: Props) {
   const canvas = useRef<HTMLCanvasElement>(null);
-  const live = useRef({ hover, pointer, hov: 0, phase: 4, last: 0, colors });
+  const live = useRef({ hover, pointer, hov: 0, phase: 4, last: 0, colors, paused });
   live.current.hover = hover;
   live.current.pointer = pointer;
   live.current.colors = colors;
+  live.current.paused = paused;
 
   useEffect(() => {
     const cv = canvas.current;
@@ -109,7 +110,8 @@ export function ShaderCanvas({ colors, hover, pointer }: Props) {
       const L = live.current;
       const dt = Math.min((now - L.last) / 1000, 0.1);
       L.last = now;
-      if (!visible || document.hidden) return;
+      // Dimmed books hold their last frame while another book is open, which keeps the open video smooth.
+      if (!visible || document.hidden || L.paused) return;
       // Advance phase on the CPU so speed changes never cause a jump.
       if (!reduce) L.phase += dt * (1 + L.hov * 0.3);
       L.hov += ((L.hover ? 1 : 0) - L.hov) * 0.05;
