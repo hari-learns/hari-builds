@@ -14,7 +14,7 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
   return (
     <html lang="en" data-theme="light" suppressHydrationWarning>
       <head>
-        <noscript><style>{`.reveal{opacity:1!important;transform:none!important}`}</style></noscript>
+        <noscript><style>{`.reveal{opacity:1!important;transform:none!important}.scene{--p:1!important;height:auto!important}`}</style></noscript>
       </head>
       <body className={`${inter.variable} ${serif.variable}`}>{children}</body>
     </html>

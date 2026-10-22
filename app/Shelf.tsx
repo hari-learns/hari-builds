@@ -6,7 +6,6 @@ import { ShaderCanvas } from "./ShaderCanvas";
 export type Book = {
   title: string; industry: string; body: string;
   colors: [string, string, string, string];
-  dark: [string, string, string, string];
   href?: string; preview?: string; video?: string;
 };
 
@@ -28,16 +27,6 @@ export function Shelf({ books }: { books: Book[] }) {
       else v.pause();
     });
   }, [active]);
-  const [theme, setTheme] = useState<"light" | "dark">("light");
-
-  // Books follow the page theme: soft pastels in light mode, deep tones in dark.
-  useEffect(() => {
-    const read = () => setTheme(document.documentElement.dataset.theme === "dark" ? "dark" : "light");
-    read();
-    const mo = new MutationObserver(read);
-    mo.observe(document.documentElement, { attributes: true, attributeFilter: ["data-theme"] });
-    return () => mo.disconnect();
-  }, []);
 
   // Focus mode: while a book is open, the rest of the page goes quiet.
   useEffect(() => {
@@ -89,11 +78,10 @@ export function Shelf({ books }: { books: Book[] }) {
             </span>
 
             <span className="book-clip">
-            <ShaderCanvas colors={theme === "dark" ? b.dark : b.colors} hover={open} pointer={pointer} paused={active !== null && !open} />
+            <ShaderCanvas colors={b.colors} hover={open} pointer={pointer} paused={active !== null && !open} />
             <span className="book-shade" aria-hidden />
 
             <span className="spine" aria-hidden={open}>
-              <span className="spine-index">{String(i + 1).padStart(2, "0")}</span>
               <span className="spine-title">{b.title}</span>
             </span>
 
