@@ -436,3 +436,6 @@ dialog.lightbox::backdrop { background: color-mix(in srgb, var(--black) 82%, tra
 
 /* short landscape phones: no sticky filter bars stealing the screen */
 @media (max-height: 520px) { .fbar, .subnav { position: static; } .hero { min-height: 0; padding-top: 56px; } }
+
+.prow[hidden] { display: none; }
+@media (max-width: 859px) { .hero .btn--ghost { display: none; } }
