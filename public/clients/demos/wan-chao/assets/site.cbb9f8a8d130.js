@@ -31,6 +31,8 @@
     if (dx) dx.addEventListener("click", function () { dock.hidden = true; try { sessionStorage.setItem("wc-dock", "1"); } catch (e) { /* ignore */ } });
   }
 
+  if (dock) { var dockT = function () { if (window.scrollY > 160) { dock.hidden = true; window.removeEventListener("scroll", dockT); } }; if (window.matchMedia("(max-width: 899px)").matches) window.addEventListener("scroll", dockT, { passive: true }); }
+
   /* ---------- drawer ---------- */
   var drawer = $("#drawer"), burger = $("#burger"), burgerX = $("#burger-x");
   function setDrawer(open) {
