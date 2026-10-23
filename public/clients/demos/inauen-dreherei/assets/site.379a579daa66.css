@@ -373,3 +373,5 @@ input[type=number] { -moz-appearance: textfield; appearance: textfield; }
 input[type=number]::-webkit-outer-spin-button, input[type=number]::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
 @media (max-height: 500px) and (orientation: landscape) { .hero { padding-top: 84px; } .hdr { position: absolute; } }
 .ftr__web { text-decoration: underline !important; }
+.dock__s { display: none; }
+@media (max-width: 859px) { .dock__l { display: none; } .dock__s { display: inline; } .dock { bottom: calc(var(--bar-h) + 8px + env(safe-area-inset-bottom)); } .dock p { padding: 0; } }

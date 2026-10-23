@@ -66,7 +66,7 @@
       });
       var p = Math.max(0, Math.min(100, st.d / max * 100));
       scale.style.setProperty("--p", p.toFixed(2));
-      tag.textContent = "ø " + fmt(st.d) + " mm";
+      tag.textContent = "Ø " + fmt(st.d) + " mm";
       tag.style.transform = "translateX(-" + p.toFixed(1) + "%)";
       var tpl = ok ? ui.sum_fmt : ui.sum_none;
       sumEl.innerHTML = tpl.replace("{d}", fmt(st.d)).replace("{n}", "<b>" + ok + "</b>").replace("{m}", total);
