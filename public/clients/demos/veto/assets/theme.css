@@ -1,0 +1,42 @@
+/* Tokens only. Every colour literal in the project lives here. */
+@font-face{font-family:"Fraunces";src:url("fraunces.woff2") format("woff2");font-weight:100 900;font-style:normal;font-display:swap}
+@font-face{font-family:"Fraunces";src:url("fraunces-italic.woff2") format("woff2");font-weight:100 900;font-style:italic;font-display:swap}
+@font-face{font-family:"Inter";src:url("inter.woff2") format("woff2");font-weight:100 900;font-style:normal;font-display:swap}
+
+:root{
+  /* heat stops, read by script.js: ground / ink / accent at heat 0, .2, .38, .5, .6, .72, 1 */
+  --s0-ground:#dfe4e6; --s0-ink:#101416; --s0-accent:#8a3512;
+  --s1-ground:#e6e3dd; --s1-ink:#15110e; --s1-accent:#8a3512;
+  --s2-ground:#eddcc4; --s2-ink:#1c130b; --s2-accent:#8a3512;
+  --s3-ground:#b8623a; --s3-ink:#1c130b; --s3-accent:#fff0dc;
+  --s4-ground:#5a2a18; --s4-ink:#f4e8d6; --s4-accent:#ffb06b;
+  --s5-ground:#2a1710; --s5-ink:#f4e8d6; --s5-accent:#ff9a55;
+  --s6-ground:#1b0f0a; --s6-ink:#f6ead8; --s6-accent:#ff9a55;
+
+  /* live values (defaults = static, no-JS cold state) */
+  --ground:var(--s0-ground); --ink:var(--s0-ink); --accent:var(--s0-accent);
+  --muted:color-mix(in srgb,var(--ink) 72%,var(--ground));
+  --line:color-mix(in srgb,var(--ink) 20%,transparent);
+  --surface:color-mix(in srgb,var(--ink) 6%,transparent);
+  --on-ink:var(--ground);
+  --ember-rgb:255 120 40;
+  --shade-rgb:12 6 3;
+  --cream:#f4ecdf; --cream-ink:#1a120b;
+  --top-bg:var(--ground); --top-fg:var(--ink);
+  --heat:0; --heat-pct:0%;
+  --ease:cubic-bezier(.16,1,.3,1);
+  --logo-filter:none; --logo-blend:multiply;
+}
+html.is-dark{--logo-filter:invert(1); --logo-blend:screen}
+
+/* static (no JS / reduced motion): each section carries its own tone */
+html:not(.heat) .tone-cold{--ground:var(--s0-ground);--ink:var(--s0-ink);--accent:var(--s0-accent)}
+html:not(.heat) .tone-warm{--ground:var(--s2-ground);--ink:var(--s2-ink);--accent:var(--s2-accent)}
+html:not(.heat) .tone-band{--ground:var(--s4-ground);--ink:var(--s4-ink);--accent:var(--s4-accent)}
+html:not(.heat) .tone-hot{--ground:var(--s6-ground);--ink:var(--s6-ink);--accent:var(--s6-accent)}
+html:not(.heat) .tone-cold,html:not(.heat) .tone-warm,html:not(.heat) .tone-band,html:not(.heat) .tone-hot{
+  --muted:color-mix(in srgb,var(--ink) 72%,var(--ground));
+  --line:color-mix(in srgb,var(--ink) 20%,transparent);
+  --surface:color-mix(in srgb,var(--ink) 6%,transparent);
+  --on-ink:var(--ground);
+}

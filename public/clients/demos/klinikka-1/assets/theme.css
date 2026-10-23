@@ -1,0 +1,8 @@
+/* tokens only. Every colour in styles.css comes from here. */
+:root{
+  --ground:#f5f3ee; --surface:#ffffff; --surface-2:#e8f0f4; --ink:#1b2831; --muted:#4a5963; --faint:#5b6a74;
+  --accent:#2d5f7e; --accent-hover:#244e68; --on-accent:#ffffff; --brand:#00a8d4;
+  --line:#d8dcda; --line-soft:#e6e8e4; --shadow:rgba(20,35,44,.14);
+  --dark:#14232c; --dark-2:#1c313c; --on-dark:#eaf1f4; --on-dark-muted:#a9bcc6; --accent-on-dark:#6fd3ee; --line-dark:#2f4653;
+  --ok:#2f6b4f; --paper:#fffefb; --focus:#0a6fa3;
+}
