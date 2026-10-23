@@ -1,0 +1,10 @@
+/* Tokens only. Brand colours from their logo and flag mark: deep blue ground, saffron, green. */
+:root{
+  --ground:#071a30; --ground-2:#0b2a4a; --surface:#0f365d; --ink:#eef3f9; --muted:#a9b9cc; --line:#27496e;
+  --paper:#f3f0e9; --paper-2:#e8e3d8; --ink-d:#0b1b2e; --muted-d:#44546a; --line-d:#cdc7b8;
+  --accent:#ff9933; --accent-ink:#071a30; --accent-d:#9a4700; --green:#138808; --white:#ffffff;
+  --scrim:rgba(7,26,48,.66); --shadow:rgba(7,26,48,.28); --focus:#ffb766; --focus-d:#0b4a99;
+  --ease:cubic-bezier(.16,1,.3,1);
+  --f-disp:"Barlow Condensed","Arial Narrow",sans-serif; --f-text:"Barlow",system-ui,sans-serif;
+  --gut:clamp(20px,5vw,64px); --sec:clamp(64px,9vw,128px);
+}
