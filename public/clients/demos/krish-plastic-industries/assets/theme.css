@@ -1,0 +1,21 @@
+:root{
+  --ground:#ffffff;
+  --paper:#f7f2e8;
+  --paper-2:#eee6d4;
+  --ink:#14201a;
+  --muted:#4a5750;
+  --faint:#6b766f;
+  --line:#e2dac8;
+  --green:#307224;
+  --green-deep:#1c4614;
+  --on-green:#ffffff;
+  --orange:#f0901e;
+  --orange-deep:#9c4700;
+  --on-orange:#1a1205;
+  --white:#ffffff;
+  --shadow:rgba(20,32,26,.10);
+  --shadow-2:rgba(20,32,26,.18);
+  --scrim:rgba(20,32,26,.55);
+  --glass:rgba(255,255,255,.92);
+  --on-deep-muted:#d4e3cf;
+}
