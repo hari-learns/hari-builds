@@ -125,7 +125,11 @@ h3{font-size:clamp(1.5rem,1.2rem + 1vw,2rem)}
 .fpanel{display:grid;gap:20px}
 .fpanel[hidden]{display:none}
 .fcard{display:grid;grid-template-rows:auto 1fr;background:var(--ground);border:1px solid var(--line)}
-.fcard img{width:100%;aspect-ratio:3/2;object-fit:cover}
+.fcard img{width:100%;aspect-ratio:16/9;object-fit:cover}
+.fdetail{display:grid;gap:6px;margin:0 0 24px;max-width:560px}
+.fdetail label{font-weight:600}
+.fdetail input{min-height:48px;padding:0 14px;font:400 1rem var(--f-text);border:2px solid var(--line);background:var(--ground);color:var(--ink);border-radius:2px}
+.fdetail input::placeholder{color:var(--muted)}
 .fcard>div{padding:20px 20px 24px;display:grid;gap:10px;align-content:start}
 .fcard h3{font-size:1.7rem}
 .fcard p{color:var(--muted);margin:0 0 6px;font-size:1rem}
@@ -267,7 +271,7 @@ body{padding-bottom:calc(56px + env(safe-area-inset-bottom))}
 @media(max-height:430px) and (orientation:landscape){.bar a{min-height:48px}body{padding-bottom:calc(48px + env(safe-area-inset-bottom))}}
 
 /* reveals */
-.js .rv{opacity:0;transform:translateY(24px);transition:opacity .9s var(--ease),transform .9s var(--ease)}
+.js .rv{opacity:0;transform:translateY(16px);transition:opacity .6s var(--ease),transform .6s var(--ease)}
 .js .rv.in{opacity:1;transform:none}
 @media(prefers-reduced-motion:reduce){
   html{scroll-behavior:auto}
