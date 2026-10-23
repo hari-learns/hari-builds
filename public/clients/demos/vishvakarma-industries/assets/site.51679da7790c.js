@@ -63,10 +63,12 @@
       var p = P[cur], a = teeth(inA), b = teeth(inB), pi = Math.PI;
       var da = a ? a * p.pitch / pi : 0, db = b ? b * p.pitch / pi : 0;
       o("pda").textContent = a ? fmt(da) : "-"; o("pdb").textContent = b ? fmt(db) : "-";
-      o("ratio").textContent = a && b ? (b >= a ? fmt(b / a) + ":1" : "1:" + fmt(a / b)) : "-";
+      o("ratio").textContent = a && b ? fmt(b / a) + ":1" : "-";
+      o("err").hidden = !!(a && b);
       var msg = ui.msg_intro + "\nProfile: " + p.name + " (" + ui.pitch.toLowerCase() + " " + p.pitch + " " + ui.mm + ")";
       if (a) msg += "\nPulley 1: " + a + " " + ui.teeth + ", " + ui.pd.toLowerCase() + " " + fmt(da) + " " + ui.mm;
       if (b) msg += "\nPulley 2: " + b + " " + ui.teeth + ", " + ui.pd.toLowerCase() + " " + fmt(db) + " " + ui.mm;
+      msg += "\n" + ui.tbc + "\nRatio, pulley 2 to 1: " + (a && b ? fmt(b / a) + ":1" : "-");
       if (p.note) msg += "\n(" + ui.checks + ")";
       o("wa").href = data.wa + "?text=" + encodeURIComponent(msg);
       o("mail").href = "mailto:" + data.mail + "?subject=" + encodeURIComponent(ui.subject + " " + p.name) + "&body=" + encodeURIComponent(msg);
@@ -84,7 +86,7 @@
   var enq = $("[data-enq]");
   if (enq) (function () {
     var data = JSON.parse($("[data-enq-data]").textContent);
-    var ids = ["c-name", "c-co", "c-ph", "c-need"];
+    var ids = ["c-name", "c-co", "c-ph", "c-qty", "c-need"];
     function text() {
       var lines = [data.hello];
       ids.forEach(function (id, i) { var v = ($("#" + id).value || "").trim(); if (v) lines.push(data.f[i] + ": " + v); });

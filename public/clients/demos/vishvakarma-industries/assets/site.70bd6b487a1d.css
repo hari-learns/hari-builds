@@ -252,6 +252,7 @@ section[id] { scroll-margin-top: 130px; }
 .meet__in { display: grid; gap: 4px; }
 .meet__h { font-size: clamp(1.4rem, 1.1rem + 1.4vw, 2.1rem); font-weight: 600; letter-spacing: -.025em; margin: 0; }
 .meet__l { color: var(--fg-2); margin: 0; }
+.meet .fine { margin-top: 8px; }
 .band .h2 { max-width: 20ch; margin-bottom: 20px; }
 
 /* footer, bar, dock */
@@ -275,6 +276,8 @@ section[id] { scroll-margin-top: 130px; }
 @media (min-width: 860px) { .bar { display: none; } }
 .dock { position: fixed; left: 12px; right: 12px; bottom: calc(var(--bar-h) + 14px + env(safe-area-inset-bottom)); z-index: 55; display: flex; align-items: center; gap: 4px; background: var(--paper); color: var(--paper-ink); padding: 4px 4px 4px 16px; font-size: .875rem; line-height: 1.4; border: 1px solid var(--paper-ink); box-shadow: 0 8px 28px color-mix(in srgb, var(--ground-3) 40%, transparent); }
 .dock p { margin: 0; padding: 8px 0; flex: 1; }
+.dk-s { display: inline; } .dk-l { display: none; }
+@media (min-width: 860px) { .dk-s { display: none; } .dk-l { display: inline; } }
 .dock button { flex: none; width: 44px; height: 44px; background: transparent; border: 0; color: var(--paper-ink); font-size: 1.4rem; cursor: pointer; }
 .dock[hidden] { display: none; }
 @media (min-width: 860px) { .dock { left: 20px; right: auto; bottom: 20px; max-width: 560px; } }
