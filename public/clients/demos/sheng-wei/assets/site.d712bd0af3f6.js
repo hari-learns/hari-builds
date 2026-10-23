@@ -30,6 +30,7 @@
   /* concept dock */
   var dock = $("#dock"), dockX = $("#dock-x");
   if (dock && safe(function () { return sessionStorage.getItem("sw-dock") === "1"; })) dock.hidden = true;
+  if (dock) window.addEventListener("scroll", function () { if (window.innerWidth < 860 && window.scrollY > 240) dock.hidden = true; }, { passive: true });
   if (dockX) dockX.addEventListener("click", function () { dock.hidden = true; safe(function () { sessionStorage.setItem("sw-dock", "1"); }); });
 
   /* reveals, with a sweep that also reveals anything already scrolled past */
