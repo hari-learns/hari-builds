@@ -66,11 +66,12 @@
     var sMat = $('[data-f="mat"]', fEl), sWork = $('[data-f="work"]', fEl), rBud = $('[data-f="bud"]', fEl), out = $("[data-out]", fEl);
     var countEl = $("[data-count]", fEl), noneEl = $("[data-none]", fEl), reset = $("[data-reset]", fEl), qEl = $("[data-q]", fEl);
     var moreA = $("[data-more]", fEl), chips = $$(".chip", fEl);
-    var st = { mat: "any", work: "any", bud: parseFloat(rBud.max), fam: "all", q: "" };
+    var st = { mat: "any", work: "any", bud: parseFloat(rBud.max), fam: "all", q: "", incl: false, shown: 24 };
+    var inclL = $("[data-incl]", fEl), inclC = inclL && $("input", inclL), moreB = $("[data-showmore]", fEl), PAGE = 24;
     var maxBud = parseFloat(rBud.max);
 
     function ok(m) {
-      if (st.mat !== "any" && m.m.indexOf(st.mat) < 0) return false;
+      if (st.mat !== "any" && m.m.indexOf(st.mat) < 0 && !(st.incl && m.u)) return false;
       if (st.work !== "any" && m.w.indexOf(st.work) < 0) return false;
       if (m.p > st.bud * 100000 + 1) return false;
       if (st.fam !== "all" && m.f !== st.fam) return false;
@@ -84,6 +85,7 @@
       if (st.work !== "any") p.push("work=" + st.work);
       if (st.bud < maxBud) p.push("bud=" + st.bud);
       if (st.fam !== "all") p.push("fam=" + st.fam);
+      if (st.incl) p.push("incl=1");
       if (st.q) p.push("q=" + encodeURIComponent(st.q));
       return p.length ? "?" + p.join("&") : "";
     }
@@ -103,11 +105,13 @@
       var list = data.machines.filter(ok), total = data.machines.length, dflt = st.mat === "any" && st.work === "any" && st.bud >= maxBud;
       if (!isPage && dflt && data.pop) list = data.machines.filter(function (m) { return data.pop.indexOf(m.id) > -1; });
       if (out) out.textContent = lakhLabel(st.bud);
+      if (inclL) inclL.hidden = st.mat === "any";
       if (countEl) countEl.textContent = (!isPage && dflt && data.pop ? ui.popular : ui.count).replace("{n}", list.length).replace("{total}", total);
       if (noneEl) noneEl.hidden = list.length > 0;
       if (isPage) {
-        var ids = {}; list.forEach(function (m) { ids[m.id] = 1; });
+        var ids = {}; list.forEach(function (m, i) { if (i < st.shown) ids[m.id] = 1; });
         $$(".mcard", fEl).forEach(function (c) { c.hidden = !ids[c.id]; });
+        if (moreB) { var left = list.length - st.shown; moreB.hidden = left <= 0; if (left > 0) moreB.textContent = moreB.getAttribute("data-tpl").replace("{n}", Math.min(PAGE, left)); }
         chips.forEach(function (c) { var on = c.getAttribute("data-fam") === st.fam; c.classList.toggle("is-on", on); c.setAttribute("aria-pressed", on ? "true" : "false"); });
         safe(function () { history.replaceState(null, "", location.pathname + qs() + location.hash); });
       } else {
@@ -116,21 +120,25 @@
         if (moreA) { moreA.href = data.machines_url + qs() + "#all"; moreA.hidden = list.length === 0; }
       }
     }
-    sMat.addEventListener("change", function () { st.mat = sMat.value; render(); });
-    sWork.addEventListener("change", function () { st.work = sWork.value; render(); });
-    rBud.addEventListener("input", function () { st.bud = parseFloat(rBud.value); render(); });
+    function fresh() { st.shown = PAGE; render(); }
+    sMat.addEventListener("change", function () { st.mat = sMat.value; fresh(); });
+    sWork.addEventListener("change", function () { st.work = sWork.value; fresh(); });
+    rBud.addEventListener("input", function () { st.bud = parseFloat(rBud.value); fresh(); });
+    if (inclC) inclC.addEventListener("change", function () { st.incl = inclC.checked; fresh(); });
+    if (moreB) moreB.addEventListener("click", function () { st.shown += PAGE; render(); });
     if (reset) reset.addEventListener("click", function () {
-      st = { mat: "any", work: "any", bud: maxBud, fam: "all", q: "" };
-      sMat.value = "any"; sWork.value = "any"; rBud.value = maxBud; if (qEl) qEl.value = ""; render();
+      st = { mat: "any", work: "any", bud: maxBud, fam: "all", q: "", incl: false, shown: PAGE };
+      if (inclC) inclC.checked = false; sMat.value = "any"; sWork.value = "any"; rBud.value = maxBud; if (qEl) qEl.value = ""; render();
     });
-    if (qEl) qEl.addEventListener("input", function () { st.q = qEl.value.trim().toLowerCase(); render(); });
-    chips.forEach(function (c) { c.addEventListener("click", function () { st.fam = c.getAttribute("data-fam"); render(); }); });
+    if (qEl) qEl.addEventListener("input", function () { st.q = qEl.value.trim().toLowerCase(); fresh(); });
+    chips.forEach(function (c) { c.addEventListener("click", function () { st.fam = c.getAttribute("data-fam"); fresh(); }); });
     safe(function () {
       var p = new URLSearchParams(location.search);
       if (p.get("mat")) { st.mat = p.get("mat"); sMat.value = st.mat; if (sMat.value !== st.mat) { st.mat = "any"; sMat.value = "any"; } }
       if (p.get("work")) { st.work = p.get("work"); sWork.value = st.work; if (sWork.value !== st.work) { st.work = "any"; sWork.value = "any"; } }
       if (p.get("bud")) { var b = parseFloat(p.get("bud")); if (b >= 3 && b <= maxBud) { st.bud = b; rBud.value = b; } }
       if (p.get("fam")) st.fam = p.get("fam");
+      if (p.get("incl") === "1" && inclC) { st.incl = true; inclC.checked = true; }
       if (p.get("q") && qEl) { st.q = p.get("q").toLowerCase(); qEl.value = p.get("q"); }
     });
     render();
