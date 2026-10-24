@@ -203,3 +203,6 @@ footer a br{display:none}footer .cols>div>a{display:flex}
 @media(max-width:899px){.hero::before{background:linear-gradient(180deg,rgba(20,19,21,.5) 0%,rgba(20,19,21,.2) 25%,rgba(20,19,21,.82) 62%,rgba(20,19,21,.95) 100%)}}
 .nav .btn{white-space:nowrap}
 footer a{padding:0}
+
+.navcall{display:none!important}
+@media(max-width:1060px){.navcall{display:flex!important;color:var(--orange)!important}}
