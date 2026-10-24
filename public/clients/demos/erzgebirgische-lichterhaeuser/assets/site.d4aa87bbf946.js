@@ -31,6 +31,8 @@
   var dock = $("#dock"), dockX = $("#dock-x");
   if (dock && safe(function () { return sessionStorage.getItem("elh-dock") === "1"; })) dock.hidden = true;
   if (dockX) dockX.addEventListener("click", function () { dock.hidden = true; safe(function () { sessionStorage.setItem("elh-dock", "1"); }); });
+  /* phones: the note sits under the header at first view and steps away once the visitor scrolls */
+  if (dock) { var dockAway = function () { dock.classList.toggle("is-away", window.scrollY > 40); }; window.addEventListener("scroll", dockAway, { passive: true }); dockAway(); }
 
   /* reveals + a sweep that also reveals anything already scrolled past */
   var rvs = $$(".rv");
