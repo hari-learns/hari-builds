@@ -31,7 +31,13 @@
   /* concept dock */
   var dock = $("#dock"), dockX = $("#dock-x");
   if (dock && safe(function () { return sessionStorage.getItem("kmt-dock") === "1"; })) dock.hidden = true;
-  if (dockX) dockX.addEventListener("click", function () { dock.hidden = true; safe(function () { sessionStorage.setItem("kmt-dock", "1"); }); });
+  function closeDock() { if (!dock || dock.hidden) return; dock.hidden = true; safe(function () { sessionStorage.setItem("kmt-dock", "1"); }); }
+  if (dockX) dockX.addEventListener("click", closeDock);
+  /* phones: the notice sits above the sticky Anfrage bar, so it shows on first load only and leaves once the visitor starts reading */
+  if (dock && !dock.hidden && window.matchMedia && window.matchMedia("(max-width: 860px)").matches) {
+    var onDockScroll = function () { if (window.scrollY > 320) { closeDock(); window.removeEventListener("scroll", onDockScroll); } };
+    window.addEventListener("scroll", onDockScroll, { passive: true });
+  }
 
   /* reveals: observer plus a sweep that also reveals anything already scrolled past */
   var rvs = $$(".rv");
