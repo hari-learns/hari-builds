@@ -27,10 +27,16 @@
   var dock = $("#dock"), dockX = $("#dock-x");
   if (dock && safe(function () { return sessionStorage.getItem("bock-dock") === "1"; })) dock.hidden = true;
   if (dockX) dockX.addEventListener("click", function () { dock.hidden = true; safe(function () { sessionStorage.setItem("bock-dock", "1"); }); });
-
   /* mobile bar hides near the footer so it never covers footer content */
   var bar = $("#bar"), ftr = $(".ftr");
-  function barCheck() { if (bar && ftr) bar.classList.toggle("is-hidden", ftr.getBoundingClientRect().top < window.innerHeight - 40); }
+  /* ...and stays out of the way while the hero's own buttons are on screen */
+  var heroCta = $(".hero .btn-row");
+  function barCheck() {
+    if (!bar) return;
+    var vh = window.innerHeight, r = heroCta && heroCta.getBoundingClientRect();
+    var heroOn = !!r && r.bottom > 0 && r.top < vh;
+    bar.classList.toggle("is-hidden", heroOn || (!!ftr && ftr.getBoundingClientRect().top < vh - 40));
+  }
 
   /* reveals + sweep */
   var rvs = $$(".rv");
