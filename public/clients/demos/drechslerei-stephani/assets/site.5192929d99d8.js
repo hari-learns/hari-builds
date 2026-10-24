@@ -30,6 +30,13 @@
   /* concept dock */
   var dock = $("#dock"), dockX = $("#dock-x");
   if (dock && safe(function () { return sessionStorage.getItem("ds-dock") === "1"; })) dock.hidden = true;
+  /* phones: the note waits until the first screen (and its CTAs) has been scrolled past */
+  if (dock) {
+    var first = $("main > section, main > header, main > div");
+    if (first && "IntersectionObserver" in window) {
+      new IntersectionObserver(function (es) { es.forEach(function (en) { dock.classList.toggle("is-shown", !en.isIntersecting); }); }).observe(first);
+    } else dock.classList.add("is-shown");
+  }
   if (dockX) dockX.addEventListener("click", function () { dock.hidden = true; safe(function () { sessionStorage.setItem("ds-dock", "1"); }); });
 
   /* reveals + sweep for anything already scrolled past */
