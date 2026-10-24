@@ -152,7 +152,7 @@
     var q = $("[data-search]"), shown = $("[data-shown]"), none = $("[data-none]");
     var state = { g: "", t: {}, q: "" };
     var apply = function () {
-      var n = 0, words = state.q.toLowerCase().split(/\s+/).filter(Boolean);
+      var n = 0, words = state.q.toLowerCase().replace(/quarz(?!t)/g, "quartz").split(/\s+/).filter(Boolean);
       cards.forEach(function (c) {
         var ok = (!state.g || c.getAttribute("data-g") === state.g);
         var tg = c.getAttribute("data-t") || "";
