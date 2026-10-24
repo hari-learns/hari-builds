@@ -28,23 +28,26 @@
     var matched=[];
     function run(){
       var mk=vals('mk'),kd=vals('kd');list.innerHTML='';
-      if(!mk.length&&!kd.length){empty.hidden=false;send.hidden=true;matched=[];return}
+      if(!mk.length&&!kd.length){empty.hidden=false;send.hidden=true;matched=[];var jj=f.querySelector('.finder__jump');if(jj)jj.hidden=true;return}
       var res=data.lines.map(function(l){
         var a=mk.length?l.mk.filter(function(x){return mk.indexOf(x)>-1}).length:1;
         var b=kd.length?l.kd.filter(function(x){return kd.indexOf(x)>-1}).length:1;
         return {l:l,s:(a&&b)?a*2+b:0};
-      }).filter(function(r){return r.s>0}).sort(function(x,y){return y.s-x.s});
+      }).filter(function(r){return r.s>0}).map(function(r){r.g=r.l.mk.length>=4;return r}).sort(function(x,y){return (x.g-y.g)||(y.s-x.s)});
       matched=res.map(function(r){return r.l});
       empty.hidden=true;
       if(!matched.length){list.innerHTML='<li class="finder__none">No published product line matches both answers. Send us what you need anyway and Protube will come back to you.</li>'}
-      matched.slice(0,8).forEach(function(l){
-        var li=d.createElement('li'),a=d.createElement('a');a.href=l.u;
+      var shown=0,sawGen=false;
+      res.slice(0,8).forEach(function(r){var l=r.l;
+        if(r.g&&!sawGen&&shown){sawGen=true;var h=d.createElement('li');h.className='finder__grp';h.textContent='Also used across most shops';list.appendChild(h)}
+        shown++;var li=d.createElement('li'),a=d.createElement('a');a.href=l.u;
         a.innerHTML='<small></small><b></b><span></span>';
         a.children[0].textContent=l.f;a.children[1].textContent=l.t;a.children[2].textContent=l.s;
         li.appendChild(a);list.appendChild(li);
       });
       if(matched.length>8){var li=d.createElement('li');li.className='finder__none';li.style.padding='12px 0';li.textContent='+ '+(matched.length-8)+' more product lines match. They are all in the enquiry.';list.appendChild(li)}
       send.hidden=false;build();
+      var jump=f.querySelector('.finder__jump');if(jump){jump.hidden=false;jump.textContent=matched.length+' matching product line'+(matched.length>1?'s':'')+' \u2193'}
     }
     function build(){
       var mk=label(data.makes,vals('mk')),kd=label(data.needs,vals('kd'));
