@@ -75,8 +75,10 @@
         '<div class="btns" style="margin-top:0"><a class="btn btn-primary" href="' + mail + '">Email sales with these answers</a><a class="btn btn-ghost" href="' + s.url + '">About ' + esc(s.name) + '</a></div>' +
         '<p class="tiny">Opens your email app with the answers filled in, addressed to ' + esc(D.sales) + '. Nothing is sent until you press send.</p>';
     };
+    var toResult = function () { requestAnimationFrame(function () { window.scrollTo(0, out.getBoundingClientRect().top + window.pageYOffset - 80); }); };
     chipsI.forEach(function (c) { c.addEventListener('click', function () { st.ind = c.getAttribute('data-ind'); render(); }); });
-    chipsN.forEach(function (c) { c.addEventListener('click', function () { st.need = c.getAttribute('data-need'); render(); }); });
+    chipsN.forEach(function (c) { c.addEventListener('click', function () { st.need = c.getAttribute('data-need'); render(); if (st.ind && window.innerWidth <= 900) toResult(); }); });
+    chipsI.forEach(function (c) { c.addEventListener('click', function () { if (st.need && window.innerWidth <= 900) toResult(); }); });
     if (note) note.addEventListener('input', function () { if (st.ind && st.need) render(); });
     // allow deep links from other pages: ?need=machine
     var q = /[?&]need=(\w+)/.exec(location.search); if (q && D.needs[q[1]]) st.need = q[1];
