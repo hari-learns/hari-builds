@@ -90,8 +90,8 @@
         rows.push({ f: f, m: m, ts: tableState });
       });
     });
-    rows.sort(function (a, b) { return a.m.kn - b.m.kn || b.m.spm - a.m.spm; });
-    rows = rows.slice(0, 8);
+    rows.sort(function (a, b) { return (a.ts === "unk" ? 1 : 0) - (b.ts === "unk" ? 1 : 0) || a.m.kn - b.m.kn || b.m.spm - a.m.spm; });
+    rows = rows.slice(0, 6);
     var html = "";
     if (!rows.length) html = '<p class="res-none">' + esc(S.none) + "</p>";
     else {
@@ -102,11 +102,11 @@
         if (r.ts === "unk") why.push('<li class="q">' + esc(S.why_table_unk) + "</li>");
         if (W) why.push("<li>" + esc(fill(S.why_spm, { s: r.m.spm, w: W })) + "</li>");
         if (job !== "any" && S.job_names[job]) why.push("<li>" + esc(fill(S.why_job, { j: S.job_names[job] })) + "</li>");
-        var ratio = Math.min(1, need / r.m.kn);
-        html += '<li class="res' + (i === 0 ? " best" : "") + '"><div class="res-top"><span class="res-name">KN ' + r.m.kn + '</span><span class="res-fam">' + esc(r.f.name) + "</span></div>" +
+        var margin = Math.round((r.m.kn / need - 1) * 100);
+        why.push("<li>" + esc(fill(S.margin, { m: margin })) + "</li>");
+        html += '<li class="res' + (i === 0 ? " best" : "") + '"><div class="res-top"><span class="res-name">KN ' + r.m.kn + '</span>' + (i === 0 ? '<span class="badge">' + esc(S.best) + '</span>' : '') + '<span class="res-fam">' + esc(r.f.name) + "</span></div>" +
           '<div class="res-nums"><div><span>' + esc(S.kn) + "</span> " + r.m.kn + ' kN (≈ ' + r.m.kn / 10 + ' t)</div><div><span>' + esc(S.spm_l) + "</span> " + r.m.spm + "</div><div><span>" + esc(S.table_l) + "</span> " + dim(r.m.table) + "</div></div>" +
-          '<div class="bar-meter" aria-hidden="true"><i style="transform:scaleX(' + ratio.toFixed(3) + ')"></i></div>' +
-          '<ul class="res-why">' + why.join("") + "</ul>" +
+                    '<ul class="res-why">' + why.join("") + "</ul>" +
           (i === 0 && r.ts === "fit" ? svg(r.m.table, die) : "") +
           '<a class="more" href="' + esc(r.f.url) + '">' + esc(S.see) + "</a></li>";
       });
@@ -131,5 +131,6 @@
   form.addEventListener("submit", function (e) { e.preventDefault(); run(); });
   form.addEventListener("input", run);
   form.addEventListener("change", run);
+  if (form.elements.force.value) run();
   form.addEventListener("reset", function () { setTimeout(function () { out.innerHTML = '<p class="muted">' + esc(S.empty) + "</p>"; }, 0); });
 })();
