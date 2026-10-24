@@ -32,6 +32,12 @@
   if (dock && safe(function () { return sessionStorage.getItem("richter-dock") === "1"; })) dock.hidden = true;
   if (dockX) dockX.addEventListener("click", function () { dock.hidden = true; safe(function () { sessionStorage.setItem("richter-dock", "1"); }); });
 
+  /* phone action bar steps aside while the hero's own CTAs are on screen (no doubled buttons on the first screen) */
+  var bar = $(".bar"), heroCta = $(".hero .btn-row");
+  if (bar && heroCta && "IntersectionObserver" in window) {
+    new IntersectionObserver(function (es) { es.forEach(function (en) { bar.classList.toggle("is-off", en.isIntersecting); }); }).observe(heroCta);
+  }
+
   /* reveals: blocks + staggered children; sweep reveals anything at or above the fold */
   var items = $$(".rv");
   $$("[data-stagger]").forEach(function (g) {
