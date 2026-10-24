@@ -8,6 +8,17 @@
 <link rel="preload" href="/clients/demos/veto/assets/inter.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="stylesheet" href="/clients/demos/veto/assets/theme.css?v=c64777ba11"><link rel="stylesheet" href="/clients/demos/veto/assets/styles.css?v=426e43733e">
 <link rel="icon" href="/clients/demos/veto/assets/img/logo-300.webp">
+<!-- gc-track -->
+<script>(function(){try{if(/[?&]notrack/.test(location.search))localStorage.setItem('skipgc','t');}catch(e){}
+var m=location.pathname.match(/\/clients\/demos\/([^\/]+)/),slug=m?m[1]:'other';
+var kinds=[['wa.me','whatsapp'],['api.whatsapp','whatsapp'],['tel:','call'],['mailto:','email'],['maps.','map'],['goo.gl/maps','map'],['before-after','before-after'],['/film','film'],['/seo','seo']];
+document.addEventListener('click',function(e){var a=e.target.closest&&e.target.closest('a[href]');if(!a)return;
+var h=(a.getAttribute('href')||'').toLowerCase(),k=null;for(var i=0;i<kinds.length;i++){if(h.indexOf(kinds[i][0])>-1){k=kinds[i][1];break;}}
+if(!k)return;var p='demo/'+slug+'/'+k;
+(function send(n){if(window.goatcounter&&window.goatcounter.count){window.goatcounter.count({path:p,title:'click '+k+' ('+slug+')',event:true});}else if(n<20){setTimeout(function(){send(n+1);},150);}})(0);
+},true);})();</script>
+<script data-goatcounter="https://hharan.goatcounter.com/count" async src="https://gc.zgo.at/count.js"></script>
+<!-- /gc-track -->
 </head><body data-page="puukiuas">
 <a class="skip" href="#main">Siirry sisältöön</a>
 <div class="glow" aria-hidden="true"></div>
