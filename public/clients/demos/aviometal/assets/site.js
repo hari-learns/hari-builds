@@ -45,54 +45,66 @@
       var oo = d.createElement("option"); oo.value = "altra"; oo.textContent = "Altra, su richiesta"; f.alloy.appendChild(oo);
       if (keep && list.indexOf(keep) > -1) f.alloy.value = keep;
     }
+    function pz(n) { return fmt(n, 0) + (n === 1 ? " pezzo" : " pezzi"); }
     function run() {
       var k = f.form.value, F = forms[k], v = num(f.dim), w = num(f.w), l = num(f.l), q = num(f.qty) || 1, a = f.alloy.value;
       var plane = F.kind === "sheet" || F.kind === "plate", bar = ["round", "square", "hex"].indexOf(F.kind) > -1;
       d.getElementById("t-dim-l").textContent = F.dim;
       d.getElementById("f-w").hidden = !plane;
-      d.getElementById("t-l-l").textContent = plane ? "Lunghezza (mm)" : "Lunghezza (mm)";
       d.getElementById("f-l").hidden = !(plane || bar);
       match.innerHTML = ""; status.className = "tool-status"; note.textContent = "";
-      var lines = [];
-      var has = v !== null;
-      if (!has) { status.textContent = F.rng ? "Inserisca " + F.dim.split(" (")[0].toLowerCase() + ": gamma " + F.dimlist + "." : "Misure su richiesta."; }
+      var has = v !== null, ok = true, big = false;
+      if (!has) { status.textContent = F.rng ? "Inserisca " + F.dim.split(" (")[0].toLowerCase() + ": gamma " + F.dimlist + "." : "Misure su richiesta."; ok = false; }
       else if (F.rng) {
         var inr = v >= F.rng[0] && v <= F.rng[1];
         if (inr) { status.textContent = "Rientra nella gamma pubblicata (" + F.dimlist + ")."; status.classList.add("ok"); }
-        else { status.textContent = "Fuori dalla gamma pubblicata (" + F.dimlist + "). Su richiesta si forniscono misure speciali."; status.classList.add("out"); }
+        else {
+          ok = false; status.classList.add("out");
+          status.textContent = "Fuori dalla gamma di questo prodotto (" + F.dimlist + ").";
+          var alt = Object.keys(forms).filter(function (x) { var G = forms[x]; return x !== k && G.kind === F.kind && G.rng && v >= G.rng[0] && v <= G.rng[1]; });
+          alt.forEach(function (x) { li("Questa misura rientra in: " + forms[x].label + " (" + forms[x].dimlist + ")", "yes"); });
+          li("Su richiesta si forniscono anche misure speciali: ne parli con le vendite", "no");
+        }
       } else { status.textContent = "Per i profilati la misura si concorda: forniamo anche secondo disegno del Cliente."; }
-      if (a && a !== "altra") {
+      if (plane && F.maxsz && w && l) {
+        var mx = F.maxsz, fit1 = (w <= mx[0] && l <= mx[1]) || (w <= mx[1] && l <= mx[0]);
+        if (!fit1) { big = true; ok = false; status.className = "tool-status out"; status.textContent = "Il pezzo supera il formato pubblicato (" + F.size + ")."; li("Per formati maggiori ne parli con le vendite", "no"); }
+      }
+      if (ok && a && a !== "altra") {
         if (F.alloys.length) {
           if (F.alloys.indexOf(a) > -1) li(a + " è tra le leghe indicate dal pronto per questo prodotto", "yes");
           else li(a + " non è nell'elenco dal pronto per questo prodotto: ne parli con le vendite", "no");
         }
-        if (cfg.schede.indexOf(a) > -1) { var link = d.createElement("li"); var an = d.createElement("a"); an.href = cfg.schedeUrl.replace("{a}", a.toLowerCase()); an.textContent = "Apra la scheda tecnica AA" + a; link.appendChild(an); match.appendChild(link); }
       }
-      if (F.size) li("Dimensioni: " + F.size, "");
-      var weightLine = "";
-      if (has && plane && v > 0) {
+      if (a && a !== "altra" && cfg.schede.indexOf(a) > -1) { var link = d.createElement("li"); var an = d.createElement("a"); an.href = cfg.schedeUrl.replace("{a}", a.toLowerCase()); an.textContent = "Apra la scheda tecnica AA" + a; link.appendChild(an); match.appendChild(link); }
+      if (ok && F.size) li("Dimensioni: " + F.size, "");
+      var weightLine = "", dn = (a && cfg.dens[a]) ? cfg.dens[a] : null;
+      if (ok && has && plane && v > 0) {
         var m2 = v * DENS;
-        li("Peso: " + fmt(m2, 1) + " kg per metro quadro (calcolato come nelle tabelle pesi unitari)", "");
-        weightLine = fmt(m2, 1) + " kg/m2";
-        if (w && l) { var one = m2 * w * l / 1e6; li("Un pezzo " + fmt(w, 0) + " × " + fmt(l, 0) + " mm pesa circa " + fmt(one, 1) + " kg" + (q > 1 ? "; " + fmt(q, 0) + " pezzi: " + fmt(one * q, 1) + " kg" : ""), ""); weightLine += "; pezzo " + fmt(one, 1) + " kg"; }
+        li("Peso nominale: " + fmt(m2, 1) + " kg al metro quadro (2,7 kg/dm³, come nelle tabelle pesi unitari)", "");
+        weightLine = fmt(m2, 1) + " kg/m2 nominali";
+        if (dn) li("Con la densità della scheda AA" + a + " (" + fmt(dn, 2) + " g/cm³): circa " + fmt(v * dn, 1) + " kg al metro quadro", "");
+        if (w && l) { var one = m2 * w * l / 1e6; li("Un pezzo " + fmt(w, 0) + " × " + fmt(l, 0) + " mm pesa circa " + fmt(one, 1) + " kg" + (q > 1 ? "; " + pz(q) + ": " + fmt(one * q, 1) + " kg" : ""), ""); weightLine += "; pezzo " + fmt(one, 1) + " kg"; }
       }
-      var kgm = null;
-      if (has && bar && v > 0) {
-        kgm = F.kind === "round" ? Math.PI * v * v / 4 * DENS / 1000 : F.kind === "square" ? v * v * DENS / 1000 : 0.866025 * v * v * DENS / 1000;
-        li("Peso: " + fmt(kgm, 3) + " kg al metro", ""); weightLine = fmt(kgm, 3) + " kg/m";
-        if (l) { var one2 = kgm * l / 1000; li("Un pezzo lungo " + fmt(l, 0) + " mm pesa circa " + fmt(one2, 1) + " kg" + (q > 1 ? "; " + fmt(q, 0) + " pezzi: " + fmt(one2 * q, 1) + " kg" : ""), ""); }
+      if (ok && has && bar && v > 0) {
+        var kgm = F.kind === "round" ? Math.PI * v * v / 4 * DENS / 1000 : F.kind === "square" ? v * v * DENS / 1000 : 0.866025 * v * v * DENS / 1000;
+        li("Peso nominale: " + fmt(kgm, 3) + " kg al metro (2,7 kg/dm³, come nelle tabelle pesi unitari)", ""); weightLine = fmt(kgm, 3) + " kg/m nominali";
+        if (dn) li("Con la densità della scheda AA" + a + " (" + fmt(dn, 2) + " g/cm³): circa " + fmt(kgm * dn / DENS, 3) + " kg al metro", "");
+        if (l) { var one2 = kgm * l / 1000; li("Un pezzo lungo " + fmt(l, 0) + " mm pesa circa " + fmt(one2, 1) + " kg" + (q > 1 ? "; " + pz(q) + ": " + fmt(one2 * q, 1) + " kg" : ""), ""); }
         li(kgm < 6 ? "Sotto i 6 kg al metro si fornisce la barra intera." : "Da 6 kg al metro in su si taglia a misura su indicazione del Cliente.", "");
       }
-      if (F.kind === "sheet") note.textContent = "Quantità minima: il foglio. " + F.cut;
-      else if (F.kind === "plate") note.textContent = "Quantità minima: tagliata a misura secondo richiesta. " + F.cut;
-      else if (F.kind === "other" && F.cut) note.textContent = F.cut;
-      else if (F.kind === "other") note.textContent = "Sotto i 6 kg al metro si fornisce la barra intera; da 6 kg al metro in su si taglia a misura.";
+      if (ok || big) {
+        if (F.kind === "sheet") note.textContent = "Quantità minima: il foglio. " + F.cut;
+        else if (F.kind === "plate") note.textContent = "Quantità minima: tagliata a misura secondo richiesta. " + F.cut;
+        else if (F.kind === "other" && F.cut) note.textContent = F.cut;
+        else if (F.kind === "other") note.textContent = "Sotto i 6 kg al metro si fornisce la barra intera; da 6 kg al metro in su si taglia a misura.";
+      }
       var lines = ["Buongiorno,", "", "vorrei un'offerta per:", "Prodotto: " + F.label, "Lega: " + (a ? (a === "altra" ? "altra, da concordare" : a) : "da consigliare"), F.dim + ": " + (has ? fmt(v) : "da definire")];
       if (plane) lines.push("Dimensioni pezzo: " + (w && l ? fmt(w, 0) + " × " + fmt(l, 0) + " mm" : "da definire"));
       if (bar) lines.push("Lunghezza: " + (l ? fmt(l, 0) + " mm" : "da definire"));
-      lines.push("Quantità: " + (num(f.qty) ? fmt(q, 0) + " pezzi" : "da definire"));
+      lines.push("Quantità: " + (num(f.qty) ? pz(q) : "da definire"));
       if (weightLine) lines.push("Peso indicativo calcolato: " + weightLine);
-      lines.push("", "Nome e azienda: " + (f.name.value || ""), "", "(Inviato dalla proposta di restyling del sito Aviometal)");
+      lines.push("", "Nome e azienda: " + (f.name.value || ""), "", "(Richiesta preparata con lo strumento di verifica del sito)");
       send.href = "mailto:" + cfg.mail + "?subject=" + encodeURIComponent("Richiesta di offerta: " + F.label + (a && a !== "altra" ? " " + a : "")) + "&body=" + encodeURIComponent(lines.join("\n"));
     }
     var qs = safe(function () { return new URLSearchParams(location.search); });
