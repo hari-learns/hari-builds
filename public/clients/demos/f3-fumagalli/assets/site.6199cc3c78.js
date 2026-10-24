@@ -90,6 +90,8 @@
   }
   function needsCap(n) { return ["steam", "dry", "shirts", "irons", "press", "flat"].indexOf(n) >= 0; }
 
+  var BI = 0;
+  function pick(list, key, need, sorter) { var m = list.filter(function (x) { return key(x) >= need; }).sort(sorter); BI = Math.max(0, m.findIndex(function (x) { return key(x) >= need * 1.1; })); m.forEach(function (x) { x._tight = key(x) < need * 1.1; }); return m; }
   /* ---- result engines (data only from the datasheets) */
   function card(o) {
     var best = o.best ? '<span class="badge">' + esc(L.fits.toUpperCase()) + "</span>" : "";
@@ -98,41 +100,40 @@
   function results() {
     var n = S.need, out = [], notes = [], names = [];
     if (n === "steam") {
-      var list = D.vulcano.filter(function (v) { return v.max >= S.kgh && (!S.backup || v.gen === 2); }).sort(function (a, b) { return a.max - b.max; }).slice(0, 3);
+      var list = pick(D.vulcano.filter(function (v) { return !S.backup || v.gen === 2; }), function (v) { return v.max; }, S.kgh, function (a, b) { return a.max - b.max; }).slice(0, 3);
       list.forEach(function (v, i) {
         names.push("Vulcano " + v.m);
-        out.push(card({ best: i === 0, name: "Vulcano " + v.m, img: v.img, url: v.url,
-          why: esc(L.cover) + " <b>" + v.max + " kg/h</b> (" + S.kgh + " " + esc(L.needs_label) + ")" + (v.gen === 2 ? " &middot; 2 &times; 100%" : ""),
+        out.push(card({ best: i === BI, name: "Vulcano " + v.m, img: v.img, url: v.url,
+          why: esc(L.cover) + " <b>" + v.max + " kg/h</b> (" + S.kgh + " " + esc(L.needs_label) + ")" + (v.gen === 2 ? " &middot; 2 &times; 100%" : "") + (v._tight ? " &middot; " + esc(L.tight) : ""),
           spec: esc(L.boiler) + " " + esc(v.vol) + " L &middot; " + esc(L.power) + " " + v.kw + " kW &middot; " + esc(v.bar) + " bar &middot; " + esc(L.size) + " " + esc(v.dim) + " cm &middot; " + v.kg + " kg" }));
       });
-      if (S.backup) notes.push(L.backup_note); if (S.food) notes.push(L.food_note);
+      if (S.backup) notes.push(L.backup_note); if (S.food) notes.push(L.food_note); notes.push(L.headroom, L.steam_check);
       if (!list.length) notes.push(L.over_note);
     } else if (n === "dry") {
-      var c = D.capri.filter(function (x) { return x.kg >= S.kg && (S.heat === "any" || (S.heat === "el" && x.el) || (S.heat === "gas" && x.gas) || (S.heat === "steam" && x.steam)); })
-        .sort(function (a, b) { return a.kg - b.kg || a.units - b.units; }).slice(0, 3);
+      var c = pick(D.capri.filter(function (x) { return S.heat === "any" || (S.heat === "el" && x.el) || (S.heat === "gas" && x.gas) || (S.heat === "steam" && x.steam); }), function (x) { return x.kg; }, S.kg, function (a, b) { return a.kg - b.kg || a.units - b.units; }).slice(0, 3);
       c.forEach(function (x, i) {
         names.push(x.m);
         var heats = [];
         if (S.heat === "any" || S.heat === "el") heats.push(L.kwh_el + " " + fmt(x.el) + " kW" + (x.sole ? " (SOLE " + fmt(x.sole) + " kW)" : ""));
         if (S.heat === "any" || S.heat === "gas") heats.push(L.kwh_gas + " " + fmt(x.gas) + " kW");
         if (S.heat === "any" || S.heat === "steam") heats.push(L.kwh_steam + " " + x.steam + " kg/h");
-        out.push(card({ best: i === 0, name: x.m, img: "capri_lab", url: x.url,
+        out.push(card({ best: i === BI, name: x.m, img: "capri_lab", url: x.url,
           why: (x.units > 1 ? x.units + " &times; " : "") + "<b>" + x.kg + " kg</b> (" + S.kg + " " + esc(L.needs_label) + ") &middot; " + esc(L.drum) + " " + x.drum + " cm",
           spec: esc(heats.join(" · ")) + " &middot; " + esc(L.size) + " " + esc(x.dim) + " cm &middot; " + x.w + " kg" }));
       });
       if (c.length) { if (S.app === "selfservice") notes.push(L.self_note); else notes.push(L.lab_note); notes.push(L.sole_note); if (S.app === "dry") notes.push(L.wet_note); } else notes.push(L.over_note);
     } else if (n === "shirts") {
-      var f = D.firenze.filter(function (x) { return x.max >= S.shirts; }).sort(function (a, b) { return a.max - b.max; });
+      var f = pick(D.firenze, function (x) { return x.max; }, S.shirts, function (a, b) { return a.max - b.max; });
       f.forEach(function (x, i) {
         names.push(x.m);
-        out.push(card({ best: i === 0, name: x.m, img: x.img, url: x.url, why: esc(L.cover) + " <b>" + x.max + " " + esc(L.shirts_u) + "</b> (" + S.shirts + " " + esc(L.needs_label) + ")", spec: esc(x.d) }));
+        out.push(card({ best: i === BI, name: x.m, img: x.img, url: x.url, why: esc(L.cover) + " <b>" + x.max + " " + esc(L.shirts_u) + "</b> (" + S.shirts + " " + esc(L.needs_label) + ")", spec: esc(x.d) }));
       });
       if (f.length) notes.push(L.with_firenze); else notes.push(L.over_note);
     } else if (n === "flat") {
-      var fl = D.mangani.filter(function (x) { return x.hi >= S.flat; }).sort(function (a, b) { return a.hi - b.hi || a.lo - b.lo; }).slice(0, 3);
+      var fl = pick(D.mangani, function (x) { return x.hi; }, S.flat, function (a, b) { return a.hi - b.hi || a.lo - b.lo; }).slice(0, 3);
       fl.forEach(function (x, i) {
         names.push("Mangani " + x.m);
-        out.push(card({ best: i === 0, name: "Mangani " + x.m, img: "mangano", url: x.url, why: esc(L.cover) + " <b>" + (x.lo === x.hi ? x.hi : x.lo + "-" + x.hi) + " kg/h</b> (" + S.flat + " " + esc(L.needs_label) + ")",
+        out.push(card({ best: i === BI, name: "Mangani " + x.m, img: "mangano", url: x.url, why: esc(L.cover) + " <b>" + (x.lo === x.hi ? x.hi : x.lo + "-" + x.hi) + " kg/h</b> (" + S.flat + " " + esc(L.needs_label) + ")" + (x._tight ? " &middot; " + esc(L.tight) : ""),
           spec: esc(x.size) + " mm &middot; " + esc(L.kwh_el) + " " + esc(x.el) + " kW" + (x.gas !== "-" ? " &middot; " + esc(L.kwh_gas) + " " + esc(x.gas) + " kW" : "") + " &middot; " + x.kg + " kg" }));
       });
       notes.push(fl.length ? L.flat_text : L.over_note);
@@ -210,6 +211,13 @@
     });
     var bk = $("#backup", host); if (bk) bk.addEventListener("change", function () { S.backup = bk.checked; render(); });
     var fd = $("#food", host); if (fd) fd.addEventListener("change", function () { S.food = fd.checked; render(); });
+    var cp = $("[data-copy]", host);
+    if (cp) cp.addEventListener("click", function () {
+      var r = results(), txt = decodeURIComponent((mailto(r.names).split("body=")[1] || ""));
+      txt = L.mail_subject + " - " + L.needs[S.need] + "\r\n" + txt;
+      var done = function () { cp.textContent = L.copied; setTimeout(function () { cp.textContent = L.copy; }, 1800); };
+      if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(txt).then(done, done); else done();
+    });
     var rs = $("[data-restart]", host); if (rs) rs.addEventListener("click", function () { S.app = S.need = null; render(); host.scrollIntoView({ behavior: reduce ? "auto" : "smooth", block: "start" }); });
   }
   if (S.app && needsFor(S.app).length === 1) S.need = needsFor(S.app)[0];
