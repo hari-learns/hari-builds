@@ -29,6 +29,7 @@
   if (dock && safe(function () { return sessionStorage.getItem("fe-dock") === "1"; })) dock.hidden = true;
   if (dockX) dockX.addEventListener("click", function () { dock.hidden = true; safe(function () { sessionStorage.setItem("fe-dock", "1"); }); });
 
+  if (location.hash) { var th = d.getElementById(location.hash.slice(1)); if (th) setTimeout(function () { th.scrollIntoView(); }, 60); }
   var rvs = $$(".rv");
   function activate(el) { el.classList.add("is-in"); }
   var io = "IntersectionObserver" in window ? new IntersectionObserver(function (es) {
@@ -62,31 +63,32 @@
     function type() { return form.querySelector("input[name=type]:checked").value; }
     function sync(first) {
       var s = D.spec[type()];
-      fill(el("thick"), s.thick, true); fill(el("pitch"), s.pitch, true); fill(el("cross"), s.cross, true);
+      fill(el("thick"), s.thick, true); fill(el("pitch"), s.pitch, true); fill(el("cross"), s.cross, true); fill(el("std"), s.standards, true); fill(el("mat"), s.materials, true);
+      var lbl = $("#lbl-std"); lbl.hidden = !s.std_panel; if (!s.std_panel) form.querySelector("input[name=panel][value=shaped]").checked = true;
       var dp = el("depth"); dp.min = s.depth[0]; dp.max = s.depth[1];
       if (first || +dp.value > s.depth[1]) dp.value = first ? 30 : s.depth[1];
       $("#depth-hint").textContent = "Range " + s.depth[0] + " to " + s.depth[1] + " mm";
     }
     function build() {
-      var t = type(), s = D.spec[t], dep = +el("depth").value, ok = dep >= s.depth[0] && dep <= s.depth[1];
+      var t = type(), s = D.spec[t], dep = +el("depth").value, qv = el("qty").value, ok = el("depth").value !== "" && dep >= s.depth[0] && dep <= s.depth[1] && (qv === "" || +qv > 0);
       var bar = form.querySelector("input[name=bar]:checked").value, panel = form.querySelector("input[name=panel]:checked").value;
       var fin = el("finish").value, galv = fin === "Hot dip galvanised" ? " (" + D.galv + ")" : "";
       var qty = el("qty").value || "___", unit = el("unit").value;
       var lines = [
-        s.label + " grating, " + s.standard,
+        s.label + " grating, " + el("std").value,
         "Load bar: " + dep + " x " + el("thick").value + " mm, " + bar.toLowerCase(),
-        "Mesh (pitch): " + el("pitch").value + " mm",
+        "Pitch (load bar x cross bar): " + el("pitch").value + " mm",
         "Cross bar: " + el("cross").value,
-        "Material: " + s.material,
+        "Material: " + el("mat").value,
         "Finish: " + fin + galv,
         "Panels: " + (panel === "standard" ? "standard 1000 x 7315 mm" : "shaped to our drawing"),
-        "Quantity: " + qty + " " + unit,
-        "Project / delivery: ____________"
+        "Quantity: " + qty + " " + unit
       ];
       var txt = lines.join("\n");
       $("#spec-out").textContent = txt;
-      var warn = $("#spec-warn"); warn.textContent = ok ? "" : "Load bar depth for this type is " + s.depth[0] + " to " + s.depth[1] + " mm.";
-      var msg = "Enquiry from the Ferrotech website concept:\n" + txt;
+      var warn = $("#spec-warn"); warn.textContent = ok ? "" : "Check the values: depth " + s.depth[0] + " to " + s.depth[1] + " mm, quantity above zero.";
+      ["#spec-wa", "#spec-mail"].forEach(function (id) { var a = $(id); a.setAttribute("aria-disabled", ok ? "false" : "true"); a.style.pointerEvents = ok ? "" : "none"; a.style.opacity = ok ? "" : ".45"; });
+      var msg = "[Concept demo] Enquiry from the Ferrotech website concept:\n" + txt;
       $("#spec-wa").href = "https://wa.me/" + D.wa + "?text=" + encodeURIComponent(msg);
       $("#spec-mail").href = "mailto:" + D.email + "?subject=" + encodeURIComponent("Grating enquiry") + "&body=" + encodeURIComponent(msg);
     }
