@@ -22,12 +22,12 @@ $$('[data-tool]').forEach(function(root){
  function render(){var p=val('part'),q=val('qty');if(!p&&!q)return;
   var ids=[],why={};if(p){ids.push(p);why[p]='選んだ部品：'+lab(D.parts,p)}
   var qs=q?D.qmap[q]:null;if(qs&&ids.indexOf(qs)<0){ids.push(qs);why[qs]='数の目安：'+lab(D.qty,q)}
-  if(!ids.length){out.innerHTML='<p class="tool__hint">量産型については、部品の種類を選ぶと近い事業内容をご案内します。</p>';return}
+  if(!ids.length){ids=['lighting','interior','oa','servo'];ids.forEach(function(id){why[id]='数の目安：'+lab(D.qty,q)+'（金型製作）'})}
   var h='<div class="res">'+ids.map(function(id){var s=D.sv[id];return '<article><p class="why">'+esc(why[id])+'</p><h3>'+esc(s.name)+'</h3><p>'+esc(s.body)+'</p>'+(s.strong?'<p><b>'+esc(s.strong)+'</b></p>':'')+'<a class="inl" href="'+D.base+'/business/'+id+'/">この事業内容のページを見る</a></article>'}).join('')+'</div>';
-  var names=ids.map(function(id){return D.sv[id].name}).join('、');
+  var mass=(q==='mass'&&p);var names=ids.map(function(id){return D.sv[id].name}).join('、');
   var body='佐藤精工株式会社 ご担当者様\n\n金型についてご相談があります。\n\n【ご相談の内容】\n・部品：'+(p?lab(D.parts,p):'未選択')+'\n・数の目安：'+(q?lab(D.qty,q):'未選択')+'\n・近い事業内容：'+names+'\n\n会社名：\nご担当者名：\n電話番号：\n部品の用途・材質・ご希望の納期：\n';
   var href='mailto:'+D.mail+'?subject='+encodeURIComponent('【ご相談】'+names+'について')+'&body='+encodeURIComponent(body);
-  h+='<div class="res__act"><a class="btn" href="'+href+'" data-ev="email">この内容でメール相談</a><a class="btn btn--ghost" href="'+D.telh+'" data-ev="call">電話 '+esc(D.tel)+'</a></div><p class="note">公式サイトの事業内容にもとづく目安です。仕様・費用・納期は個別にご確認ください。</p>';
+  if(mass)h+='<p class="note">量産型の金型製作は、上の「'+esc(D.sv[p].name)+'」の事業内容が対象です。</p>';h+='<div class="res__act"><a class="btn" href="'+href+'" data-ev="email">この内容でメール相談</a><a class="btn btn--ghost" href="'+D.telh+'" data-ev="call">電話 '+esc(D.tel)+'</a></div><p class="note">公式サイトの事業内容にもとづく目安です。仕様・費用・納期は個別にご確認ください。</p>';
   out.innerHTML=h}
  root.addEventListener('change',render)});
 })();
