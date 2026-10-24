@@ -51,13 +51,14 @@ if(!k)return;var p='demo/'+slug+'/'+k;
     <div class="f-chips" id="f-chips" role="group" aria-label="Filter by range"><button type="button" class="chip on" data-top="">All ranges</button><button type="button" class="chip" data-top="Gas Safety Equipment">Gas Safety Equipment</button><button type="button" class="chip" data-top="Industrial Gas Equipment">Industrial Gas Equipment</button><button type="button" class="chip" data-top="Beverage Equipment">Beverage Equipment</button><button type="button" class="chip" data-top="Disposable Gas Cylinders and Equipment">Disposable Gas Cylinders and Equipment</button><button type="button" class="chip" data-top="High Purity Equipment">High Purity Equipment</button><button type="button" class="chip" data-top="Medical Equipment">Medical Equipment</button><button type="button" class="chip" data-top="Spare Parts and Fittings">Spare Parts and Fittings</button></div>
     <div class="f-ex"><span class="muted">Try:</span> <button type="button" class="ex" data-q="oxygen regulator">oxygen regulator</button><button type="button" class="ex" data-q="acetylene hose">acetylene hose</button><button type="button" class="ex" data-q="flashback arrestor torch end">flashback arrestor torch end</button><button type="button" class="ex" data-q="medical suction">medical suction</button><button type="button" class="ex" data-q="CO2 beverage">CO2 beverage</button><button type="button" class="ex" data-q="nitrogen 20,000kPa">nitrogen 20,000kPa</button></div>
   </div>
+  <details class="ordering"><summary>Ordering a regulator? What to have ready</summary>
+  <p>Tesuco asks for these to make sure the correct regulator is supplied:</p>
+  <ul class="bul"><li>Type of gas</li><li>Purity of the gas supply</li><li>Required inlet and outlet pressure</li><li>Single or dual stage pressure regulation</li><li>Required flow rate, if available</li></ul>
+  <p>Put them in the note on your enquiry. Any other installed equipment or required specification helps.</p></details>
   <p class="f-count" id="f-count" aria-live="polite"></p>
   <ul class="prl f-res" id="f-res"></ul>
   <div class="f-more"><button type="button" class="btn ghost" id="f-more" hidden>Show more</button></div>
-  <section class="ordering rv"><h2>What to have ready when you order a regulator</h2>
-  <p>Tesuco asks for these to make sure the correct regulator is supplied:</p>
-  <ul class="bul"><li>Type of gas</li><li>Purity of the gas supply</li><li>Required inlet and outlet pressure</li><li>Single or dual stage pressure regulation</li><li>Required flow rate, if available</li></ul>
-  <p>Put them in the note on your enquiry. Any other installed equipment or required specification helps.</p></section>
+
   <noscript><p>The search needs JavaScript. Browse the <a href="/clients/demos/tesuco/products/">product ranges</a> instead, or email sales@tesuco.com.au.</p></noscript>
 </div>
 </main>
@@ -105,6 +106,7 @@ if(!k)return;var p='demo/'+slug+'/'+k;
     <ul class="enq-list" id="enq-list"></ul>
     <label class="fld">Your name<input id="enq-name" autocomplete="name"></label>
     <label class="fld">Phone or company (optional)<input id="enq-phone" autocomplete="tel"></label>
+    <label class="fld">Your email<input id="enq-email" type="email" autocomplete="email"></label>
     <label class="fld">Anything we should know (gas, pressure, quantity)<textarea id="enq-note" rows="3"></textarea></label>
     <div class="drawer-act"><a class="btn" id="enq-mail" href="mailto:sales@tesuco.com.au">Email this list to Tesuco</a><button type="button" class="btn ghost" id="enq-copy">Copy list</button></div>
     <p class="fine">Opens your email app with the codes filled in, addressed to sales@tesuco.com.au. Nothing is sent from this page.</p>

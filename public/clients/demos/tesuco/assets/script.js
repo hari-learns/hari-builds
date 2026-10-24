@@ -19,7 +19,7 @@ d.addEventListener('click',function(e){if(nav&&nav.classList.contains('open')&&!
 /* reveals */
 var rv=$$('.rv'),reduce=window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches;
 if(!('IntersectionObserver' in window)||reduce){rv.forEach(function(n){n.classList.add('in')})}
-else{var io=new IntersectionObserver(function(es){es.forEach(function(en){if(en.isIntersecting){en.target.classList.add('in');io.unobserve(en.target)}})},{rootMargin:'0px 0px -8% 0px'});rv.forEach(function(n){io.observe(n)})}
+else{var io=new IntersectionObserver(function(es){es.forEach(function(en){if(en.isIntersecting){en.target.classList.add('in');io.unobserve(en.target)}})},{rootMargin:'0px 0px -4% 0px'});rv.forEach(function(n){io.observe(n)})}
 
 /* enquiry store */
 var KEY='tesuco-enq',items=[];
@@ -30,10 +30,10 @@ function add(c,desc){var i=find(c);if(i<0)items.push({c:c,d:desc,q:1});else item
 function syncButtons(){$$('.add').forEach(function(b){var on=find(b.getAttribute('data-code'))>-1;b.classList.toggle('on',on);b.textContent=on?'Added':'Add'})}
 function lines(max){return items.map(function(it){return '- '+it.c+' x'+it.q+'  '+(max?it.d.replace(/\s*·\s*/g,', ').slice(0,max):it.d)})}
 function mailto(){
-  var name=($('#enq-name')||{}).value||'',ph=($('#enq-phone')||{}).value||'',note=($('#enq-note')||{}).value||'';
+  var em=($('#enq-email')||{}).value||'',name=($('#enq-name')||{}).value||'',ph=($('#enq-phone')||{}).value||'',note=($('#enq-note')||{}).value||'';
   var total=items.reduce(function(a,b){return a+b.q},0);
-  function mk(max){return 'Hello Tesuco,\n\nPlease quote the following:\n'+lines(max).join('\n')+(note?'\n\nNotes: '+note:'')+'\n\nName: '+name+'\nPhone / company: '+ph+'\n'}
-  var b=mk(0);if(encodeURIComponent(b).length>1700)b=mk(48);if(encodeURIComponent(b).length>1700)b=mk(0).slice(0,0)+'Hello Tesuco,\n\nPlease quote these codes:\n'+items.map(function(i){return i.c+' x'+i.q}).join(', ')+(note?'\n\nNotes: '+note:'')+'\n\nName: '+name+'\nPhone / company: '+ph+'\n';
+  function mk(max){return 'Hello Tesuco,\n\nPlease quote the following:\n'+lines(max).join('\n')+(note?'\n\nNotes: '+note:'')+'\n\nName: '+name+'\nEmail: '+em+'\nPhone / company: '+ph+'\n'}
+  var b=mk(0);if(encodeURIComponent(b).length>1700)b=mk(48);if(encodeURIComponent(b).length>1700)b=mk(0).slice(0,0)+'Hello Tesuco,\n\nPlease quote these codes:\n'+items.map(function(i){return i.c+' x'+i.q}).join(', ')+(note?'\n\nNotes: '+note:'')+'\n\nName: '+name+'\nEmail: '+em+'\nPhone / company: '+ph+'\n';
   return 'mailto:'+EMAIL+'?subject='+encodeURIComponent('Quote enquiry: '+total+' item'+(total===1?'':'s'))+'&body='+encodeURIComponent(b);
 }
 function render(){
@@ -53,7 +53,7 @@ function render(){
   syncButtons();
 }
 d.addEventListener('click',function(e){var b=e.target.closest('.add');if(b){add(b.getAttribute('data-code'),b.getAttribute('data-desc'))}});
-['enq-name','enq-phone','enq-note'].forEach(function(id){var el=$('#'+id);if(el)el.addEventListener('input',render)});
+['enq-name','enq-email','enq-phone','enq-note'].forEach(function(id){var el=$('#'+id);if(el)el.addEventListener('input',render)});
 var dr=$('#drawer'),lastF=null;
 function openDrawer(){lastF=d.activeElement;dr.hidden=false;render();var c=$('#enq-close');if(c)c.focus()}
 function closeDrawer(){if(dr&&!dr.hidden){dr.hidden=true;if(lastF&&lastF.focus)lastF.focus()}}
@@ -91,7 +91,7 @@ if(F){
       var s=0,code=r[0].toLowerCase();
       if(code===nq)s=1000;else if(code.indexOf(nq)===0)s=500;else if(code.indexOf(nq)>-1)s=300;
       if(nq&&r.d.indexOf(nq)>-1)s+=100;
-      var first=norm(r[1].split(' · ')[0]);toks.forEach(function(t){if(code.indexOf(t)>-1)s+=20;if(first.indexOf(t)>-1)s+=30});s-=Math.min(r[1].length,120)/40;
+      var first=norm(r[1].split(' · ')[0]);toks.forEach(function(t){if(code.indexOf(t)>-1)s+=20;if(first.indexOf(t)>-1)s+=30});var all=toks.length>0&&toks.every(function(t){return first.indexOf(t)>-1});if(all)s+=100;s-=Math.min(r[1].length,120)/40;
       matches.push([s,r])});
     matches.sort(function(a,b){return b[0]-a[0]});
     shown=PAGE;draw(toks);
