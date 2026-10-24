@@ -1,0 +1,12 @@
+@font-face{font-family:"Barlow Condensed";font-weight:500;font-display:swap;src:url(fonts/BarlowCondensed-500.woff2) format("woff2")}
+@font-face{font-family:"Barlow Condensed";font-weight:600;font-display:swap;src:url(fonts/BarlowCondensed-600.woff2) format("woff2")}
+@font-face{font-family:"Barlow Condensed";font-weight:700;font-display:swap;src:url(fonts/BarlowCondensed-700.woff2) format("woff2")}
+@font-face{font-family:"Inter";font-weight:400 600;font-display:swap;src:url(fonts/Inter-400.woff2) format("woff2")}
+:root{
+  --red:#d7261f;--red-d:#b21d17;--red-brand:#ee3b34;
+  --ink:#16181c;--ink-2:#3a3e45;--mute:#5b6068;
+  --paper:#fff;--soft:#f4f3f0;--line:#e2e0db;--dark:#16181c;--dark-2:#23262c;
+  --f-head:"Barlow Condensed","Arial Narrow",Arial,sans-serif;--f-body:"Inter",system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;
+  --s1:clamp(.5rem,1vw,.75rem);--s2:clamp(1rem,2vw,1.5rem);--s3:clamp(1.5rem,3.5vw,2.5rem);--s4:clamp(2.5rem,6vw,5rem);--s5:clamp(3.5rem,9vw,7rem);
+  --r:10px;--wrap:1240px;
+}
