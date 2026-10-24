@@ -26,7 +26,7 @@
   var dock = $("#dock"), dockX = $("#dock-x");
   if (dock && safe(function () { return sessionStorage.getItem("iy-dock") === "1"; })) dock.hidden = true;
   if (dockX) dockX.addEventListener("click", function () { dock.hidden = true; safe(function () { sessionStorage.setItem("iy-dock", "1"); }); });
-  if (dock) window.addEventListener("scroll", function () { if (window.scrollY > 240) dock.hidden = true; }, { passive: true });
+  if (dock) window.addEventListener("scroll", function () { if (window.scrollY > 80) dock.hidden = true; }, { passive: true });
 
   /* reveals */
   var rvs = $$(".rv, .chart");
@@ -74,9 +74,9 @@
         h = matLabel[mat] + "：サイズを選んでください"; p = "標準品：" + (so.join("、") || "なし") + (st.length ? "　受注生産品：" + st.join("、") : "");
       } else if (size && mat) {
         var c = code(size, mat), L = matLabel[mat];
-        if (c === "o") { cls = "res res--o"; sym = "○"; h = size + "／" + L + "：標準品です"; p = "カタログの標準ラインナップにあります。在庫と表面処理をご確認ください。"; }
-        else if (c === "t") { cls = "res res--t"; sym = "△"; h = size + "／" + L + "：受注生産品です"; p = "在庫・納期、表面処理の確認が必要です。お問い合わせください。"; }
-        else { cls = "res res--x"; sym = "－"; h = size + "／" + L + "：標準ラインナップにありません"; p = "その他のサイズ・材質・表面処理もご相談ください。"; }
+        if (c === "o") { cls = "res res--o"; sym = "○"; h = size + "／" + L + "：標準ラインナップにあります"; p = "カタログ（2014年6月）の標準品です。在庫・表面処理は要確認です。"; }
+        else if (c === "t") { cls = "res res--t"; sym = "△"; h = size + "／" + L + "：受注生産品です"; p = "カタログ（2014年6月）では受注生産品です。在庫・納期をお問い合わせください。"; }
+        else { cls = "res res--x"; sym = "－"; h = size + "／" + L + "：標準ラインナップにありません"; p = "カタログ（2014年6月）に掲載のない仕様です。ご相談ください。"; }
         var others = D.mats.filter(function (m) { return m.k !== mat && code(size, m.k) === "o"; }).map(function (m) { return m.l; });
         var sizes = D.sizes.filter(function (s) { return s !== size && code(s, mat) === "o"; });
         if (c !== "o" && others.length) a = size + " の標準品がある材質：" + others.join("、") + "。";
