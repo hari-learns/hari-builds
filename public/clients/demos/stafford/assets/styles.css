@@ -282,3 +282,6 @@ textarea{min-height:140px;resize:vertical}
 .tablewrap{overflow-x:auto}
 
 .fresult .eyebrow{color:var(--blue-hi)}
+.fresult .btn-ghost{border-color:rgba(246,245,240,.5);color:var(--paper)}
+.fresult .btn-ghost:hover{background:var(--paper);color:var(--ink)}
+.fresult .tiny{color:var(--mute-on-ink)}
