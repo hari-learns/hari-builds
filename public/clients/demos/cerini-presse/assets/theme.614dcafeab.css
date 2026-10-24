@@ -1,0 +1,10 @@
+/* Palette tokens only. Orange = the Cerini logo / site orange; green = the machine colour in their photos. */
+:root{
+  --ground:#121418; --surface:#1a1d22; --surface-2:#22262d; --ink:#f3f0ea; --muted:#b4bac2;
+  --accent:#f0902d; --accent-ink:#1a1006; --accent-deep:#9a4d08; --green:#8fb560;
+  --paper:#f2efe9; --paper-ink:#15171b; --paper-muted:#505760; --card:#ffffff;
+  --line:rgba(255,255,255,.14); --line-dark:rgba(20,22,26,.16);
+  --scrim:rgba(18,20,24,.92); --scrim-soft:rgba(18,20,24,0);
+  --shadow:rgba(0,0,0,.35); --bar-bg:rgba(18,20,24,.96);
+  --table-fill:rgba(255,255,255,.08); --white:#ffffff;
+}
