@@ -91,7 +91,7 @@ if(F){
       var s=0,code=r[0].toLowerCase();
       if(code===nq)s=1000;else if(code.indexOf(nq)===0)s=500;else if(code.indexOf(nq)>-1)s=300;
       if(nq&&r.d.indexOf(nq)>-1)s+=100;
-      var first=norm(r[1].split(' · ')[0]);toks.forEach(function(t){if(code.indexOf(t)>-1)s+=20;if(first.indexOf(t)>-1)s+=30});var all=toks.length>0&&toks.every(function(t){return first.indexOf(t)>-1});if(all)s+=100;s-=Math.min(r[1].length,120)/40;
+      var first=norm(r[1].split(' · ').slice(0,2).join(' '));toks.forEach(function(t){if(code.indexOf(t)>-1)s+=20;if(first.indexOf(t)>-1)s+=30});var all=toks.length>0&&toks.every(function(t){return first.indexOf(t)>-1});if(all)s+=100;if(r[3].indexOf('Spare Parts')===0&&!/spare|part|o-ring|seal|washer|gauge|nut|stem|fitting/.test(nq))s-=150;s-=Math.min(r[1].length,120)/40;
       matches.push([s,r])});
     matches.sort(function(a,b){return b[0]-a[0]});
     shown=PAGE;draw(toks);
