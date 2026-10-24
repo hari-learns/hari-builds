@@ -104,6 +104,7 @@
         li.appendChild(sp); li.appendChild(x); elReq.appendChild(li);
       });
       var body = [S.hello, "", S.intro].concat(picked.length ? picked.map(line) : ["- " + S.none], ["", S.qtyWord + ": " + (elQty.value || S.none), S.noteWord + ": " + (elNote.value || ""), S.nameWord + ": " + (elName.value || ""), "", S.tail]).join("\n");
+      var bn = $("#bar-n"); if (bn) bn.textContent = picked.length ? "(" + picked.length + ")" : "";
       elPre.textContent = body;
       elSend.href = mailto(cfg.mail, S.sub + (picked.length === 1 ? ": " + picked[0].t + " " + picked[0].dn + "x" + picked[0].p : ""), body);
     }

@@ -192,7 +192,7 @@ caption{text-align:left;font:600 1.1rem var(--font);padding:0 0 10px}
   .hero{min-height:84svh} .hero::before{background:linear-gradient(0deg,rgba(10,21,34,.95) 0,rgba(10,21,34,.82) 55%,rgba(10,21,34,.35))}
   .hero-img img{object-position:50% 50%}
   .facts li{padding:16px 10px 16px 0}
-  .nut{grid-template-columns:1fr;padding:12px} .nut .add{width:100%} .nut dl{grid-template-columns:repeat(3,minmax(0,1fr));gap:8px 10px} .nut dd{font-size:.95rem} .nut dt{font-size:.875rem}
+  .nut{padding:12px;gap:6px 10px} .nut .add{padding:0 12px} .chip{min-width:48px;padding:0 12px} .nut dl{grid-template-columns:repeat(3,minmax(0,1fr));gap:8px 10px} .nut dd{font-size:.95rem} .nut dt{font-size:.875rem}
   .foot{padding-bottom:calc(var(--s3) + 150px)}
 }
 @media(max-height:480px) and (orientation:landscape){
