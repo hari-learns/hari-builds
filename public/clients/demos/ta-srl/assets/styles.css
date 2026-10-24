@@ -28,10 +28,12 @@ p{margin:0 0 1em}
 .top-in{display:flex;align-items:center;justify-content:space-between;gap:16px;min-height:var(--hdr)}
 .logo{display:block;flex:none}.logo img{width:auto;height:58px}
 .nav{display:flex;align-items:center;gap:clamp(8px,1.4vw,22px)}
-.nav a{text-decoration:none;font-weight:600;font-size:.95rem;padding:12px 4px;min-height:44px;display:inline-flex;align-items:center;border-bottom:2px solid transparent}
+.nav a{text-decoration:none;font-weight:600;font-size:.95rem;padding:12px 4px;min-height:44px;min-width:44px;justify-content:center;display:inline-flex;align-items:center;border-bottom:2px solid transparent}
 .nav a:hover,.nav a[aria-current]{border-bottom-color:var(--green)}
 .nav .nav-call{background:var(--navy);color:var(--white);padding:10px 16px;border-radius:999px;border:0;white-space:nowrap}
 .nav .nav-call:hover{background:var(--blue)}
+.nav .lang{font-size:.875rem;letter-spacing:.06em;padding:10px 10px;border:1px solid var(--line);border-radius:8px;min-width:44px;justify-content:center}
+.nav .lang:hover{border-color:var(--green)}
 .burger{display:none;width:48px;height:48px;border:1px solid var(--line);border-radius:12px;background:var(--white);cursor:pointer;flex-direction:column;align-items:center;justify-content:center;gap:5px;padding:0}
 .burger span{display:block;width:22px;height:2px;background:var(--ink);transition:transform .25s,opacity .25s}
 .burger[aria-expanded=true] span:nth-child(1){transform:translateY(7px) rotate(45deg)}.burger[aria-expanded=true] span:nth-child(2){opacity:0}.burger[aria-expanded=true] span:nth-child(3){transform:translateY(-7px) rotate(-45deg)}
@@ -164,7 +166,7 @@ address{font-style:normal;margin:20px 0}.contact .btn.ghost-d{color:#fff;border-
 /* footer */
 .foot{background:#071a29;color:#c3d6e4;padding:48px 0 calc(48px + 64px)}.foot a{color:#fff}
 .foot-in{display:grid;grid-template-columns:1.2fr 1fr 1fr;gap:32px}.logochip{display:inline-block;background:#fff;padding:8px 12px;border-radius:6px;margin-bottom:14px;line-height:0}.foot-logo{width:175px;height:auto}.foot-h{font:500 .875rem var(--mono);letter-spacing:.12em;text-transform:uppercase;color:var(--green-l);margin:0 0 12px}
-.foot-nav{list-style:none;margin:0;padding:0}.foot a{display:inline-block;padding:10px 0;min-height:44px}.foot-co a,.foot-nav a{padding:6px 0}.soc a{margin-right:16px}
+.foot-nav{list-style:none;margin:0;padding:0}.foot a{display:inline-block;padding:10px 0;min-height:44px;min-width:44px}.foot-co a,.foot-nav a{padding:6px 0}.soc a{margin-right:16px}
 .legal{grid-column:1/-1;font-size:.875rem;margin:0;border-top:1px solid var(--line-d);padding-top:20px}
 @media (max-width:760px){.foot-in{grid-template-columns:1fr}}@media (min-width:761px){.foot{padding-bottom:48px}}
 /* sticky bar (phones) */
