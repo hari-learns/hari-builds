@@ -1,0 +1,252 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>FRP or steel grating: choosing by environment | Ferrotech</title>
+<meta name="description" content="When fibreglass (FRP / GRP) grating is the better choice than steel: corrosion, fire, weight and temperature, with the resin systems Ferrotech supplies in Oman.">
+<meta name="robots" content="noindex, nofollow">
+<meta name="theme-color" content="#001638">
+<link rel="canonical" href="https://hharan.site/clients/demos/ferrotech/insights/frp-or-steel-grating/">
+<meta property="og:type" content="website">
+<meta property="og:title" content="FRP or steel grating: choosing by environment | Ferrotech">
+<meta property="og:description" content="When fibreglass (FRP / GRP) grating is the better choice than steel: corrosion, fire, weight and temperature, with the resin systems Ferrotech supplies in Oman.">
+<meta property="og:url" content="https://hharan.site/clients/demos/ferrotech/insights/frp-or-steel-grating/">
+<meta property="og:image" content="https://hharan.site/clients/demos/ferrotech/assets/img/efg-1024.webp">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" type="image/png" href="/clients/demos/ferrotech/assets/img/favicon-64.png">
+<link rel="apple-touch-icon" href="/clients/demos/ferrotech/assets/img/apple-touch-icon.png">
+<link rel="preload" as="font" type="font/woff2" href="/clients/demos/ferrotech/assets/fonts/InstrumentSerif-normal-400.woff2" crossorigin>
+<link rel="preload" as="font" type="font/woff2" href="/clients/demos/ferrotech/assets/fonts/HankenGrotesk-normal-400-600.woff2" crossorigin>
+<style>/* Tokens only. Brand: Ferrograte navy (the logo's own tile colour), the orange diamond / lift-table orange as the one accent. */
+:root {
+  --ground: #002050;
+  --ground-2: #00285f;
+  --ground-3: #001638;
+  --surface: #0a3270;
+  --line: #34548c;
+  --line-soft: #1d3d75;
+  --ink: #eef3fa;
+  --muted: #b9c8e0;
+  --faint: #8ea3c6;
+  --accent: #ffa63d;
+  --accent-hi: #ffb862;
+  --on-accent: #001638;
+  --ok: #8be0b4;
+  --bad: #ff9f90;
+  --paper: #f3f2ed;
+  --paper-2: #e8e6dd;
+  --paper-ink: #001638;
+  --paper-muted: #44577d;
+  --paper-line: #cdc9bb;
+  --paper-accent: #9a5200;
+  --paper-ok: #176a49;
+  --paper-bad: #a8321f;
+  --black: #000000;
+  --white: #ffffff;
+  --ease: cubic-bezier(.16, 1, .3, 1);
+  --gut: clamp(20px, 5vw, 56px);
+  --bar-h: 64px;
+}
+.theme-dark  { --bg: var(--ground);   --bg-2: var(--ground-2); --fg: var(--ink);       --fg-2: var(--muted);       --rule: var(--line);       --hl: var(--accent); }
+.theme-deep  { --bg: var(--ground-3); --bg-2: var(--ground);   --fg: var(--ink);       --fg-2: var(--muted);       --rule: var(--line-soft);  --hl: var(--accent); }
+.theme-paper { --bg: var(--paper);    --bg-2: var(--paper-2);  --fg: var(--paper-ink); --fg-2: var(--paper-muted); --rule: var(--paper-line); --hl: var(--paper-accent); }
+/* Ferrotech concept. Tokens come from theme.css; no colour literals here. */
+@font-face { font-family: "Instrument Serif"; src: url("/clients/demos/ferrotech/assets/fonts/InstrumentSerif-normal-400.woff2") format("woff2"); font-weight: 400; font-style: normal; font-display: swap; }
+@font-face { font-family: "Instrument Serif"; src: url("/clients/demos/ferrotech/assets/fonts/InstrumentSerif-italic-400.woff2") format("woff2"); font-weight: 400; font-style: italic; font-display: swap; }
+@font-face { font-family: "Hanken Grotesk"; src: url("/clients/demos/ferrotech/assets/fonts/HankenGrotesk-normal-400-600.woff2") format("woff2"); font-weight: 400 600; font-style: normal; font-display: swap; }
+@font-face { font-family: "IBM Plex Mono"; src: url("/clients/demos/ferrotech/assets/fonts/IBMPlexMono-normal-400.woff2") format("woff2"); font-weight: 400; font-style: normal; font-display: swap; }
+@font-face { font-family: "IBM Plex Mono"; src: url("/clients/demos/ferrotech/assets/fonts/IBMPlexMono-normal-500.woff2") format("woff2"); font-weight: 500; font-style: normal; font-display: swap; }
+*, *::before, *::after { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; scroll-behavior: smooth; scroll-padding-top: 84px; }
+body { margin: 0; font: 400 clamp(16px, 1.05vw + 12px, 18px)/1.65 "Hanken Grotesk", system-ui, sans-serif; background: var(--ground-3); color: var(--ink); overflow-x: hidden; padding-bottom: var(--bar-h); }
+img { display: block; max-width: 100%; height: auto; }
+a { color: inherit; }
+h1, h2, h3, h4 { margin: 0; font-weight: 400; }
+p { margin: 0 0 1em; }
+ul { margin: 0; padding: 0; list-style: none; }
+.mono { font-family: "IBM Plex Mono", ui-monospace, monospace; font-size: 14px; letter-spacing: .04em; text-transform: uppercase; }
+.wrap { width: 100%; max-width: 1240px; margin-inline: auto; padding-inline: var(--gut); min-width: 0; }
+.skip { position: absolute; left: -999px; top: 8px; background: var(--accent); color: var(--on-accent); padding: 10px 16px; z-index: 100; }
+.skip:focus { left: 8px; }
+:focus-visible { outline: 3px solid var(--accent); outline-offset: 3px; }
+/* header */
+.hdr { position: fixed; inset: 0 0 auto 0; z-index: 50; transition: background .4s var(--ease), box-shadow .4s; padding-top: env(safe-area-inset-top); }
+.hdr.is-solid { background: var(--ground); box-shadow: 0 1px 0 var(--line-soft); }
+.hdr__in { display: flex; align-items: center; justify-content: space-between; gap: 16px; min-height: 68px; }
+.brand { display: block; line-height: 0; flex: none; }
+.brand img { width: 92px; height: auto; }
+.nav { display: none; gap: 4px; }
+.nav a { padding: 10px 12px; min-height: 44px; display: inline-flex; align-items: center; text-decoration: none; font-size: 15px; color: var(--muted); border-bottom: 2px solid transparent; }
+.nav a:hover, .nav a[aria-current] { color: var(--ink); border-color: var(--accent); }
+.hdr__r { display: flex; align-items: center; gap: 10px; }
+.hdr__cta { display: none; }
+.burger { flex: none; width: 48px; height: 48px; display: inline-grid; place-items: center; background: none; border: 1px solid var(--line); color: var(--ink); cursor: pointer; }
+.drawer { position: fixed; inset: 0; z-index: 60; background: var(--ground-3); display: flex; flex-direction: column; padding: 16px var(--gut) 24px; visibility: hidden; opacity: 0; transform: translateY(-12px); transition: opacity .35s, transform .35s var(--ease), visibility 0s .35s; overflow-y: auto; }
+.drawer.is-open { visibility: visible; opacity: 1; transform: none; transition-delay: 0s; }
+.drawer__top { display: flex; justify-content: space-between; align-items: center; min-height: 68px; }
+.drawer nav { display: grid; margin-top: 12px; }
+.drawer nav a { padding: 16px 0; font: 400 clamp(26px, 6vw, 36px)/1.1 "Instrument Serif", serif; text-decoration: none; border-bottom: 1px solid var(--line-soft); min-height: 56px; display: flex; align-items: center; }
+.drawer__foot { display: grid; gap: 10px; margin-top: auto; padding-top: 28px; }
+/* buttons */
+.btn { display: inline-flex; align-items: center; justify-content: center; gap: 10px; min-height: 48px; padding: 12px 22px; background: var(--accent); color: var(--on-accent); font-weight: 600; font-size: 16px; text-decoration: none; border: 1px solid var(--accent); cursor: pointer; transition: background .25s, transform .25s var(--ease); font-family: inherit; }
+.btn:hover { background: var(--accent-hi); }
+.btn svg { width: 18px; height: 18px; flex: none; }
+.btn--ghost { background: transparent; color: var(--fg, var(--ink)); border-color: var(--line); }
+.btn--ghost:hover { background: var(--surface); color: var(--ink); }
+.theme-paper .btn--ghost { color: var(--paper-ink); border-color: var(--paper-line); }
+.theme-paper .btn--ghost:hover { background: var(--paper-2); color: var(--paper-ink); }
+.btn--sm { min-height: 44px; padding: 8px 16px; font-size: 15px; }
+.btn-row { display: flex; flex-wrap: wrap; gap: 12px; }
+/* sections */
+.sec { padding-block: clamp(56px, 9vw, 120px); background: var(--bg); color: var(--fg); }
+.sec + .sec { border-top: 1px solid var(--rule); }
+.eyebrow { color: var(--hl); margin: 0 0 18px; }
+.h1 { font: 400 clamp(36px, 6vw, 84px)/1.02 "Instrument Serif", serif; letter-spacing: -.01em; max-width: 18ch; }
+.h1 em, .h2 em { font-style: italic; color: var(--hl); }
+.h2 { font: 400 clamp(30px, 4.2vw, 56px)/1.08 "Instrument Serif", serif; letter-spacing: -.005em; max-width: 22ch; }
+.h3 { font: 600 clamp(18px, 1.4vw + 10px, 22px)/1.3 "Hanken Grotesk", sans-serif; }
+.lead { font-size: clamp(17px, 1.2vw + 12px, 21px); color: var(--fg-2); max-width: 62ch; margin-top: 22px; }
+.prose p, .prose li { max-width: 68ch; color: var(--fg-2); }
+.prose h2 { margin: 2.2em 0 .6em; font: 400 clamp(26px, 3vw, 38px)/1.12 "Instrument Serif", serif; color: var(--fg); }
+.prose h3 { margin: 1.6em 0 .4em; font: 600 20px/1.3 "Hanken Grotesk"; color: var(--fg); }
+.bullets li { position: relative; padding-left: 22px; margin-bottom: .45em; }
+.bullets li::before { content: ""; position: absolute; left: 0; top: .78em; width: 10px; height: 2px; background: var(--hl); }
+/* hero */
+.hero { position: relative; min-height: min(100svh, 920px); display: flex; align-items: flex-end; background: var(--ground-3); color: var(--ink); overflow: hidden; padding: 120px 0 56px; }
+.hero__bg { position: absolute; inset: 0; }
+.hero__bg img { width: 100%; height: 100%; object-fit: cover; object-position: 50% 74%; animation: settle 2.6s var(--ease) forwards; }
+.hero__bg::after { content: ""; position: absolute; inset: 0; background: linear-gradient(180deg, var(--ground-3) 0%, transparent 34%, transparent 42%, var(--ground-3) 100%), linear-gradient(90deg, var(--ground-3) 0%, transparent 70%); opacity: .88; }
+@keyframes settle { to { object-position: 50% 62%; } }
+.hero__grid { position: relative; display: grid; gap: 36px; grid-template-columns: minmax(0, 1fr); align-items: end; }
+.hero__lead { font-size: clamp(17px, 1.2vw + 12px, 21px); color: var(--muted); max-width: 54ch; margin: 22px 0 28px; }
+.hero__certs { display: flex; flex-wrap: wrap; gap: 10px 22px; margin-top: 30px; color: var(--muted); }
+.hero__certs span { padding-top: 10px; border-top: 1px solid var(--line); }
+.panel { border: 1px solid var(--line); background: var(--ground-3); padding: 20px; max-width: 460px; }
+.panel svg { width: 100%; height: auto; display: block; }
+.panel .env { fill: var(--surface); stroke: var(--accent); stroke-width: 1.5; }
+.panel .l { fill: none; stroke: var(--muted); stroke-width: 1; }
+.panel .t { fill: var(--ink); font: 500 11px "IBM Plex Mono", monospace; letter-spacing: .06em; }
+.draw { stroke-dasharray: 1; stroke-dashoffset: 1; animation: draw 1.6s var(--ease) .5s forwards; }
+.fadein { opacity: 0; animation: fi 1.2s ease 1s forwards; }
+@keyframes draw { to { stroke-dashoffset: 0; } } @keyframes fi { to { opacity: 1; } }
+.panel__cap { margin-top: 14px; display: grid; gap: 4px; }
+.panel__cap b { font: 400 clamp(26px, 3vw, 34px)/1.1 "Instrument Serif", serif; }
+.panel__cap span { color: var(--muted); font-size: 15px; }
+/* grids and cards */
+.grid { display: grid; gap: clamp(18px, 2.4vw, 32px); grid-template-columns: minmax(0, 1fr); }
+.card { background: var(--bg-2); border: 1px solid var(--rule); display: flex; flex-direction: column; min-width: 0; }
+.card__img { aspect-ratio: 4 / 3; overflow: hidden; }
+.card__img img { width: 100%; height: 100%; object-fit: cover; transition: transform .9s var(--ease); }
+.card:hover .card__img img { transform: scale(1.04); }
+.card__b { padding: 22px; display: flex; flex-direction: column; gap: 10px; flex: 1; }
+.card__b p { color: var(--fg-2); margin: 0; font-size: 16px; }
+.card__more { margin-top: auto; padding-top: 10px; color: var(--hl); font-weight: 600; text-decoration: none; display: inline-flex; align-items: center; gap: 8px; min-height: 44px; }
+.facts { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1px; background: var(--rule); border: 1px solid var(--rule); }
+.fact { background: var(--bg); padding: 22px 18px; }
+.fact b { display: block; font: 400 clamp(30px, 4vw, 52px)/1 "Instrument Serif", serif; color: var(--hl); }
+.fact span { display: block; margin-top: 8px; color: var(--fg-2); font-size: 15px; line-height: 1.4; }
+.split { display: grid; gap: clamp(28px, 4vw, 64px); grid-template-columns: minmax(0, 1fr); align-items: start; }
+.figure img { width: 100%; height: auto; }
+.figure figcaption { margin-top: 10px; color: var(--fg-2); font-size: 14px; }
+.certs { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 14px; }
+.certs figure { margin: 0; background: var(--white); padding: 6px; }
+.certs figcaption { color: var(--paper-ink); font-size: 13px; padding: 6px 2px 2px; }
+/* tables */
+.tbl { overflow-x: auto; border: 1px solid var(--rule); background: var(--bg-2); }
+table { border-collapse: collapse; width: 100%; font-size: 16px; min-width: 520px; }
+th, td { text-align: left; padding: 14px 16px; border-bottom: 1px solid var(--rule); vertical-align: top; }
+th { font: 500 14px "IBM Plex Mono", monospace; text-transform: uppercase; letter-spacing: .05em; color: var(--hl); background: var(--bg-2); white-space: nowrap; }
+tr:last-child td { border-bottom: 0; }
+td:first-child { font-weight: 600; white-space: nowrap; }
+/* spec builder */
+.builder { border: 1px solid var(--line); background: var(--ground); padding: clamp(20px, 3vw, 36px); display: grid; gap: 28px; grid-template-columns: minmax(0, 1fr); }
+.fld { display: grid; gap: 6px; min-width: 0; }
+.fld label, .fld legend { font: 500 13px "IBM Plex Mono", monospace; text-transform: uppercase; letter-spacing: .06em; color: var(--muted); }
+.fld select, .fld input[type=number] { width: 100%; min-height: 48px; padding: 10px 12px; background: var(--ground-3); color: var(--ink); border: 1px solid var(--line); font: inherit; border-radius: 0; }
+fieldset { border: 0; padding: 0; margin: 0; min-width: 0; }
+.seg { display: flex; flex-wrap: wrap; gap: 8px; }
+.seg label { cursor: pointer; }
+.seg input { position: absolute; opacity: 0; pointer-events: none; }
+.seg span { display: inline-flex; align-items: center; min-height: 48px; padding: 10px 16px; border: 1px solid var(--line); font: 500 14px "Hanken Grotesk"; text-transform: none; letter-spacing: 0; color: var(--ink); }
+.seg input:checked + span { background: var(--accent); border-color: var(--accent); color: var(--on-accent); font-weight: 600; }
+.seg input:focus-visible + span { outline: 3px solid var(--accent); outline-offset: 2px; }
+.fields { display: grid; gap: 16px; grid-template-columns: repeat(2, minmax(0, 1fr)); }
+.fields .wide { grid-column: 1 / -1; }
+.out { border: 1px solid var(--accent); padding: 20px; background: var(--ground-3); display: grid; gap: 14px; align-content: start; min-width: 0; }
+.out pre { margin: 0; white-space: pre-wrap; word-break: break-word; font: 400 15px/1.55 "IBM Plex Mono", monospace; color: var(--ink); }
+.out small { color: var(--muted); font-size: 14px; line-height: 1.5; }
+/* projects */
+.filters { display: flex; flex-wrap: wrap; gap: 8px; margin: 24px 0; }
+.filters button { min-height: 44px; padding: 8px 16px; background: transparent; border: 1px solid var(--rule); color: var(--fg); font: 500 15px "Hanken Grotesk"; cursor: pointer; }
+.filters button[aria-pressed=true] { background: var(--accent); border-color: var(--accent); color: var(--on-accent); font-weight: 600; }
+.plist { border-top: 1px solid var(--rule); }
+.plist li { display: grid; grid-template-columns: minmax(0, 1fr); gap: 2px 18px; padding: 16px 0; border-bottom: 1px solid var(--rule); }
+.plist li[hidden] { display: none; }
+.plist b { font-weight: 600; } .plist span { color: var(--fg-2); }
+.tag { font: 500 12px "IBM Plex Mono", monospace; text-transform: uppercase; letter-spacing: .06em; color: var(--hl); }
+/* page head */
+.phead { padding: 150px 0 56px; background: var(--ground-3); color: var(--ink); border-bottom: 1px solid var(--line-soft); }
+.crumbs { display: flex; flex-wrap: wrap; gap: 8px; margin: 0 0 22px; color: var(--muted); font-size: 14px; }
+.crumbs a { text-decoration: none; min-height: 44px; display: inline-flex; align-items: center; } .crumbs a:hover { color: var(--accent); }
+.crumbs li + li::before { content: "/"; margin-right: 8px; color: var(--faint); }
+.crumbs { list-style: none; padding: 0; }
+/* insights */
+.art { max-width: 74ch; }
+.qa { border-left: 3px solid var(--hl); padding: 6px 0 6px 20px; margin: 28px 0; }
+.qa b { display: block; font: 400 clamp(22px, 2.4vw, 30px)/1.2 "Instrument Serif", serif; color: var(--fg); margin-bottom: 8px; }
+.draft { margin-top: 48px; padding: 16px 18px; border: 1px dashed var(--rule); color: var(--fg-2); font-size: 15px; }
+.faq details { border-bottom: 1px solid var(--rule); padding: 14px 0; }
+.faq summary { cursor: pointer; font-weight: 600; min-height: 44px; display: flex; align-items: center; }
+/* footer, bar, dock */
+.ftr { background: var(--ground-3); border-top: 1px solid var(--line-soft); padding: 56px 0 40px; color: var(--muted); }
+.ftr__grid { display: grid; gap: 32px; grid-template-columns: minmax(0, 1fr); }
+.ftr h2 { font: 500 14px "IBM Plex Mono", monospace; letter-spacing: .08em; text-transform: uppercase; color: var(--accent); margin-bottom: 14px; }
+.ftr li { margin-bottom: 6px; } .ftr a { text-decoration: none; display: inline-flex; align-items: center; min-height: 44px; } .ftr a:hover { color: var(--ink); }
+.ftr p { margin: 0; font-size: 15px; }
+.ftr__note { margin-top: 36px !important; padding-top: 20px; border-top: 1px solid var(--line-soft); font-size: 14px !important; }
+.ftr__note a { display: inline-flex; min-height: 44px; text-decoration: underline; }
+.bar { position: fixed; inset: auto 0 0 0; z-index: 40; display: grid; grid-template-columns: 1fr 1fr; gap: 8px; padding: 8px var(--gut) calc(8px + env(safe-area-inset-bottom)); background: var(--ground); border-top: 1px solid var(--line-soft); min-height: var(--bar-h); }
+.dock { position: fixed; left: 12px; right: 12px; bottom: calc(var(--bar-h) + 10px + env(safe-area-inset-bottom)); z-index: 45; display: flex; align-items: center; gap: 10px; background: var(--paper); color: var(--paper-ink); padding: 10px 12px 10px 16px; font-size: 14px; max-width: 520px; box-shadow: 0 6px 24px var(--black); }
+.dock[hidden] { display: none; } .dock p { margin: 0; line-height: 1.4; }
+.dock button { flex: none; width: 44px; height: 44px; background: none; border: 0; font-size: 26px; cursor: pointer; color: var(--paper-ink); }
+/* reveal */
+.rv { opacity: 0; transform: translateY(26px); transition: opacity .9s var(--ease), transform .9s var(--ease); }
+.rv.is-in { opacity: 1; transform: none; }
+@media (min-width: 640px) { .grid--2, .grid--3 { grid-template-columns: repeat(2, minmax(0, 1fr)); } .facts { grid-template-columns: repeat(3, minmax(0, 1fr)); } .ftr__grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } .plist li { grid-template-columns: 1.2fr 1.6fr auto; align-items: baseline; } .fields { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+@media (min-width: 960px) { .hero__grid { grid-template-columns: minmax(0, 1.5fr) minmax(0, 1fr); } .split { grid-template-columns: repeat(2, minmax(0, 1fr)); } .split--wide { grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr); } .builder { grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr); } .grid--3 { grid-template-columns: repeat(3, minmax(0, 1fr)); } .facts { grid-template-columns: repeat(6, minmax(0, 1fr)); } .ftr__grid { grid-template-columns: 1.3fr 1fr 1.4fr 1fr; } .dock { left: auto; right: 16px; } }
+@media (min-width: 1100px) { .nav { display: flex; } .hdr__cta { display: inline-flex; } .burger { display: none; } .bar { display: none; } body { padding-bottom: 0; } .dock { bottom: 16px; } }
+@media (max-height: 520px) and (orientation: landscape) { .hero { min-height: 0; padding-top: 96px; } .hero__bg img { object-position: 50% 50%; } }
+@media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } .rv { opacity: 1; transform: none; transition: none; } .hero__bg img { animation: none; object-position: 50% 62%; } .draw { animation: none; stroke-dashoffset: 0; } .fadein { animation: none; opacity: 1; } .card__img img { transition: none; } }
+.js-off .rv { opacity: 1; transform: none; }
+
+.prose a, .bullets a, .plist a { display: inline-flex; align-items: center; min-height: 44px; }
+.fld label, .fld legend { font-size: 14px; }
+.tag { font-size: 14px; }
+.certs figcaption { font-size: 14px; }
+
+.crumbs a { min-width: 44px; justify-content: center; }
+.seg label { position: relative; display: inline-flex; }
+.seg input { inset: 0; width: 100%; height: 100%; margin: 0; }
+.out small a { display: inline-flex; align-items: center; min-height: 44px; }
+.out small { font-size: 14px; }
+
+.builder .fields { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+</style>
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "Article", "headline": "FRP or steel grating: choosing by environment", "description": "When fibreglass (FRP / GRP) grating is the better choice than steel: corrosion, fire, weight and temperature, with the resin systems Ferrotech supplies in Oman.", "datePublished": "2026-10-24", "dateModified": "2026-10-24", "author": {"@id": "https://ferrotechengg.com/#org"}, "publisher": {"@id": "https://ferrotechengg.com/#org"}, "mainEntityOfPage": "https://hharan.site/clients/demos/ferrotech/insights/frp-or-steel-grating/", "image": "https://hharan.site/clients/demos/ferrotech/assets/img/efg-1024.webp"}</script>
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "What is the maximum temperature for vinyl ester FRP grating?", "acceptedAnswer": {"@type": "Answer", "text": "Ferrotech's VEFR resin systems (vinyl ester) are listed for up to 82 °C; isophthalic polyester up to 65 °C; phenolic up to 150 °C."}}, {"@type": "Question", "name": "Is Ferrograte FRP grating fire retardant?", "acceptedAnswer": {"@type": "Answer", "text": "It is designed to exhibit a minimum of Class 1 flame spread rating in accordance with ASTM E-84."}}]}</script>
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "Home", "item": "https://hharan.site/clients/demos/ferrotech/"}, {"@type": "ListItem", "position": 2, "name": "Insights", "item": "https://hharan.site/clients/demos/ferrotech/insights/"}, {"@type": "ListItem", "position": 3, "name": "FRP or steel grating: choosing by enviro", "item": "https://hharan.site/clients/demos/ferrotech/insights/frp-or-steel-grating/"}]}</script>
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+<header class="hdr" id="hdr"><div class="wrap hdr__in"><a class="brand" href="/clients/demos/ferrotech/" aria-label="Ferrotech Engineering, home"><img class="" src="/clients/demos/ferrotech/assets/img/logo.png" width="670" height="339" alt="Ferrograte, Ferrotech Engineering LLC"></a><nav class="nav" aria-label="Main navigation"><a href="/clients/demos/ferrotech/gratings/">Gratings</a><a href="/clients/demos/ferrotech/structural/">Structural steel</a><a href="/clients/demos/ferrotech/access/">Access engineering</a><a href="/clients/demos/ferrotech/projects/">Projects</a><a href="/clients/demos/ferrotech/capabilities/">Capabilities</a><a href="/clients/demos/ferrotech/insights/" aria-current="page">Insights</a></nav><div class="hdr__r"><a class="btn btn--sm hdr__cta" href="/clients/demos/ferrotech/contact/">Send an enquiry</a><button class="burger" id="burger" type="button" aria-label="Open menu" aria-expanded="false" aria-controls="drawer"><svg viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M3 7h18M3 12h18M3 17h18"/></svg></button></div></div></header>
+<div class="drawer" id="drawer" aria-hidden="true" role="dialog" aria-label="Main navigation"><div class="drawer__top"><a class="brand" href="/clients/demos/ferrotech/" tabindex="-1"><img class="" src="/clients/demos/ferrotech/assets/img/logo.png" width="670" height="339" alt="Ferrograte, Ferrotech Engineering LLC"></a><button class="burger" id="burger-x" type="button" aria-label="Close menu"><svg viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M5 5l14 14M19 5L5 19"/></svg></button></div><nav aria-label="Main navigation"><a href="/clients/demos/ferrotech/gratings/">Gratings</a><a href="/clients/demos/ferrotech/structural/">Structural steel</a><a href="/clients/demos/ferrotech/access/">Access engineering</a><a href="/clients/demos/ferrotech/projects/">Projects</a><a href="/clients/demos/ferrotech/capabilities/">Capabilities</a><a href="/clients/demos/ferrotech/insights/">Insights</a><a href="/clients/demos/ferrotech/contact/">Send an enquiry</a></nav><div class="drawer__foot"><a class="btn" href="tel:+96824502841"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 4h4l2 5-2.5 1.5a11 11 0 0 0 5 5L15 13l5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 6a2 2 0 0 1 2-2z"/></svg>Call +968 2450 2841</a><a class="btn btn--ghost" href="mailto:info@ferrotechengg.com"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="1"/><path d="m3 7 9 6 9-6"/></svg>info@ferrotechengg.com</a></div></div>
+<main id="main"><section class="phead theme-deep"><div class="wrap"><ol class="crumbs" aria-label="Breadcrumb"><li><a href="/clients/demos/ferrotech/">Home</a></li><li><a href="/clients/demos/ferrotech/insights/">Insights</a></li><li aria-current="page">FRP or steel grating: choosing by enviro</li></ol><h1 class="h1">FRP or steel grating: choosing by environment</h1><p class="lead">Choose FRP (GRP) where corrosion resistance, light weight, electrical insulation or maintenance-free service matter most; choose galvanised steel where the application calls for it. Resin choice sets the temperature and corrosion limit.</p></div></section>
+<section class="sec theme-paper "><div class="wrap"><div class="art prose"><div class="qa"><b>Should I use FRP or steel grating?</b>Choose FRP (GRP) where corrosion resistance, light weight, electrical insulation or maintenance-free service matter most; choose galvanised steel where the application calls for it. Resin choice sets the temperature and corrosion limit.</div><h2>Where FRP is chosen</h2><p>Fibreglass grating is widely used in industrial applications because of its corrosion resistance and high strength-to-weight ratio. Ferrotech lists these benefits: light weight, fire retardant, electrical insulation, maintenance free, corrosion resistance, permanent slip resistance, a safe and comfortable foothold, easy installation and maintenance, and radio transmittance.</p><p>Typical places: sewage treatment and desalination plants, independent power projects, oil &amp; gas, food and beverage, chemical plants, marine and dry docks.</p><h2>Choosing the resin</h2><p>The resin sets the temperature limit and the corrosion resistance. Ferrotech's published resin systems:</p><div class="tbl scroller" tabindex="0" role="region" aria-label="Data table"><table><thead><tr><th scope=col>Resin</th><th scope=col>Base</th><th scope=col>Corrosion resistance</th><th scope=col>Max temperature</th></tr></thead><tbody><tr><td><b>IFR-25 / IFR-10 / IFGR-30</b></td><td>Isophthalic polyester</td><td>Very good</td><td>65 °C</td></tr><tr><td><b>VEFR-25 / VEFR-10</b></td><td>Vinyl ester</td><td>Excellent</td><td>82 °C</td></tr><tr><td><b>MP-5</b></td><td>Phenolic</td><td>Very good (low smoke)</td><td>150 °C</td></tr></tbody></table></div><h2>Moulded or pultruded</h2><p>Moulded grating suits general industrial needs and, in the heavier range, loads such as forklift traffic. Pultruded grating, in I-shape, T-shape and high-load bars, suits long walkways, high load locations, ramps, shelving and manufacturing lines. All Ferrograte FRP / GRP grating is designed to a minimum of Class 1 flame spread rating to ASTM E-84.</p><h2>When steel is the answer</h2><p>Electro-forged and heavy duty steel grating, hot dip galvanised to BS EN ISO 1461:2009 or ASTM A123, is the choice where the project specification calls for steel, and heavy duty welded grating covers rolling loads up to the bar sizes in the range. When in doubt, send the environment (chemicals, temperature, load, fire requirement) and Ferrotech's team will recommend a type.</p><h2>Frequently asked</h2><div class="faq"><details><summary>What is the maximum temperature for vinyl ester FRP grating?</summary><p>Ferrotech&#x27;s VEFR resin systems (vinyl ester) are listed for up to 82 °C; isophthalic polyester up to 65 °C; phenolic up to 150 °C.</p></details><details><summary>Is Ferrograte FRP grating fire retardant?</summary><p>It is designed to exhibit a minimum of Class 1 flame spread rating in accordance with ASTM E-84.</p></details></div><h2>Related</h2><ul class="bullets"><li><a href="/clients/demos/ferrotech/gratings/frp/" style="text-decoration:underline">FRP / GRP gratings</a></li></ul><div class="btn-row" style="margin-top:28px"><a class="btn" href="/clients/demos/ferrotech/gratings/#builder">Build a grating spec<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a><a class="btn btn--ghost" href="/clients/demos/ferrotech/contact/">Ask the engineers</a></div><p class="draft">Draft prepared from your published information, for review before publishing. Facts come from ferrotechengg.com; items to confirm are listed in the project notes.</p></div></div></section>
+</main>
+<footer class="ftr"><div class="wrap"><div class="ftr__grid"><div><img class="" src="/clients/demos/ferrotech/assets/img/logo.png" width="670" height="339" alt="Ferrograte, Ferrotech Engineering LLC"><p style="margin-top:18px">Ferrotech Engineering LLC. Gratings and structural steel, Sohar, Oman.</p></div><div><h2>Pages</h2><ul><li><a href="/clients/demos/ferrotech/gratings/">Gratings</a></li><li><a href="/clients/demos/ferrotech/structural/">Structural steel</a></li><li><a href="/clients/demos/ferrotech/access/">Access engineering</a></li><li><a href="/clients/demos/ferrotech/projects/">Projects</a></li><li><a href="/clients/demos/ferrotech/capabilities/">Capabilities</a></li><li><a href="/clients/demos/ferrotech/insights/">Insights</a></li><li><a href="/clients/demos/ferrotech/contact/">Contact</a></li><li><a href="/clients/demos/ferrotech/seo/">Search visibility audit</a></li></ul></div><div><h2>Sohar, Oman</h2><ul><li><p>PO Box 323, P.C. 322</p></li><li><p>Plot No. 5137, Road No. 509, Sohar Industrial Estate-V</p></li><li><p>Sultanate of Oman</p></li><li><a href="mailto:info@ferrotechengg.com">info@ferrotechengg.com</a></li><li><a href="tel:+96824502841">+968 2450 2841</a></li><li><a href="tel:+96824502842">+968 2450 2842</a></li><li><a href="tel:+96899863383">+968 9986 3383</a></li></ul></div><div><h2>Certified</h2><ul><li><p>ISO 9001:2015</p></li><li><p>ISO 45001:2018</p></li><li><p>ISO 14001:2015</p></li></ul></div></div><p class="ftr__note">Redesign concept built from the public content of <a href="https://ferrotechengg.com" rel="noopener">ferrotechengg.com</a>.</p></div></footer>
+<div class="bar"><a class="btn" href="/clients/demos/ferrotech/contact/">Send an enquiry</a><a class="btn btn--ghost" href="tel:+96824502841"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 4h4l2 5-2.5 1.5a11 11 0 0 0 5 5L15 13l5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 6a2 2 0 0 1 2-2z"/></svg>Call</a></div>
+<div class="dock" id="dock" role="note"><p>Redesign concept for Ferrotech Engineering by Hariharan. Not the live site.</p><button type="button" id="dock-x" aria-label="Close note">&times;</button></div>
+<script src="/clients/demos/ferrotech/assets/site.2bfd600a76.js" defer></script>
+</body>
+</html>
