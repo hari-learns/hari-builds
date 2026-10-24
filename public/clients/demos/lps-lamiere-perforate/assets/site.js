@@ -81,7 +81,7 @@
     }
     function toggle(r, th, k) {
       var i = -1; picked.forEach(function (p, j) { if (p.k === k) i = j; });
-      if (i > -1) picked.splice(i, 1); else picked.push({ k: k, r: r, th: th, qty: 1 });
+      if (i > -1) picked.splice(i, 1); else picked.push({ k: k, r: r, th: th, qty: 0 });
       renderReq();
     }
     function renderReq() {
@@ -91,8 +91,8 @@
         li.innerHTML = '<div><strong></strong><small></small></div><div class="fin-qty"><label class="sr"></label><input type="number" inputmode="numeric" min="1" step="1"><button type="button" class="fin-x" aria-label="Rimuovi">&times;</button></div>';
         $("strong", li).textContent = title(it.r) + ", sp. " + fmt(it.th) + " mm";
         $("small", li).textContent = cfg.matsShort[it.r[0]] + " · 1000 × 2000 mm · fogli";
-        var inp = $("input", li); inp.value = it.qty; $("label", li).textContent = "Numero di fogli"; inp.setAttribute("aria-label", "Numero di fogli");
-        inp.addEventListener("input", function () { var v = parseInt(inp.value, 10); it.qty = v > 0 ? v : 1; build(); });
+        var inp = $("input", li); inp.value = it.qty || ""; inp.placeholder = "N."; $("label", li).textContent = "Numero di fogli"; inp.setAttribute("aria-label", "Numero di fogli");
+        inp.addEventListener("input", function () { var v = parseInt(inp.value, 10); it.qty = v > 0 ? v : 0; build(); });
         $(".fin-x", li).addEventListener("click", function () { toggle(it.r, it.th, it.k); render(); });
         el.items.appendChild(li);
       });
@@ -101,11 +101,11 @@
     }
     function build() {
       var L = ["Buongiorno,", "", "vorrei un'offerta per le seguenti lamiere forate (formato lastra 1000 x 2000 mm, come da assortimento a magazzino):", ""];
-      picked.forEach(function (it, i) { L.push((i + 1) + ") " + line(it) + ": " + it.qty + (it.qty === 1 ? " foglio" : " fogli")); });
-      L.push("", "Ragione sociale: " + (el.co.value || ""), "Nome: " + (el.nm.value || ""), "Telefono: " + (el.tel.value || ""), "", "(Richiesta preparata con lo strumento di ricerca dell'assortimento del sito)");
+      picked.forEach(function (it, i) { L.push((i + 1) + ") " + line(it) + ": " + (it.qty ? it.qty + (it.qty === 1 ? " foglio" : " fogli") : "quantità da indicare")); });
+      L.push("", "Resto a disposizione per ogni chiarimento. Cordiali saluti,", (el.nm.value || ""), (el.co.value || ""), (el.tel.value ? "Tel. " + el.tel.value : ""), "", "(Richiesta preparata con lo strumento di ricerca dell'assortimento del sito)");
       text = L.join("\n");
       var on = picked.length > 0;
-      el.send.setAttribute("aria-disabled", on ? "false" : "true");
+      el.send.setAttribute("aria-disabled", on ? "false" : "true"); el.send.textContent = on ? "Scriva a " + cfg.mail : "Scelga uno spessore";
       el.send.href = on ? "mailto:" + cfg.mail + "?subject=" + encodeURIComponent("Richiesta di offerta lamiere forate (" + picked.length + (picked.length === 1 ? " articolo" : " articoli") + ")") + "&body=" + encodeURIComponent(text) : "mailto:" + cfg.mail;
     }
     function refresh(skip) {

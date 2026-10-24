@@ -300,7 +300,7 @@ html.js .rv.in{opacity:1;transform:none}
 .split .tool{grid-template-columns:minmax(0,1fr)}
 .sec .tool{margin-top:0}
 @media(min-width:861px){.dock{left:auto;right:20px}}
-.foot-logo{padding:0;width:119px;height:auto;box-shadow:0 0 0 7px var(--white);margin:7px;border-radius:2px}
+.foot-logo{padding:0;width:110px;height:auto;margin:0 0 6px}
 .tool-match li:has(a){padding:0}
 .tool-match li a{display:flex;align-items:center;min-height:44px;padding:0 12px;color:var(--blue-hi);font:500 .95rem var(--sans)}
 
@@ -426,3 +426,6 @@ thead tr.sub th{font-size:.875rem;text-transform:lowercase;letter-spacing:0;colo
 .fin-jump{position:sticky;top:calc(var(--hdr) + env(safe-area-inset-top) + 8px);z-index:5;display:flex;align-items:center;justify-content:center;min-height:44px;margin:0 0 12px;padding:0 14px;background:var(--amber);color:var(--ink);font-weight:600;border-radius:4px;text-decoration:none;text-align:center}
 @media(min-width:961px){.fin-jump{display:none!important}}
 @media(max-width:860px){.hero-act .btn-line{display:none}}
+
+@media(max-width:420px){.fin-form{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.f select{padding:0 8px}}
+.foot-logo{background:none;box-shadow:none}
