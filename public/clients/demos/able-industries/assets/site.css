@@ -84,12 +84,12 @@ p{margin:0 0 1em}
 .eyebrow,.kicker{font:500 .9rem/1.3 "IBM Plex Mono",monospace;letter-spacing:.12em;text-transform:uppercase;color:var(--hl);margin:0 0 16px}
 
 /* hero */
-.hero{position:relative;min-height:min(92svh,860px);display:flex;align-items:flex-end;background:var(--bg);color:var(--fg);overflow:hidden;padding-top:var(--bar-h)}
+.hero{position:relative;min-height:min(82svh,740px);display:flex;align-items:flex-end;background:var(--bg);color:var(--fg);overflow:hidden;padding-top:var(--bar-h)}
 .hero-img,.band-img{position:absolute;inset:0}
 .hero-img img,.band-img img{width:100%;height:100%;object-fit:cover;object-position:60% 40%}
 .hero-img img{animation:settle 2.2s var(--ease) both}
 @keyframes settle{from{transform:scale(1.07)}to{transform:scale(1)}}
-.hero-scrim{position:absolute;inset:0;background:linear-gradient(180deg,rgba(7,14,20,.6) 0%,rgba(7,14,20,.25) 30%,rgba(7,14,20,.92) 100%),linear-gradient(90deg,rgba(7,14,20,.55),transparent 65%)}
+.hero-scrim{position:absolute;inset:0;background:linear-gradient(180deg,rgba(7,14,20,.5) 0%,rgba(7,14,20,.1) 32%,rgba(7,14,20,.88) 100%),linear-gradient(90deg,rgba(7,14,20,.5),transparent 60%)}
 .hero-in{position:relative;padding-bottom:clamp(40px,8vh,88px);padding-top:80px}
 .hero h1{font-size:clamp(2.6rem,8.2vw,6.4rem);max-width:15ch;text-shadow:0 2px 30px rgba(0,0,0,.5)}
 .lead{font-size:clamp(1.05rem,1.3vw + .7rem,1.4rem);color:#dbe6ee;max-width:46ch;margin:20px 0 28px}
@@ -276,3 +276,16 @@ p{margin:0 0 1em}
 
 .hero .eyebrow{color:#fff;text-shadow:0 1px 12px rgba(0,0,0,.7)}
 .band .kicker{color:#7fd0f5}
+
+.phead.has-img{position:relative;overflow:hidden;min-height:clamp(340px,52vh,520px);display:flex;align-items:flex-end}
+.ph-img{position:absolute;inset:0}.ph-img img{width:100%;height:100%;object-fit:cover;object-position:60% 45%}
+.ph-scrim{position:absolute;inset:0;background:linear-gradient(180deg,rgba(7,14,20,.65),rgba(7,14,20,.35) 40%,rgba(7,14,20,.92))}
+.ph-in{position:relative;width:100%}
+.has-img .eyebrow{color:#fff}
+.bar .nav-cta{display:none}
+@media(min-width:960px){.bar .nav-cta{display:inline-flex}}
+
+.f{align-content:end}
+.page-can-able-make-it .mbar{display:none}
+.page-can-able-make-it{padding-bottom:0}
+@media(max-width:959px){.dock{bottom:calc(76px + env(safe-area-inset-bottom))}.page-can-able-make-it .dock{bottom:12px}body{padding-bottom:calc(120px + env(safe-area-inset-bottom))}.page-can-able-make-it{padding-bottom:80px}}

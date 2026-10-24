@@ -31,6 +31,7 @@
   // dock
   var dock = $("#dock");
   try { if (sessionStorage.getItem("dock-x")) dock.hidden = true; } catch (e) {}
+  if (dock) setTimeout(function () { dock.hidden = true; }, 7000);
   if (dock) $("button", dock).addEventListener("click", function () { dock.hidden = true; try { sessionStorage.setItem("dock-x", "1"); } catch (e) {} });
 
   // gallery filter + lightbox
@@ -111,7 +112,7 @@
         r.pct = Math.max(longest / m.L, other / m.W) * 100;
         if (longest > m.L || other > m.W) { r.st = "no"; r.why = "Larger than the " + fmt(m.L) + " × " + fmt(m.W) + " mm bed."; return r; }
         if (T && T > m.T) { r.st = "no"; r.why = "Deeper than " + m.T + " mm."; return r; }
-        r.why = "Fits the " + fmt(m.L) + " × " + fmt(m.W) + " mm bed."; return r;
+        r.st = "chk2"; r.why = "Fits the " + fmt(m.L) + " × " + fmt(m.W) + " mm bed. Able confirms which materials it can cut."; return r;
       }
       return r;
     }
@@ -127,7 +128,7 @@
       var yes = rs.filter(function (r) { return r.st !== "no"; });
       var head = document.createElement("li");
       head.style.cssText = "border:0;padding:0";
-      head.innerHTML = '<p class="sumline">' + (yes.length ? yes.length + " of " + rs.length + " machines cover this size." : "Outside the published machine sizes. Able may still be able to help: ask.") + "</p>";
+      head.innerHTML = '<p class="sumline">' + (yes.length ? (rs.filter(function (r) { return r.st === "fit"; }).length + " fit, " + rs.filter(function (r) { return r.st === "chk2"; }).length + " to confirm with Able.").replace("0 fit, ", "") : "Outside the published machine sizes. Able may still be able to help: send it anyway.") + "</p>";
       out.appendChild(head);
       rs.sort(function (a, b) { return (a.st === "no") - (b.st === "no"); }).forEach(function (r) {
         var li = document.createElement("li"); li.className = r.st;
