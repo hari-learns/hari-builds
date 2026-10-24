@@ -90,3 +90,5 @@ img{max-width:100%;height:auto;display:block}a{color:inherit}h1,h2,h3{font-weigh
 .num-l b{font-size:clamp(1.6rem,1.1rem + 1.4vw,2.3rem);white-space:nowrap}
 .hero .kick,.phero .kick{color:#ffd9bd}
 @media(max-width:700px){.hero-img::after,.phero-img::after{background:linear-gradient(0deg,#0e2238f5 0,#0e2238d0 55%,#0e223880 100%)}}
+
+@media(max-width:700px){.nobar{padding-bottom:0}.nobar .bar{display:none}.nobar{--bar:0px}.dock{font-size:.8125rem;padding-left:12px}.hero-t{padding-top:96px}.hero{min-height:min(80svh,760px)}.hero .lead{font-size:1rem}.hero-act{margin-top:18px}}
