@@ -6,7 +6,7 @@ var dock=$('#dock');try{if(sessionStorage.getItem('dockx'))dock.hidden=true}catc
 $('#dockx').addEventListener('click',function(){dock.hidden=true;try{sessionStorage.setItem('dockx','1')}catch(e){}});
 /* menu */
 var bg=$('#burger'),nav=$('#nav');
-function setMenu(o){nav.classList.toggle('open',o);bg.setAttribute('aria-expanded',o);bg.setAttribute('aria-label',o?'Chiudi il menu':'Apri il menu');d.body.style.overflow=o?'hidden':''}
+function setMenu(o){if(o){var hb=$('.top').getBoundingClientRect().bottom;nav.style.top=Math.max(0,hb)+'px'}nav.classList.toggle('open',o);bg.setAttribute('aria-expanded',o);bg.setAttribute('aria-label',o?'Chiudi il menu':'Apri il menu');d.body.style.overflow=o?'hidden':''}
 bg.addEventListener('click',function(){setMenu(!nav.classList.contains('open'))});
 d.addEventListener('keydown',function(e){if(e.key==='Escape')setMenu(false)});
 $$('a',nav).forEach(function(a){a.addEventListener('click',function(){setMenu(false)})});
@@ -54,9 +54,9 @@ if(box){
   if(dia<=F.turn.maxdia){
    h+='<div class="res best"><span class="tag">Rientra</span><h3>'+F.bnj.name+'</h3><p>Passaggio barra diametro '+F.turn.maxdia+' mm: la tua barra da '+fmt(dia)+' mm ci passa. '+F.bnj.text+'</p></div>';
    if(mat==='Altro materiale')h+='<div class="res no"><span class="tag">Da chiedere</span><h3>Materiale diverso da quelli elencati</h3><p>Sul sito TA lavora da barra trafilata in acciaio, inox e speciale, alluminio, bronzo e ottone. Per altri materiali chiedi a TA.</p></div>';
-   else h+='<div class="res"><span class="tag">Materiale e serie</span><h3>'+mat+', '+qty.toLowerCase()+'</h3><p>Tra i materiali citati da TA, lavorati dal pezzo singolo alla piccola, media e grande serie.</p></div>';
+   else h+='<div class="res"><span class="tag">Materiale e serie</span><h3>'+mat+', '+qty.toLowerCase()+'</h3><p>Il sito di TA cita questo materiale tra quelli lavorati da barra, e lavorazioni dal pezzo singolo alla piccola, media e grande serie.</p></div>';
   }else{
-   h+='<div class="res no"><span class="tag">Oltre il passaggio barra</span><h3>'+fmt(dia)+' mm supera i '+F.turn.maxdia+' mm del '+F.bnj.name+'</h3><p>Sul sito non sono elencate altre macchine di tornitura: il parco macchine di TA è più ampio. Scrivi a TA con il disegno e ti dice se si può fare.</p></div>';
+   h+='<div class="res no"><span class="tag">Oltre il passaggio barra</span><h3>'+fmt(dia)+' mm supera i '+F.turn.maxdia+' mm del '+F.bnj.name+'</h3><p>Sul sito non sono elencate altre macchine di tornitura (il parco macchine è «molto vasto», dalla macchina tradizionale a quella ad alta tecnologia). Scrivi a TA con il disegno.</p></div>';
   }
   out.innerHTML=h+reqBtn(subj,lines,'Invia la richiesta a TA');
  }
@@ -69,9 +69,9 @@ if(box){
   ok.sort(function(a,b){return a.m.dia*a.m.h-b.m.dia*b.m.h});
   var lines=['Presetting utensili','Diametro max utensile: '+fmt(dia)+' mm','Lunghezza/altezza utensile: '+fmt(h)+' mm','Attacco: '+(tp?TN[tp]:'non so / altro')],subj='Verifica presetting, utensile Ø '+fmt(dia)+' x '+fmt(h)+' mm';
   var o='';
-  if(!ok.length)o+='<div class="res no"><span class="tag">Nessun modello</span><h3>Con queste misure nessun presetting a scheda le copre</h3><p>Il campo più ampio sulle schede è 700 mm di diametro e 600 mm di altezza (EVO 75 e 76). Scrivi a TA: potrebbero esserci soluzioni non pubblicate.</p></div>';
+  if(!ok.length)o+='<div class="res no"><span class="tag">Nessun modello</span><h3>Con queste misure nessun presetting a scheda le copre</h3><p>Il campo più ampio sulle schede è 700 mm di diametro e 600 mm di altezza (EVO 75 e 76). Scrivi a TA con le tue misure.</p></div>';
   ok.forEach(function(r,i){var m=r.m,link=m.page?'<a class="l btn dark" href="'+F.base+'/presetting/'+m.page+'/">Scheda</a>':'';
-   o+='<div class="res'+(i===0?' best':'')+'" style="animation-delay:'+(i*45)+'ms"><span class="tag">'+(i===0?'Il più vicino alla tua misura':'Rientra')+'</span><h3>'+m.id+'</h3><p>Campo '+m.dia+' mm di diametro, '+m.h+' mm di altezza'+(m.note?' ('+m.note+')':'')+'. Attacchi: '+m.t.split('').map(function(c){return TN[c]}).join(', ')+'.</p>'+link+'</div>'});
+   o+='<div class="res'+(i===0?' best':'')+'" style="animation-delay:'+(i*45)+'ms"><span class="tag">'+(i===0?'Il più compatto che copre la tua misura':'Rientra')+'</span><h3>'+m.id+'</h3><p>Campo '+m.dia+' mm di diametro, '+m.h+' mm di altezza'+(m.note?' ('+m.note+')':'')+'. Attacchi: '+m.t.split('').map(function(c){return TN[c]}).join(', ')+'.</p>'+link+'</div>'});
   if(no.length)o+='<details><summary>Non rientrano ('+no.length+')</summary><ul>'+no.map(function(r){return '<li><strong>'+r.m.id+'</strong>: '+r.why.join(', ')+'</li>'}).join('')+'</ul></details>';
   out.innerHTML=o+(ok.length?reqBtn(subj,lines.concat(['Modelli che sembrano coprire la misura: '+ok.map(function(r){return r.m.id}).join(', ')]),'Invia la richiesta a TA'):reqBtn(subj,lines,'Scrivi a TA'));
  }

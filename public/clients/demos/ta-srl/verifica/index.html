@@ -19,7 +19,7 @@ if(!k)return;var p='demo/'+slug+'/'+k;
 <script data-goatcounter="https://hharan.goatcounter.com/count" async src="https://gc.zgo.at/count.js"></script>
 <!-- /gc-track -->
 </head>
-<body class="p-verifica"><div class="dock" id="dock" role="note"><p>Concept di redesign per TA S.r.l. · non è il sito ufficiale · realizzato da hharan.site</p><button type="button" id="dockx" aria-label="Chiudi avviso">×</button></div>
+<body class="p-verifica"><div class="dock" id="dock" role="note"><p>Concept di redesign per TA S.r.l. · non è il sito ufficiale</p><button type="button" id="dockx" aria-label="Chiudi avviso">×</button></div>
 <a class="skip" href="#main">Vai al contenuto</a>
 <header class="top"><div class="wrap top-in"><a class="logo" href="/clients/demos/ta-srl/" aria-label="TA S.r.l., home"><img src="/clients/demos/ta-srl/assets/logo-ta-45.png" width="175" height="73" alt="TA S.r.l. Travetti, 45 anniversario, dal 1980"></a>
 <nav class="nav" id="nav" aria-label="Principale"><a href="/clients/demos/ta-srl/lavorazioni/">Lavorazioni</a><a href="/clients/demos/ta-srl/presetting/">Presetting</a><a href="/clients/demos/ta-srl/azienda/">L&#x27;Azienda</a><a href="/clients/demos/ta-srl/gallery/">Gallery</a><a href="/clients/demos/ta-srl/novita/">Novità</a><a href="/clients/demos/ta-srl/verifica/" aria-current="page">Verifica</a><a href="/clients/demos/ta-srl/contatti/">Contatti</a><a class="nav-call" href="tel:+390332850167">Chiama 0332 850167</a></nav>
@@ -27,22 +27,22 @@ if(!k)return;var p='demo/'+slug+'/'+k;
 <div class="event" role="note"><div class="wrap"><strong>MOMA Mostra Mercato Artigianato</strong><span>Lariofiere, Erba · 24-25 ottobre, 30-31 ottobre, 1 novembre 2026</span></div></div>
 <main id="main"><section class="pagehead dark"><div class="wrap"><p class="k lt">Verifica rapida</p><h1>Il tuo pezzo o il tuo utensile rientra nelle nostre macchine?</h1><p class="lead">Due strumenti in uno: la tornitura da barra sul Citizen BNJ 51 SY6 e il presetting EVO, ASTRID, GA 400, LOREL 320. Tutti i numeri vengono dalle schede pubblicate da TA.</p></div></section>
 <section class="fit" id="verifica-tool" aria-labelledby="fit-h"><div class="wrap">
-<div class="sh reveal"><p class="k">Verifica rapida</p><h2 id="fit-h">Il tuo pezzo o il tuo utensile rientra?</h2><p class="sub">Inserisci le misure: vedi quali macchine TA, dai dati delle loro schede, le coprono. Poi invii la richiesta con i numeri già scritti.</p></div>
+<h2 id="fit-h" class="sr">Verifica le tue misure</h2>
 <div class="fit-box reveal" id="fit" data-fit>
 <div class="seg" role="tablist" aria-label="Cosa vuoi verificare"><button type="button" role="tab" aria-selected="true" data-mode="turn" id="tab-turn">Pezzo da tornire da barra</button><button type="button" role="tab" aria-selected="false" data-mode="preset" id="tab-preset">Utensile da presettare</button></div>
 <form class="fit-form" data-form="turn" aria-labelledby="tab-turn" novalidate>
-<label>Diametro della barra<span class="u">mm</span><input type="number" inputmode="decimal" min="1" max="500" step="any" name="dia" value="32" required></label>
+<label>Diametro della barra<span class="u">mm</span><input type="number" inputmode="decimal" min="1" step="any" name="dia" value="32" required></label>
 <label>Materiale<select name="mat"><option>Acciaio</option><option>Acciaio inox e speciale</option><option>Alluminio</option><option>Bronzo</option><option>Ottone</option><option>Altro materiale</option></select></label>
 <label>Quantità<select name="qty"><option>Pezzo singolo</option><option>Piccola serie</option><option>Media serie</option><option>Grande serie</option></select></label></form>
 <form class="fit-form" data-form="preset" aria-labelledby="tab-preset" hidden novalidate>
-<label>Diametro max utensile<span class="u">mm</span><input type="number" inputmode="decimal" min="1" max="1500" step="any" name="dia" value="250" required></label>
-<label>Lunghezza / altezza utensile<span class="u">mm</span><input type="number" inputmode="decimal" min="1" max="1500" step="any" name="h" value="300" required></label>
+<label>Diametro max utensile<span class="u">mm</span><input type="number" inputmode="decimal" min="1" step="any" name="dia" value="250" required></label>
+<label>Lunghezza / altezza utensile<span class="u">mm</span><input type="number" inputmode="decimal" min="1" step="any" name="h" value="300" required></label>
 <label>Attacco<select name="taper"><option value="">Non so / altro</option><option value="I">ISO (30, 40, 50)</option><option value="B">BT</option><option value="V">VDI</option><option value="H">HSK</option></select></label></form>
 <div class="fit-out" id="fit-out" aria-live="polite"></div>
 <p class="fit-note">Risultato indicativo, ricavato dalle schede tecniche pubblicate da TA. La conferma finale spetta a TA.</p>
 </div></div></section>
 <section class="sec"><div class="wrap narrow"><h2>Da dove arrivano i numeri</h2><ul class="src"><li>Tornitura: il Citizen Miyano BNJ 51 SY6 ha un passaggio barra di diametro 50 mm (Novità, 14 dicembre 2018). Materiali e serie: pagina L'Azienda.</li>
-<li>Presetting: campi di misura dalle schede tecniche di EVO, ASTRID, GA 400 e LOREL 320 e dalla famiglia T718 (Novità, 2015).</li><li>Il parco macchine di TA è più ampio di quello elencato sul sito: se la tua misura non rientra, scrivici.</li></ul></div></section><section class="sec contact" id="contatti"><div class="wrap split"><div class="reveal"><p class="k">Contatti</p><h2>Il tuo caso non rientra? Scrivici</h2>
+<li>Presetting: campi di misura dalle schede tecniche di EVO, ASTRID, GA 400 e LOREL 320 e dalla famiglia T718 (Novità, 2015).</li><li>Il parco macchine è «molto vasto» (monografia 2020) ma il sito non lo elenca: se la tua misura non rientra, scrivici.</li></ul></div></section><section class="sec contact" id="contatti"><div class="wrap split"><div class="reveal"><p class="k">Contatti</p><h2>Il tuo caso non rientra? Scrivici</h2>
 <p class="big"><a href="tel:+390332850167">0332 850167</a><small>tel. e fax</small></p><p class="big"><a href="mailto:info@ta-srl.it">info@ta-srl.it</a></p>
 <address>T.A. S.r.l.<br>Via Dr. Luigi Ceriana, 10<br>21051 Arcisate (Varese) - Italy</address><p><a class="btn ghost-d" href="https://www.google.com/maps/search/?api=1&query=Via+Dr.+Luigi+Ceriana+10+21051+Arcisate+VA" target="_blank" rel="noopener">Apri in Maps</a></p></div>
 <form class="cform reveal" id="cform" action="mailto:info@ta-srl.it" method="post" enctype="text/plain"><label>Nome *<input name="nome" autocomplete="name" required></label><label>Email *<input type="email" name="email" autocomplete="email" required></label>
