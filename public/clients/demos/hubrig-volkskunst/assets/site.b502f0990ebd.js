@@ -178,7 +178,7 @@
       hit.forEach(function (c, i) { if (i < shown) { c.hidden = false; n++; } });
       if (cnt) cnt.textContent = hit.length === 1 ? CFG.results_one : CFG.results.replace("{n}", hit.length);
       if (none) none.hidden = hit.length > 0;
-      if (more) { var rest = hit.length - shown; more.hidden = rest <= 0; more.textContent = CFG.more.replace("{n}", Math.min(rest, PAGE)); }
+      if (more) { var rest = hit.length - shown; more.hidden = rest <= 0; more.textContent = CFG.more.replace("{n}", Math.min(rest, PAGE)).replace("{r}", rest); }
       $$("[data-season]").forEach(function (b) { b.setAttribute("aria-pressed", b.dataset.season === st.season ? "true" : "false"); });
       $$("[data-series]").forEach(function (b) {
         b.setAttribute("aria-pressed", b.dataset.series === st.series ? "true" : "false");
@@ -214,7 +214,7 @@
       var state = "closed", label = CFG.closed_now;
       if (CFG.holiday && ymd >= CFG.holiday.from && ymd <= CFG.holiday.to) { state = "holiday"; label = CFG.holiday_now; }
       else if (CFG.hours.days.indexOf(wd) > -1 && hm >= CFG.hours.open && hm < CFG.hours.close) { state = "open"; label = CFG.open_now; }
-      os.forEach(function (o) { o.setAttribute("data-state", state); var l = $("[data-openlabel]", o); if (l) l.textContent = label + " · " + CFG.hours.time; });
+      os.forEach(function (o) { o.setAttribute("data-state", state); var l = $("[data-openlabel]", o); if (l) { l.textContent = label + " · "; var tm = d.createElement("span"); tm.className = "nw"; tm.textContent = CFG.hours.time; l.appendChild(tm); } });
     } catch (e) { /* keep static hours */ }
   }
 })();
