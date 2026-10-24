@@ -43,6 +43,12 @@
     $$("[data-count]").forEach(function (e) { co.observe(e); });
   }
 
+  // mobile action bar hides while the hero (which has the same buttons) is on screen
+  var hero = $("[data-hero]");
+  if (hero && "IntersectionObserver" in window) {
+    new IntersectionObserver(function (es) { root.classList.toggle("sbar-off", es[0].isIntersecting && es[0].intersectionRatio > 0.35); }, { threshold: [0, 0.35, 0.6] }).observe($(".hero-t", hero));
+  }
+
   // drawer
   var dr = $("#drawer"), bg = $(".burger"), lastFocus = null;
   function openD() { lastFocus = d.activeElement; dr.classList.add("is-open"); dr.setAttribute("aria-hidden", "false"); bg.setAttribute("aria-expanded", "true"); root.style.overflow = "hidden"; var x = $(".drawer-x"); if (x) x.focus(); }
@@ -119,14 +125,16 @@
         h += '<li style="animation-delay:' + i * 0.06 + 's"><b>' + esc(s.title) + "</b><p>" + esc(s.text) + '</p><a href="' + s.href + '">' + esc(s.title) + " &rarr;</a></li>";
       });
       h += "</ol><h3>" + esc(T.check_title) + '</h3><ul class="checks">';
-      if (S.mat && S.need !== "manut") h += S.mat === "altro" ? '<li class="q"><b>Materiale</b> ' + esc(T.mat_other) + "</li>" : "<li><b>" + esc(S.mat) + "</b> " + esc(T.mat_ok) + "</li>";
-      if (S.die) h += (S.die === "nonso") ? '<li class="q"><b>Tipo di stampo</b> ' + esc(T.die_other) + "</li>" : "<li><b>" + esc(label(D.die, S.die)) + "</b> " + esc(T.die_ok) + "</li>";
-      if (S.sector) {
-        if (S.sector === "altro") h += '<li class="q"><b>Settore</b> non nell\'elenco pubblicato: descrivilo nella richiesta.</li>';
-        else h += "<li><b>" + esc(S.sector) + "</b> " + esc(S.sector === "Automotive" ? T.sector_iatf : T.sector_ok) + "</li>";
-      }
-      if (S.have) h += "<li>" + esc(S.have === "2d" || S.have === "3d" ? T.have_cad : T.have_other) + "</li>";
-      h += "</ul><p class=\"tbc\">" + esc(T.tbc) + "</p>";
+      var nchk = 0;
+      if (S.mat === "altro" && S.need !== "manut") { h += '<li class="q"><b>Materiale</b> ' + esc(T.mat_other) + "</li>"; nchk++; }
+      if (S.die === "nonso") { h += '<li class="q"><b>Tipo di stampo</b> ' + esc(T.die_other) + "</li>"; nchk++; }
+      if (S.sector === "altro") { h += '<li class="q"><b>Settore</b> non nell\'elenco pubblicato: descrivilo nella richiesta.</li>'; nchk++; }
+      if (S.sector === "Automotive") { h += "<li><b>Automotive</b> " + esc(T.sector_iatf) + "</li>"; nchk++; }
+      if (S.have) { h += "<li>" + esc(S.have === "2d" || S.have === "3d" ? T.have_cad : T.have_other) + "</li>"; nchk++; }
+      if (!nchk) h += "<li>" + esc(T.have_other) + "</li>";
+      h += "</ul><h3>" + esc(T.need_title) + '</h3><ul class="checks">';
+      T.need_items.forEach(function (x, i) { h += "<li>" + esc(x) + "</li>"; });
+      h += "</ul><p class=\"tbc\">" + esc(T.tbc) + " " + esc(T.attach) + "</p>";
       var txt = buildText(), href = "mailto:" + D.email + "?subject=" + encodeURIComponent(T.subject + " - " + label(D.need, S.need)) + "&body=" + encodeURIComponent(txt);
       h += '<div class="res-a"><a class="btn btn--y" data-send href="' + href + '">' + esc(T.send) + '</a><button class="btn btn--o" type="button" data-copy>' + esc(T.copy) + '</button><a class="btn btn--o" href="' + D.tel + '">' + esc(T.call) + " " + esc(D.phone) + "</a></div>";
       out.innerHTML = h;
@@ -153,6 +161,6 @@
     // preselect from ?need=
     var m = /[?&]need=([a-z]+)/.exec(location.search);
     if (m && $('.chip[data-g="need"][data-v="' + m[1] + '"]', tool)) { $('.chip[data-g="need"][data-v="' + m[1] + '"]', tool).click(); }
-    else render();
+    else { var df = $('.chip[data-g="need"][data-v="nuovo"]', tool); if (df) df.click(); else render(); }
   }
 })();
