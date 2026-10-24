@@ -321,3 +321,4 @@ thead tr.sub th{font-size:.875rem;text-transform:lowercase;letter-spacing:0;colo
 @media(max-width:860px){.hero-act{display:none}.hero-in{padding-top:6vh}}
 @media(max-width:560px){.grades{grid-template-columns:repeat(2,minmax(0,1fr));column-gap:16px}.grade{padding:18px 8px 18px 0}.g-l{display:none}.grades.light .g-l{display:block}}
 .dock{font-size:.875rem}
+.tool-form{align-content:start}
