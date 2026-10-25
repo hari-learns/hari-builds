@@ -53,6 +53,13 @@
   d.addEventListener('keydown', function (e) { if (e.key === 'Escape' && dr && dr.classList.contains('is-open')) setDrawer(false); });
   if (window.matchMedia) matchMedia('(min-width:1400px)').addEventListener && matchMedia('(min-width:1400px)').addEventListener('change', function (m) { if (m.matches) setDrawer(false); });
 
+  /* hide the phone bar while typing */
+  var bar = d.querySelector('.bar');
+  if (bar) {
+    d.addEventListener('focusin', function (e) { if (e.target.matches && e.target.matches('input,select,textarea')) bar.style.display = 'none'; });
+    d.addEventListener('focusout', function () { bar.style.display = ''; });
+  }
+
   /* concept dock */
   var dk = d.getElementById('dock'), dkx = d.querySelector('.dock-x');
   try { if (sessionStorage.getItem('dock-x') === '1' && dk) dk.hidden = true; } catch (e) {}
@@ -120,14 +127,17 @@
       var to = where === 'ab' ? td.to_export : td.to_sales, cc = where === 'ab' ? td.to_sales : '';
       var subj = T.subj + ': ' + I.n + (len === null ? '' : ', ' + F(len) + ' ' + T.unit_m);
       var href = 'mailto:' + to + '?' + (cc ? 'cc=' + cc + '&' : '') + 'subject=' + encodeURIComponent(subj) + '&body=' + encodeURIComponent(lastDraft.replace(/\n/g, '\r\n'));
-      out.innerHTML = '<div class="res">' +
+      var known = lim.every(function (r) { return r[1] !== null; }), bad = lim.some(function (r) { return r[1] === false; });
+      var vk = bad ? 'ask' : known ? 'ok' : 'need', vt = bad ? T.v_ask : known ? T.v_ok : T.v_need;
+      var catH = cl.length && td.profiles.some(function (p) { return p.inds.indexOf(indKey) > -1; }) ? T.r_cat : T.r_cat2;
+      out.innerHTML = '<div class="res"><p class="verdict v-' + vk + '" role="status">' + E(vt) + '</p><div class="res-g"><div class="res-c">' +
         '<div><h3>' + E(T.r_limits) + '</h3><ul class="lim">' + lim.map(function (r) { return '<li><span>' + E(r[0]) + '</span>' + chip(r[1]) + '</li>'; }).join('') + '</ul></div>' +
-        '<div><h3>' + E(T.r_mat) + '</h3><ul class="mats">' + mats + '</ul>' + notes + '</div>' +
         '<div><h3>' + E(T.r_time) + '</h3><p>' + E(time) + '</p></div>' +
         '<div><h3>' + E(T.r_colour) + '</h3><p>' + E(col) + '</p></div>' +
-        (cat ? '<div><h3>' + E(T.r_cat) + '</h3><div class="cat-l">' + cat + '</div></div>' : '') +
+        (cat ? '<div><h3>' + E(catH) + '</h3><div class="cat-l">' + cat + '</div></div>' : '') + '</div><div class="res-c">' +
+        '<div><h3>' + E(T.r_mat) + '</h3><ul class="mats">' + mats + '</ul>' + notes + '</div>' +
         '<div><h3>' + E(T.r_mail) + '</h3><pre class="draft" tabindex="0">' + E(lastDraft) + '</pre><div class="res-act"><a class="btn" href="' + href + '">' + E(T.mail_btn) + '</a>' +
-        '<button type="button" class="btn btn-line" data-copy>' + E(T.copy_btn) + '</button></div><p class="small">' + E(T.mail_note) + '</p></div></div>';
+        '<button type="button" class="btn btn-line" data-copy>' + E(T.copy_btn) + '</button></div><p class="small">' + E(T.mail_note) + '</p></div></div></div></div>';
     }
     out.addEventListener('click', function (e) {
       var b = e.target.closest && e.target.closest('[data-copy]');
