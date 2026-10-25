@@ -395,3 +395,19 @@ a.premiere h3{color:var(--on-char)}
 @media (min-width:900px){.dock{left:auto;right:16px}}
 
 .on-dark .crumbs,.on-dark .crumbs a,.on-dark .crumbs li+li::before{color:var(--muted-on-char)}
+
+@media (max-width:640px){
+  .table-wrap.stack{overflow:visible;border:0;background:transparent}
+  .table-wrap.stack table{min-width:0;display:block}
+  .table-wrap.stack thead{position:absolute;left:-9999px;width:1px;height:1px;overflow:hidden}
+  .table-wrap.stack tbody,.table-wrap.stack tr{display:block}
+  .table-wrap.stack tr{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);margin-bottom:10px;padding:6px 0}
+  .table-wrap.stack tbody th[scope="row"]{display:block;position:static;border:0;font-family:var(--display);font-size:1.3rem;font-weight:700;padding:8px 16px 4px;white-space:normal}
+  .table-wrap.stack td{display:flex;justify-content:space-between;gap:16px;border:0;padding:6px 16px;white-space:normal;text-align:right}
+  .table-wrap.stack td::before{content:attr(data-label);color:var(--muted);text-align:left;flex:none}
+  .table-wrap.stack td.wrapcell{display:block;text-align:left;min-width:0}
+  .table-wrap.stack td.wrapcell::before{display:block;margin-bottom:2px}
+}
+.dock{padding:4px 4px 4px 12px;font-size:.95rem}
+.dock p{margin:6px 0}
+@media (max-width:899px){.dock{right:auto;left:10px;width:auto;max-width:calc(100vw - 20px)}}

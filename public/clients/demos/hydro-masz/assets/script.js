@@ -186,8 +186,10 @@
       if (send) {
         var tnames = sel.length ? D.tasks.filter(function (t) { return sel.indexOf(t[0]) > -1; }).map(function (t) { return t[1]; }).join(", ") : ui.task_all;
         var body = ui.mail_body.replace("{km}", k).replace("{task}", tnames).replace("{names}", names.length ? names.join("; ") : ui.mail_none);
+        var sm = $(".fx-send-m"); if (sm) sm.dataset.sync = "1";
         send.href = "mailto:" + D.email + "?subject=" + encodeURIComponent(ui.mail_subject.replace("{km}", k)) + "&body=" + encodeURIComponent(body);
       }
+      var sm2 = $(".fx-send-m"); if (sm2 && send) sm2.href = send.href;
       taskBtns.forEach(function (b) {
         var t = b.dataset.task, on = t === "all" ? !sel.length : sel.indexOf(t) > -1;
         b.setAttribute("aria-pressed", on ? "true" : "false");
