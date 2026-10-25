@@ -20,7 +20,16 @@
     $('.drawer-close', drawer).addEventListener('click', function () { setOpen(false); });
     drawer.addEventListener('click', function (e) { if (e.target === drawer) setOpen(false); });
     $$('a', drawer).forEach(function (a) { a.addEventListener('click', function () { setOpen(false); }); });
-    d.addEventListener('keydown', function (e) { if (e.key === 'Escape' && drawer.classList.contains('is-open')) setOpen(false); });
+    d.addEventListener('keydown', function (e) {
+      if (!drawer.classList.contains('is-open')) return;
+      if (e.key === 'Escape') { setOpen(false); return; }
+      if (e.key === 'Tab') {
+        var f = $$('a, button', drawer); if (!f.length) return;
+        var first = f[0], last = f[f.length - 1];
+        if (e.shiftKey && d.activeElement === first) { e.preventDefault(); last.focus(); }
+        else if (!e.shiftKey && d.activeElement === last) { e.preventDefault(); first.focus(); }
+      }
+    });
     window.addEventListener('resize', function () { if (window.innerWidth >= 1040 && drawer.classList.contains('is-open')) setOpen(false); });
   }
 
@@ -50,6 +59,18 @@
       try { sessionStorage.setItem('ipm-dock-off', '1'); } catch (e) {}
     });
   }
+
+  /* ---- category filter */
+  $$('[data-filter]').forEach(function (inp) {
+    var cards = $$('.groups .card'), groups = $$('.groups .group'), n = $('[data-filter-n]');
+    function norm(t) { return t.toLowerCase(); }
+    inp.addEventListener('input', function () {
+      var q = norm(inp.value.trim()), shown = 0;
+      cards.forEach(function (c) { var ok = !q || norm(c.textContent).indexOf(q) > -1; c.hidden = !ok; if (ok) shown++; });
+      groups.forEach(function (g) { g.hidden = !$$('.card', g).some(function (c) { return !c.hidden; }); });
+      if (n) n.textContent = q ? shown + ' / ' + cards.length : '';
+    });
+  });
 
   /* ---- carousel strip */
   $$('[data-strip]').forEach(function (s) {
@@ -127,9 +148,9 @@
     var ticks = '<div class="bar-ticks" aria-hidden="true">' + [100, 1000, 10000].map(function (v) { return '<span style="left:' + (pos(v) * 100).toFixed(1) + '%">' + fmt(v) + '</span>'; }).join('') + '</div>';
 
     function render() {
+      var kb = $('.kgh', root_); if (kb) kb.style.opacity = (!task || task.lines.some(function (l) { return l.kind; })) ? '' : '.4';
       if (!task) { list.innerHTML = '<p class="f-empty">' + esc(T.step1) + '</p>'; send.hidden = true; return; }
       var ls = task.lines.map(function (l, i) { return { l: l, s: status(l), i: i }; });
-      ls.sort(function (a, b) { return order[a.s] - order[b.s] || a.i - b.i; });
       shown = ls;
       var html = ls.map(function (x, idx) {
         var l = x.l, s = x.s;
@@ -139,30 +160,46 @@
           '<div class="res-top"><span class="res-brand">' + esc(l.brand) + '</span><span class="res-badge">' + esc(badge) + '</span></div>' +
           '<h4 class="res-name"><a href="' + esc(l.url) + '">' + esc(l.name) + '</a></h4>' +
           (l.kind ? bar(l) + (idx === 0 ? ticks : '') : '') +
-          '<p class="res-range">' + rangeText(l) + '</p>' +
+          (rangeText(l) ? '<p class="res-range">' + rangeText(l) + '</p>' : '') +
           '<p class="res-why">' + esc(l.why) + '</p>' +
           '<a class="res-link" href="' + esc(l.url) + '">' + esc(T.open) + '</a></article>';
       }).join('');
-      list.innerHTML = html;
+      var withRange = ls.filter(function (x) { return x.l.kind === 'range'; });
+      var nIn = ls.filter(function (x) { return x.s === 'in'; }).length;
+      var head = '';
+      if (withRange.length && nIn === 0) {
+        var allAbove = withRange.every(function (x) { return x.s === 'above'; }), allBelow = withRange.every(function (x) { return x.s === 'below'; });
+        head = '<p class="f-warn">' + esc(allAbove ? T.all_above : allBelow ? T.all_below : T.all_above) + '</p>';
+      } else if (withRange.length) {
+        head = '<p class="f-sum">' + esc(T.summary.replace('{n}', nIn).replace('{m}', withRange.length).replace('{kgh}', fmt(kgh))) + '</p>';
+      }
+      list.innerHTML = head + html;
       send.hidden = false;
       buildMail();
     }
     function buildMail() {
       if (!task || !mail) return;
-      var lines = shown.filter(function (x) { return x.s === 'in' || x.s === 'ref' || x.s === 'none'; }).map(function (x) {
+      var hasCap = task.lines.some(function (l) { return l.kind; });
+      var lines = shown.map(function (x) {
         var l = x.l, r = '';
-        if (l.kind === 'range') r = ' (' + (l.lo ? fmt(l.lo) + '-' : '') + fmt(l.hi) + ' ' + T.unit + ')';
+        if (l.kind === 'range') r = ' (' + (l.lo ? fmt(l.lo) + '-' : '') + fmt(l.hi) + ' ' + T.unit + (x.s === 'above' || x.s === 'below' ? ', ' + T.outside : '') + ')';
         return '- ' + l.brand + ': ' + l.name + r;
       });
-      if (!lines.length) lines = shown.map(function (x) { return '- ' + x.l.brand + ': ' + x.l.name; });
-      var subj = T.mail_subject.replace('{task}', task.label).replace('{kgh}', fmt(kgh));
-      var body = T.mail_body.replace('{task}', task.label).replace('{kgh}', fmt(kgh)).replace('{lines}', lines.join('\n')).replace('Materiał / uwagi:\n\n', 'Materiał / uwagi:\n' + (note && note.value ? note.value : '') + '\n');
+      var note_ = note && note.value ? note.value : '';
+      var subj, body;
+      if (hasCap) {
+        subj = T.mail_subject.replace('{task}', task.label).replace('{kgh}', fmt(kgh));
+        body = T.mail_body.replace('{task}', task.label).replace('{kgh}', fmt(kgh)).replace('{lines}', lines.join('\n')).replace('Materiał / uwagi:\n\n', 'Materiał / uwagi:\n' + note_ + '\n');
+      } else {
+        subj = T.mail_subject_nokgh.replace('{task}', task.label);
+        body = T.mail_body_nokgh.replace('{task}', task.label).replace('{lines}', lines.join('\n')).replace('uwagi:\n\n', 'uwagi:\n' + note_ + '\n');
+      }
       mail.href = 'mailto:' + D.email + '?cc=' + encodeURIComponent(D.cc) + '&subject=' + encodeURIComponent(subj) + '&body=' + encodeURIComponent(body);
     }
     function pick(id, scroll) {
       if (!byId[id]) return;
       task = byId[id];
-      chips.forEach(function (c) { var on = c.getAttribute('data-task') === id; c.setAttribute('aria-checked', on ? 'true' : 'false'); });
+      chips.forEach(function (c) { var on = c.getAttribute('data-task') === id; c.setAttribute('aria-pressed', on ? 'true' : 'false'); });
       if (sel) sel.value = id;
       render();
     }
@@ -173,14 +210,7 @@
       if (from !== 'rng') rng.value = toSlider(v);
       render();
     }
-    chips.forEach(function (c, i) {
-      c.addEventListener('click', function () { pick(c.getAttribute('data-task')); });
-      c.addEventListener('keydown', function (e) {
-        var k = e.key, n = chips.length, j = -1;
-        if (k === 'ArrowRight' || k === 'ArrowDown') j = (i + 1) % n; else if (k === 'ArrowLeft' || k === 'ArrowUp') j = (i - 1 + n) % n;
-        if (j > -1) { e.preventDefault(); chips[j].focus(); pick(chips[j].getAttribute('data-task')); }
-      });
-    });
+    chips.forEach(function (c) { c.addEventListener('click', function () { pick(c.getAttribute('data-task')); }); });
     num.addEventListener('input', function () { var v = parseFloat(num.value); if (v > 0) { kgh = Math.max(5, Math.min(20000, v)); rng.value = toSlider(kgh); render(); } });
     num.addEventListener('change', function () { setKgh(parseFloat(num.value) || 1000, 'chg'); });
     rng.addEventListener('input', function () { setKgh(fromSlider(parseInt(rng.value, 10)), 'rng'); });
