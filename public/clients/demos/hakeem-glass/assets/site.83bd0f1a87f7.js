@@ -64,7 +64,7 @@
     var T = data.T, items = {}; data.items.forEach(function (i) { items[i.slug] = i; });
     var st = { item: null, sector: null }, out = $(".tool-res", root), empty = $(".tool-empty", root);
     var ar = data.lang === "ar";
-    var jump = d.createElement("a"); jump.className = "btn btn-line-d tool-jump"; jump.href = "#"; jump.hidden = true; jump.textContent = T.r_msg;
+    var jump = d.createElement("a"); jump.className = "btn tool-jump"; jump.href = "#"; jump.hidden = true; jump.textContent = T.r_msg;
     var tf = $(".tool-form", root); tf.appendChild(jump);
     jump.addEventListener("click", function (e) { e.preventDefault(); $(".tool-out", root).scrollIntoView({ behavior: "smooth", block: "start" }); });
 
@@ -73,7 +73,7 @@
       var it = items[st.item], L = [T.hello + ": " + it.name + "."];
       if (st.sector) L.push(T.proj + ": " + T.sectors[st.sector] + ".");
       var w = val("w"), h = val("h");
-      if (w || h) L.push(T.size + ": " + (w || "?") + " × " + (h || "?") + " m.");
+      if (w || h) L.push(T.size + ": " + (w || "?") + " × " + (h || "?") + " " + T.unit + ".");
       if (val("q")) L.push(T.qty + ": " + val("q") + ".");
       if (val("area")) L.push(T.area_l + ": " + val("area") + ".");
       L.push(T.thanks); return L.join("\n");
@@ -87,14 +87,14 @@
       if (!st.item) { out.hidden = true; empty.hidden = false; jump.hidden = true; return; }
       var it = items[st.item], h = "";
       h += '<div class="res-head"><img src="' + it.img.src + '" width="' + it.img.w + '" height="' + it.img.h + '" alt="' + esc(it.name) + '"><div><p class="eyebrow">' + esc(T.r_product) + '</p><h3>' + esc(it.name) + '</h3><p>' + esc(it.line) + '. ' + esc(data.inhouse) + '</p><a class="res-link" href="' + it.url + '">' + esc(T.r_open) + '</a></div></div>';
+      h += '<div class="res-sec res-msg"><h4>' + esc(T.r_msg) + '</h4><textarea id="res-ta-' + root.id + '" aria-label="' + esc(T.r_msg) + '"' + (ar ? ' dir="rtl"' : "") + '></textarea>'
+        + '<div class="res-btns"><a class="btn btn-fill res-wa" href="#" rel="noopener">' + esc(T.send_wa) + '</a><a class="btn btn-line-d res-mail" href="#">' + esc(T.send_mail) + '</a><a class="btn btn-line-d" href="' + data.tel + '">' + esc(T.call) + '</a></div><p class="res-note">' + esc(T.note) + '</p></div>';
       var pr = it.pairs.map(function (s) { return '<li><a href="' + items[s].url + '">' + esc(items[s].name) + '</a></li>'; }).join("");
       if (it.hw) pr += '<li><a href="' + data.hwurl + '">' + esc(data.hwline) + '</a></li>';
       if (pr) h += '<div class="res-sec"><h4>' + esc(T.r_pair) + '</h4><ul>' + pr + '</ul></div>';
       if (st.sector && data.ref[st.sector]) {
         h += '<div class="res-sec"><h4>' + esc(T.r_proj) + '</h4><div class="res-proj">' + data.ref[st.sector].map(function (s) { var p = data.projects[s]; return '<a href="' + p.url + '"><img src="' + p.img.src + '" width="' + p.img.w + '" height="' + p.img.h + '" alt="' + esc(p.name) + '" loading="lazy"><b>' + esc(p.name) + '</b>' + esc(p.cat) + '</a>'; }).join("") + '</div></div>';
       }
-      h += '<div class="res-sec res-msg"><h4>' + esc(T.r_msg) + '</h4><textarea id="res-ta-' + root.id + '" aria-label="' + esc(T.r_msg) + '"' + (ar ? ' dir="rtl"' : "") + '></textarea>'
-        + '<div class="res-btns"><a class="btn btn-fill res-wa" href="#" rel="noopener">' + esc(T.send_wa) + '</a><a class="btn btn-line-d res-mail" href="#">' + esc(T.send_mail) + '</a><a class="btn btn-line-d" href="' + data.tel + '">' + esc(T.call) + '</a></div><p class="res-note">' + esc(T.note) + '</p></div>';
       out.innerHTML = h; out.hidden = false; empty.hidden = true; jump.hidden = false;
       var ta = $("textarea", out); ta.value = message(); links(ta); ta.addEventListener("input", function () { links(ta); });
     }
@@ -106,5 +106,5 @@
     if (pre && items[pre]) { var b0 = $('[data-item="' + pre + '"]', root); if (b0) b0.click(); }
   });
   /* tool: "show my enquiry" jump only on narrow screens */
-  var css = d.createElement("style"); css.textContent = "@media(min-width:900px){.tool-jump{display:none!important}}.tool-jump{width:100%}"; d.head.appendChild(css);
+  var css = d.createElement("style"); css.textContent = "@media(min-width:900px){.tool-jump{display:none!important}}.tool-jump{width:100%;position:sticky;bottom:calc(84px + env(safe-area-inset-bottom));z-index:5;background:var(--accent);color:var(--on-accent);border-color:var(--accent);box-shadow:0 6px 18px color-mix(in srgb,var(--shadow) 25%,transparent)}.tool-jump[hidden]{display:none}"; d.head.appendChild(css);
 })();
