@@ -100,14 +100,14 @@
     function find(arr, k) { for (var i = 0; i < arr.length; i++) if (arr[i].key === k) return arr[i]; return null; }
 
     function compute() {
-      var vessel = val("vessel"), jobs = vals("job"), where = val("where") || "unsure", when = val("when") || "soon";
+      var vessel = val("vessel"), jobs = vals("job"), where = val("where") || "unsure", when = val("when");
       return { vessel: vessel, jobs: jobs, where: where, when: when };
     }
 
     function render() {
       var s = compute();
       out.textContent = "";
-      if (!s.vessel || !s.jobs.length) { out.appendChild(h("p", { "class": "hout__empty", text: UI.res_empty })); return; }
+      if (!s.vessel || !s.jobs.length) { out.appendChild(h("p", { "class": "hout__empty", text: UI.res_empty })); sumBar(null); return; }
       var jobObjs = s.jobs.map(function (k) { return find(D.jobs, k); }).filter(Boolean);
       var keys = [];
       function add(k) { if (k && keys.indexOf(k) < 0 && D.services[k]) keys.push(k); }
@@ -154,7 +154,9 @@
       var lines = [UI.mail_hello, "", UI.mail_intro, "",
         L.vessel + ": " + vessel];
       if (txt("h-vessel")) lines.push(L.name + ": " + txt("h-vessel"));
-      lines.push(L.jobs + ": " + jobsTxt, L.where + ": " + region.label, L.when + ": " + (D.whens[s.when] || s.when), L.base + ": " + base.name);
+      lines.push(L.jobs + ": " + jobsTxt, L.where + ": " + region.label);
+      if (s.when) lines.push(L.when + ": " + (D.whens[s.when] || s.when));
+      lines.push(L.base + ": " + base.name);
       if (txt("h-name")) lines.push(L.who + ": " + txt("h-name"));
       if (txt("h-phone")) lines.push(L.phone + ": " + txt("h-phone"));
       lines.push("", UI.mail_sig);
@@ -173,6 +175,22 @@
       var acts = h("div", { "class": "hacts" + (s.when === "now" ? " hacts--urgent" : "") }, s.when === "now" ? [callBtn, mailBtn, copyBtn] : [mailBtn, callBtn, copyBtn]);
       enq.appendChild(acts);
       out.appendChild(enq);
+      sumBar(keys.map(function (k) { return D.services[k].title; }).join(", ") , base.name);
+    }
+
+    /* small phones: a sticky line that shows the live answer while you tap, jumps to the full result */
+    var sum = $("[data-sum]", hEl), sumT = $("[data-sum-t]", hEl), outVisible = false;
+    function sumBar(fits, base) {
+      if (!sum) return;
+      sum.dataset.on = fits ? "1" : "";
+      if (fits) sumT.textContent = UI.sum_fits + ": " + fits + " · " + UI.sum_base + ": " + base;
+      sum.hidden = !(fits && !outVisible);
+    }
+    if (sum) {
+      sum.addEventListener("click", function () { out.scrollIntoView({ behavior: reduce ? "auto" : "smooth", block: "start" }); });
+      if ("IntersectionObserver" in window) new IntersectionObserver(function (es) {
+        outVisible = es[0].isIntersecting; sum.hidden = !(sum.dataset.on && !outVisible);
+      }, { rootMargin: "-80px 0px 0px 0px" }).observe(out);
     }
 
     form.addEventListener("change", render);
