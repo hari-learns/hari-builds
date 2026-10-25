@@ -49,6 +49,18 @@
     }, { passive: true });
   }
 
+  $$("[data-video]").forEach(function (v) {
+    var btn = $(".video__btn", v);
+    if (!btn) return;
+    btn.addEventListener("click", function () {
+      var f = d.createElement("iframe");
+      f.src = "https://www.youtube-nocookie.com/embed/" + v.getAttribute("data-video") + "?autoplay=1&rel=0";
+      f.title = btn.getAttribute("aria-label").replace(/^Play: /, "");
+      f.allow = "autoplay; encrypted-media; picture-in-picture"; f.allowFullscreen = true;
+      btn.replaceWith(f);
+    });
+  });
+
   function mail(to, subject, body) { return "mailto:" + to + "?subject=" + encodeURIComponent(subject) + "&body=" + encodeURIComponent(body).replace(/%0A/g, "%0D%0A"); }
   function el(tag, cls, txt) { var n = d.createElement(tag); if (cls) n.className = cls; if (txt != null) n.textContent = txt; return n; }
   function num(v) { return (Math.round(v * 10) / 10).toString(); }
@@ -63,6 +75,7 @@
     function card(m, tag, best) {
       var c = el("article", "rescard" + (best ? " rescard--best" : ""));
       var top = el("div", "rescard__top"); top.appendChild(el("h4", "rescard__t", m.name[0].toUpperCase() + m.name.slice(1))); top.appendChild(el("span", "rescard__tag", tag)); c.appendChild(top);
+      c.appendChild(el("p", "rescard__s", m.series + (m.kind === "V" ? " V rake" : " rake")));
       var sp = el("div", "rescard__sp");
       [["Raking width", num(m.w) + " m"], ["Length", num(m.l) + " m"], ["Width", num(m.tw) + " m"], ["Weight", m.kg.toLocaleString("en-AU") + " kg"]].forEach(function (p) {
         var s = el("span", "", p[0]); s.appendChild(el("b", "", p[1])); sp.appendChild(s);
@@ -81,7 +94,7 @@
       res.innerHTML = "";
       var shown = fit.slice(0, 4);
       shown.forEach(function (m, i) { res.appendChild(card(m, i === 0 ? L.closest : (m.w > w ? L.wide : L.closest), i === 0)); });
-      if (fit.length > shown.length) res.appendChild(el("p", "note", "and " + (fit.length - shown.length) + " wider models in the published range. Raise the length or weight limit to see them all in the table below."));
+      if (fit.length > shown.length) res.appendChild(el("p", "note", "and " + (fit.length - shown.length) + " wider models in the published range. Narrow the length or weight limit to shorten the list, or see every size on the V rakes and Inline rakes pages."));
       if (!fit.length) {
         var n = el("article", "rescard rescard--no"); n.appendChild(el("p", "", L.none)); res.appendChild(n);
         narrow.forEach(function (m) { res.appendChild(card(m, L.narrow, false)); });
