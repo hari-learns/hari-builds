@@ -202,7 +202,7 @@ button,input,textarea,select{font:inherit;color:inherit}
 .phead{position:relative;overflow:hidden;padding-block:clamp(40px,7vw,96px) clamp(36px,5vw,64px);min-height:clamp(260px,34vw,420px);display:flex;align-items:flex-end}
 .phead__bg{position:absolute;inset:0}
 .phead__bg img{width:100%;height:100%;object-fit:cover;animation:settle 2s var(--ease) both}
-.phead::after{content:"";position:absolute;inset:0;background:linear-gradient(0deg,color-mix(in srgb,var(--ink) 94%,transparent) 0%,color-mix(in srgb,var(--ink) 55%,transparent) 55%,color-mix(in srgb,var(--ink) 30%,transparent) 100%)}
+.phead::after{content:"";position:absolute;inset:0;background:linear-gradient(0deg,color-mix(in srgb,var(--ink) 94%,transparent) 0%,color-mix(in srgb,var(--ink) 72%,transparent) 55%,color-mix(in srgb,var(--ink) 48%,transparent) 100%)}
 .phead .wrap{position:relative;z-index:1;width:min(var(--wrap),100% - 2*var(--gut))}
 .crumbs{margin-bottom:18px}
 .crumbs ol{display:flex;flex-wrap:wrap;gap:4px 8px;font-size:.9375rem;color:var(--muted-dark)}
@@ -305,7 +305,7 @@ button,input,textarea,select{font:inherit;color:inherit}
 
 /* ---------- boat check (signature tool) ---------- */
 .bc{display:grid;gap:clamp(26px,4vw,48px);margin-top:clamp(24px,4vw,40px);align-items:start}
-@media (min-width:980px){.bc{grid-template-columns:minmax(0,.9fr) minmax(0,1.1fr)}.bc__form{position:sticky;top:calc(var(--hdr) + 20px)}}
+@media (min-width:980px){.bc{grid-template-columns:minmax(0,.95fr) minmax(0,1.05fr)}}
 .bc__form{background:var(--ink-2);border:1px solid var(--line-dark);border-radius:var(--r);padding:clamp(20px,3vw,32px);display:grid;gap:22px}
 .bc__lenhead{display:flex;align-items:baseline;justify-content:space-between;gap:12px}
 .bc__lenhead label{font-weight:800}
@@ -339,7 +339,7 @@ button,input,textarea,select{font:inherit;color:inherit}
 .bc__h{font-family:var(--f-display);font-weight:400;font-size:1.5rem;line-height:1.15;margin-top:8px}
 .bc__h:first-child{margin-top:0}
 .bc__size,.bc__jobs{display:grid;gap:12px}
-@media (min-width:640px){.bc__size{grid-template-columns:1fr 1fr}}
+.bc__h--s{margin-top:14px}
 .res{background:var(--ink-2);border:1px solid var(--line-dark);border-left:4px solid var(--teal-lt);border-radius:var(--r);padding:18px 20px;display:grid;gap:8px;animation:rise .6s var(--ease) both}
 .res--partner{border-left-color:var(--sand)}
 .res--ask{border-left-color:var(--coral)}
@@ -382,7 +382,8 @@ button,input,textarea,select{font:inherit;color:inherit}
   body{padding-bottom:calc(var(--bar) + env(safe-area-inset-bottom))}
   .bar{position:fixed;left:0;right:0;bottom:0;z-index:70;display:grid;grid-template-columns:auto 1fr;gap:10px;padding:10px var(--gut) max(10px,env(safe-area-inset-bottom));background:var(--ink);border-top:1px solid var(--line-dark)}
   .bar .btn{min-height:48px;padding-inline:16px;font-size:.9375rem}
-  .dock{top:auto;right:auto;left:max(12px,env(safe-area-inset-left));bottom:calc(var(--bar) + 8px + env(safe-area-inset-bottom))}
+  body{position:relative}
+  .dock{position:absolute;top:calc(var(--hdr) + 8px);left:12px;right:12px;max-width:none}
 }
 
 /* ---------- reveals ---------- */
@@ -407,7 +408,8 @@ button,input,textarea,select{font:inherit;color:inherit}
   .card__img{aspect-ratio:auto;min-height:116px}
   .card__b{padding:14px 14px 12px;gap:6px}
   .card__t{font-size:1.25rem}
-  .card__l{font-size:.9375rem;line-height:1.45;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
+  .card__l{font-size:.9375rem;line-height:1.45}
+  .card__rest{display:none}
   .card .tlink{display:none}
   .sec{padding-block:clamp(48px,12vw,72px)}
 }

@@ -153,7 +153,7 @@
       var M = B.mail, nl = "\n", boat = label(B.types, type) + ", " + len + " " + L.m + ", " + label(B.engines, eng);
       var size = haul.title + " (" + (len <= 8.5 ? "to 8.5 m" : "over 8.5 m") + ")";
       if (picked.indexOf("storage") >= 0) size += "; " + store.title;
-      var lines = [M.hello, "", M.intro, "", M.boat + ": " + boat, M.jobs + ": " + (summary.length ? summary.join("; ") : "-"), M.size + ": " + size];
+      var lines = [M.hello, "", M.intro, "", M.boat + ": " + boat, M.jobs + ": " + (summary.length ? summary.join("; ") : "to discuss"), M.size + ": " + size];
       if (whenEl.value.trim()) lines.push(M.when + ": " + whenEl.value.trim());
       if (nameEl.value.trim() || phoneEl.value.trim()) { lines.push(""); if (nameEl.value.trim()) lines.push(M.name + ": " + nameEl.value.trim()); if (phoneEl.value.trim()) lines.push(M.phone + ": " + phoneEl.value.trim()); }
       lines.push("", M.thanks);
