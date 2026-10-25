@@ -1,0 +1,34 @@
+/* Tokens only. Every colour in the site lives here; styles.css uses var(--*) exclusively. */
+:root {
+  --paper: #f3f1ea;
+  --paper-2: #e9e6db;
+  --surface: #ffffff;
+  --ink: #1b1d1f;
+  --ink-2: #3b3d42;
+  --muted: #565a5f;
+  --char: #1d1f22;
+  --char-2: #2a2d31;
+  --on-char: #f3f1ea;
+  --muted-on-char: #b6b9bd;
+  --green: #00a450;
+  --green-lite: #22c670;
+  --green-hi: #19c068;
+  --green-deep: #00733a;
+  --on-green: #06130b;
+  --tint-fit: #d9f0e2;
+  --tint-maybe: #f5e6c4;
+  --tint-off: #e4e1d6;
+  --line: rgba(27, 29, 31, 0.14);
+  --line-strong: rgba(27, 29, 31, 0.3);
+  --line-on-char: rgba(243, 241, 234, 0.18);
+  --focus: #0b5fd0;
+  --focus-on-char: #f3f1ea;
+  --shadow: 0 1px 2px rgba(27, 29, 31, 0.08), 0 10px 30px -12px rgba(27, 29, 31, 0.28);
+  --scrim-a: rgba(29, 31, 34, 0.86);
+  --scrim-b: rgba(29, 31, 34, 0.5);
+  --scrim-c: rgba(29, 31, 34, 0.08);
+  --scrim-d: rgba(29, 31, 34, 0.9);
+  --veil: rgba(27, 29, 31, 0.55);
+  --white-a: rgba(255, 255, 255, 0.94);
+  --mark: #e5483a;
+}
