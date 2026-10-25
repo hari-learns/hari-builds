@@ -129,9 +129,11 @@
       c.push({ k: "beam", ok: db >= 0, t: ui.beam + " " + fmt(m.beam) + " " + ui.u_m + ": " + (db >= 0 ? fmt2(db) + " " + ui.u_m + " " + ui.under : ui.over + " " + fmt2(-db) + " " + ui.u_m) });
       c.push({ k: "draught", ok: dd >= 0, t: ui.draught + " " + fmt2(m.draught) + " " + ui.u_m + ": " + (dd >= 0 ? ui.fits.toLowerCase() : ui.over + " " + fmt2(-dd) + " " + ui.u_m) });
       c.push({ k: "kn", ok: ds >= 0, t: ui.speed + " " + m.kn + " " + ui.u_kn + ": " + (ds >= 0 ? "ok" : ui.short + " " + (-ds) + " " + ui.u_kn) });
-      if (st.bunks) c.push({ k: "bunks", ok: m.bunks, t: m.bunks ? ui.bunk_more : ui.bunk_less });
+      var note = [{ k: "bunks", n: true, ok: true, t: m.bunks ? ui.bunk_more : ui.bunk_less }];
       var ok = c.every(function (x) { return x.ok; });
-      return { c: c, ok: ok, fails: c.filter(function (x) { return !x.ok; }).length };
+      var tight = ok && (dl < 0.3 || db < 0.3);
+      if (st.bunks) c.push(note[0]);
+      return { c: c, ok: ok, tight: tight, fails: c.filter(function (x) { return !x.ok; }).length };
     }
 
     function chosen() {
@@ -147,9 +149,9 @@
       ms.forEach(function (m) {
         var r = rows[m.id], e = ev[m.id];
         r.row.classList.toggle("is-ok", e.ok); r.row.classList.toggle("is-no", !e.ok);
-        r.badge.textContent = e.ok ? ui.fits : ui.nofit; r.badge.className = "badge " + (e.ok ? "ok" : "no");
+        r.badge.textContent = e.ok ? (e.tight ? ui.tight : ui.fits) : ui.nofit; r.badge.className = "badge " + (e.ok ? (e.tight ? "tight" : "ok") : "no");
         r.checks.innerHTML = "";
-        e.c.forEach(function (x) { var li = d.createElement("li"); if (!x.ok) li.className = "x"; li.textContent = x.t; r.checks.appendChild(li); });
+        e.c.forEach(function (x) { var li = d.createElement("li"); if (!x.ok) li.className = "x"; else if (x.n) li.className = "n"; li.textContent = x.t; r.checks.appendChild(li); });
         function bar(kind, val, limit, max) {
           var b = $("[data-b-" + kind + "]", r.row), mk = $("[data-m-" + kind + "]", r.row), v = $("[data-v-" + kind + "]", r.row);
           b.style.width = Math.min(100, val / max * 100) + "%";
@@ -163,11 +165,12 @@
       var order = ms.slice().sort(function (a, b) {
         var ea = ev[a.id], eb = ev[b.id];
         if (ea.ok !== eb.ok) return ea.ok ? -1 : 1;
+        if (ea.ok && st.bunks && a.bunks !== b.bunks) return a.bunks ? -1 : 1;
         if (!ea.ok && ea.fails !== eb.fails) return ea.fails - eb.fails;
         return b.loa - a.loa;
       });
       order.forEach(function (m) { rowsEl.appendChild(rows[m.id].row); });
-      var best = ok.length ? ok.slice().sort(function (a, b) { return b.loa - a.loa; })[0] : null;
+      var best = ok.length ? ok.slice().sort(function (a, b) { if (st.bunks && a.bunks !== b.bunks) return a.bunks ? -1 : 1; return b.loa - a.loa; })[0] : null;
       sumEl.innerHTML = best ? ui.sum_ok.replace("{n}", "<b>" + ok.length + "</b>").replace("{m}", ms.length).replace("{name}", "<b>" + best.name + "</b>") : ui.sum_none;
       /* the enquiry mail carries every number */
       var L = ui.mail_lines, ch = chosen(), lines = [ui.mail_intro, ""];
