@@ -3,7 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 
 // Automation engineer stays last.
-const ROLES = ["Web designer", "App developer", "Brand engineer", "SEO strategist", "Founder", "Automation engineer"];
+const ROLES = ["Web designer", "App developer", "Brand engineer", "SEO strategist", "Creative technologist", "Automation engineer"];
 // The closing branch asks the question the others lead to.
 const ENDING = "Exactly what you need?";
 
