@@ -1,0 +1,4 @@
+User-agent: *
+Disallow:
+
+Sitemap: https://hharan.site/clients/demos/boatelectrics/sitemap.xml
