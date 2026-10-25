@@ -137,7 +137,7 @@
     function render() {
       resEl.textContent = ""; alsoList.textContent = ""; alsoEl.hidden = true; picked = [];
       $$("[data-q3]", fEl).forEach(function (g) { g.hidden = g.getAttribute("data-q3") !== st.kind; });
-      if (waitEl) waitEl.hidden = !!st.kind;
+      var q3box = $(".step--q3", fEl); if (q3box) q3box.hidden = !st.kind; enq.hidden = !st.kind;
       if (goEl) goEl.hidden = true;
       if (!st.kind) { sumEl.textContent = ui.summary_empty; update(); return; }
       var list = P.filter(function (p) { return p.cat === st.kind; }).map(function (p, i) { return { p: p, s: score(p), i: i }; });
