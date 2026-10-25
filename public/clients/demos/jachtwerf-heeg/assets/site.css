@@ -416,3 +416,5 @@ details.acc .tablewrap{border:0;border-radius:0}
 
 .set__imgs--even figure:nth-child(n){grid-column:auto!important}
 .set__imgs--even figure:nth-child(n) img{aspect-ratio:4/3!important}
+
+@media(max-width:699.98px){.story .set__imgs:not(.set__imgs--even) figure:nth-child(n+4){display:none}}

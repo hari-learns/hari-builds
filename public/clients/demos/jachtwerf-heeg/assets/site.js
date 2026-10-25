@@ -54,6 +54,7 @@
   var dock = $('[data-dock]');
   if (dock) {
     try { if (sessionStorage.getItem('jwh-dock') === '1') dock.hidden = true; } catch (e) { }
+    if (innerWidth < 900) setTimeout(function () { dock.hidden = true; }, 9000);
     var dcl = $('[data-dock-close]', dock);
     if (dcl) dcl.addEventListener('click', function () { dock.hidden = true; try { sessionStorage.setItem('jwh-dock', '1'); } catch (e) { } });
   }
