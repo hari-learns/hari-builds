@@ -510,3 +510,28 @@ input[type=number]::-webkit-outer-spin-button, input[type=number]::-webkit-inner
 .imp img { aspect-ratio: 4 / 3; object-fit: cover; background: var(--ground); }
 .spec dd { font: 500 1rem/1.5 "Hanken Grotesk", system-ui, sans-serif; }
 .kv li > :last-child { max-width: 62%; }
+
+/* split page head (process/product pages): their real photo next to the title */
+.phead--split { padding-bottom: clamp(40px, 6vw, 72px); }
+.phead__grid { display: grid; gap: 28px; align-items: center; }
+.phead__grid > div { min-width: 0; }
+@media (min-width: 900px) { .phead__grid { grid-template-columns: minmax(0, 1.1fr) minmax(0, .9fr); gap: 56px; } }
+.phead__fig img { width: 100%; height: auto; aspect-ratio: 4 / 3; object-fit: cover; background: var(--ground); border: 1px solid var(--line-soft); }
+/* home: Einfachheit band */
+.easy { display: grid; gap: 28px; align-items: center; }
+@media (min-width: 900px) { .easy { grid-template-columns: minmax(0, 1.1fr) minmax(0, .9fr); gap: 64px; } }
+.easy .hand { margin: 0; max-width: none; }
+.easy .hand img { width: 100%; max-width: 560px; }
+/* references and tiles on narrow phones */
+.refs { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+@media (min-width: 860px) { .refs { grid-template-columns: repeat(4, minmax(0, 1fr)); } }
+.refs li { min-width: 0; }
+.tile__t, .tile__s { overflow-wrap: anywhere; }
+@media (max-width: 560px) { .tile__t { font-size: 1.05rem; padding: 12px 12px 2px; } .tile__s { padding: 0 12px 14px; } }
+.sec__head { margin-bottom: clamp(28px, 4vw, 48px); }
+.ticklist + .svc__lh { margin-top: 28px; }
+.form .h2 { margin-bottom: 8px; }
+.form { max-width: 720px; }
+.f textarea { width: 100%; padding: 12px 14px; background: var(--ground-3); color: var(--ink); border: 1px solid var(--line); border-radius: 3px; font: 400 1rem "Hanken Grotesk", system-ui, sans-serif; resize: vertical; }
+.f input { width: 100%; min-height: 52px; padding: 12px 14px; background: var(--ground-3); color: var(--ink); border: 1px solid var(--line); border-radius: 3px; font: 400 1rem "Hanken Grotesk", system-ui, sans-serif; }
+.f input:focus, .f textarea:focus { border-color: var(--hl); outline: 0; box-shadow: 0 0 0 3px color-mix(in srgb, var(--hl) 28%, transparent); }

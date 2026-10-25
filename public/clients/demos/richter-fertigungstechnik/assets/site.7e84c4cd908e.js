@@ -45,78 +45,76 @@
   sweep();
   if (reduce) rvs.forEach(activate);
 
-  /* ------------------------------------------------ "Passt mein Teil?" : which process covers this part, from their published limits */
+  /* ------------------------------------------------ "Passt mein Teil?" : which process covers this part, from the figures on their own pages (two tiers: inside both figures = fits, between them = please ask) */
   var tEl = $("[data-tool]");
   if (tEl) (function () {
-    var data = json("tool-data"), T = data.ui, P = data.tool.procs, SC = data.tool.schirm, pages = data.pages, presets = data.presets;
+    var data = json("tool-data"), T = data.ui, P = data.tool.procs, SC = data.tool.schirm, pages = data.pages, presets = data.tool.presets;
     var de = (root.lang || "").indexOf("de") === 0, dec = de ? "," : ".";
     var radios = $$("input[name=ptype]", tEl), ea = $("#t-a"), eb = $("#t-b"), ec = $("#t-c"), em = $("#t-mat"), eq = $("#t-q");
     var fc = $('[data-f="c"]', tEl), resEl = $("[data-results]", tEl), sumEl = $("[data-sum]", tEl), cta = $("[data-cta]", tEl), qn = $("[data-qnote]", tEl), cp = $("[data-copy]", tEl);
     var st = { type: "flat", a: 300, b: 200, c: 5, mat: "alu", q: 10 };
-    var last = { ok: [], ask: [] };
+    var last = { text: "" };
     function num(el) { var v = parseFloat(String(el.value).replace(",", ".")); return isFinite(v) && v > 0 ? v : NaN; }
     function fmt(n) { return String(Math.round(n * 10) / 10).replace(".", dec); }
     function tpl(s, o) { return s.replace(/\{(\w+)\}/g, function (m, k) { return o[k] === undefined ? m : o[k]; }); }
     function matLabel(m) { var l = T.mats.filter(function (x) { return x[0] === m; })[0]; return l ? l[1] : m; }
     function matOk(p, m) { if (m === "schirm") return false; if (p.mats.indexOf(m) > -1) return true; return m === "klar" && p.mats.indexOf("kst") > -1; }
     function desc(a) { return a.slice().sort(function (x, y) { return y - x; }); }
-    function fits(dims, env) { var a = desc(dims), b = desc(env); if (a.length > b.length) a = a.slice(0, b.length); for (var i = 0; i < a.length; i++) if (a[i] > b[i]) return false; return true; }
-    function R(s) { return { st: s, why: [] }; }
+    function fits(dims, env) { var a = desc(dims), b = desc(env); for (var i = 0; i < a.length; i++) if (a[i] > b[i]) return false; return true; }
+    function R(s, w) { return { st: s, why: w ? [w] : [] }; }
+    function no(w, lab) { return { st: "no", why: [w], lab: lab }; }
+    var W = function () { return T.w[st.type]; };
 
+    /* flat part against a limit pair {ok:{a,b,tmin?,tmax}, max:{a,b,tmax}} */
+    function flat(lim, prefix) {
+      var o = lim.ok, m = lim.max, t = st.c, pre = prefix || "";
+      var rng = (o.tmin ? fmt(o.tmin) + " " + (de ? "bis" : "to") + " " : (de ? "bis " : "up to ")) + fmt(o.tmax);
+      var v = { a: fmt(st.a), b: fmt(st.b), t: fmt(t), w: W(), A: o.a, B: o.b, range: rng, A2: m.a, B2: m.b, C2: m.tmax, lo: o.tmin };
+      if (!fits([st.a, st.b], [m.a, m.b]) || t > m.tmax) return no(pre + tpl(T.r_no_flat, v));
+      if (o.tmin && t < o.tmin) return R("ask", pre + tpl(T.r_low, v));
+      if (fits([st.a, st.b], [o.a, o.b]) && t <= o.tmax) return R("ok", pre + tpl(T.r_ok_flat, v));
+      return R("ask", pre + tpl(T.r_ask_flat, v));
+    }
+    function block(p) {
+      var d = [st.a, st.b, st.c], v = { a: fmt(st.a), b: fmt(st.b), c: fmt(st.c), A: p.ok[0], B: p.ok[1], C: p.ok[2], A2: p.max[0], B2: p.max[1], C2: p.max[2] };
+      if (!fits(d, p.max)) return no(tpl(T.r_no_env, v));
+      if (fits(d, p.ok)) return R("ok", tpl(T.r_ok_env, v));
+      return R("ask", tpl(T.r_ask_env, v));
+    }
     function evBlech() {
-      var p = P.blech, r = R("ok"), t = st.c;
-      if (st.type === "round") { r.st = "no"; r.why.push(T.wk_round); return r; }
-      if (!matOk(p, st.mat)) { r.st = "no"; r.why.push(tpl(T.r_mat_no, { m: matLabel(st.mat) })); return r; }
-      if (!fits([st.a, st.b], [p.a, p.b])) { r.st = "no"; r.why.push(tpl(T.r_big_flat, { a: fmt(st.a), b: fmt(st.b), A: p.a, B: p.b })); return r; }
-      if (t > p.tmax) { r.st = "no"; r.why.push(tpl(T.r_t_out, { t: fmt(t), lo: p.tmin, hi: p.tmax })); return r; }
-      if (t < p.tmin) { r.st = "ask"; r.why.push(tpl(T.r_t_min, { lo: p.tmin })); return r; }
-      r.why.push(tpl(T.r_fit_flat, { a: fmt(st.a), b: fmt(st.b), A: p.a, B: p.b })); r.why.push(tpl(T.r_fit_t, { t: fmt(t), lo: p.tmin, hi: p.tmax }));
-      return r;
+      var p = P.blech;
+      if (st.type === "round") return null;
+      if (!matOk(p, st.mat)) return no(tpl(T.r_mat_no, { m: matLabel(st.mat) }), "nolist");
+      return flat(p);
     }
     function evStanz() {
-      var p = P.stanz, r = R("ok"), t = st.c;
-      if (st.type === "round") { r.st = "no"; r.why.push(T.wk_round); return r; }
-      if (st.type === "block") { r.st = "no"; r.why.push(T.wk_block_stanz); return r; }
-      if (st.mat === "schirm") {
-        var okS = fits([st.a, st.b], [SC.a, SC.b]) && t >= SC.tmin && t <= SC.tmax;
-        r.st = okS ? "ok" : "ask"; r.why.push(tpl(T.r_schirm, { a: SC.a, b: SC.b, lo: SC.tmin, hi: SC.tmax })); return r;
-      }
-      if (!matOk(p, st.mat)) { r.st = "no"; r.why.push(tpl(T.r_mat_no, { m: matLabel(st.mat) })); return r; }
-      if (!fits([st.a, st.b], [p.a, p.b])) { r.st = "no"; r.why.push(tpl(T.r_big_flat, { a: fmt(st.a), b: fmt(st.b), A: p.a, B: p.b })); return r; }
-      r.why.push(tpl(T.r_fit_flat, { a: fmt(st.a), b: fmt(st.b), A: p.a, B: p.b }));
-      if (t > p.tok) { r.st = "ask"; r.why.push(tpl(T.r_t_ask, { t: fmt(t), ok: p.tok })); }
-      return r;
+      var p = P.stanz;
+      if (st.type !== "flat") return null;
+      if (st.mat === "schirm") return flat(SC, T.schirm_prefix);
+      if (!matOk(p, st.mat)) return no(tpl(T.r_mat_no, { m: matLabel(st.mat) }), "nolist");
+      return flat(p);
     }
     function evFraes() {
-      var p = P.fraes, r = R("ok"), dims;
-      if (st.mat === "schirm") {
-        if (st.type !== "flat") { r.st = "no"; r.why.push(tpl(T.r_mat_no, { m: matLabel(st.mat) })); return r; }
-        var okS = fits([st.a, st.b], [SC.a, SC.b]) && st.c >= SC.tmin && st.c <= SC.tmax;
-        r.st = okS ? "ok" : "ask"; r.why.push(tpl(T.r_schirm, { a: SC.a, b: SC.b, lo: SC.tmin, hi: SC.tmax })); return r;
-      }
-      if (!matOk(p, st.mat)) { r.st = "no"; r.why.push(tpl(T.r_mat_no, { m: matLabel(st.mat) })); return r; }
-      dims = st.type === "round" ? [st.a, st.a, st.b] : [st.a, st.b, st.c];
-      var o = { A: p.env[0], B: p.env[1], C: p.env[2] };
-      if (fits(dims, p.env)) r.why.push(tpl(T.r_env_ok, o)); else { r.st = "no"; r.why.push(tpl(T.r_env_no, o)); }
-      return r;
+      var p = P.fraes;
+      if (st.mat === "schirm") { if (st.type !== "flat") return no(tpl(T.r_mat_no, { m: matLabel(st.mat) }), "nolist"); return flat(SC, T.schirm_prefix); }
+      if (!matOk(p, st.mat)) return no(tpl(T.r_mat_no, { m: matLabel(st.mat) }), "nolist");
+      if (st.type === "flat") return block(p);
+      if (st.type === "round") { var q = { ok: p.ok, max: p.max }; var save = { a: st.a, b: st.b, c: st.c }; st.c = st.b; st.b = st.a; var r = block(q); st.a = save.a; st.b = save.b; st.c = save.c; return r; }
+      return block(p);
     }
     function evDreh() {
-      var p = P.dreh, r = R("ok"), D = st.a, Ln = st.b;
-      if (st.type !== "round") { r.st = "no"; r.why.push(T.wk_flat); return r; }
-      if (!matOk(p, st.mat)) { r.st = "no"; r.why.push(tpl(T.r_mat_no, { m: matLabel(st.mat) })); return r; }
-      var o = { d: fmt(D), lo: p.dok[0], hi: p.dok[1], dm: p.dmax, lm: p.lmax, l: fmt(Ln) };
-      if (D > p.dmax) { r.st = "no"; r.why.push(tpl(T.r_dia_no, o)); return r; }
-      if (Ln > p.lmax) { r.st = "no"; r.why.push(tpl(T.r_len_no, o)); return r; }
-      if (D > p.dok[1] || D < p.dok[0]) { r.st = "ask"; r.why.push(tpl(T.r_dia_ask, o)); return r; }
-      r.why.push(tpl(T.r_dia_ok, o)); return r;
+      var p = P.dreh;
+      if (st.type !== "round") return null;
+      if (!matOk(p, st.mat)) return no(tpl(T.r_mat_no, { m: matLabel(st.mat) }), "nolist");
+      var D = st.a, Ln = st.b, o = p.ok, m = p.max;
+      var v = { d: fmt(D), l: fmt(Ln), lo: o.dmin, hi: o.dmax, L: o.len, dm: m.dmax };
+      if (D > m.dmax || Ln > m.len) return no(tpl(T.r_no_dia, v));
+      if (D < o.dmin) return R("ask", tpl(T.r_dia_low, v));
+      if (D > o.dmax) return R("ask", tpl(T.r_ask_dia, v));
+      return R("ok", tpl(T.r_ok_dia, v));
     }
-    var limits = {
-      blech: function () { var p = P.blech; return p.a + " × " + p.b + " mm · " + p.tmin + "–" + p.tmax + " mm"; },
-      stanz: function () { var p = P.stanz; return p.a + " × " + p.b + " mm"; },
-      fraes: function () { var p = P.fraes; return p.env.join(" × ") + " mm"; },
-      dreh: function () { var p = P.dreh; return "Ø " + p.dok[0] + "–" + p.dok[1] + " mm · DM " + p.dmax + " × " + p.lmax + " mm"; }
-    };
-    var evs = { blech: evBlech, fraes: evFraes, dreh: evDreh, stanz: evStanz };
+    var evs = { blech: evBlech, stanz: evStanz, fraes: evFraes, dreh: evDreh };
+    var pref = { flat: ["blech", "stanz", "fraes", "dreh"], block: ["fraes", "blech", "stanz", "dreh"], round: ["dreh", "fraes", "blech", "stanz"] };
     var order = { ok: 0, ask: 1, no: 2 };
 
     function mailText(fit) {
@@ -124,26 +122,36 @@
       var typ = T.types.filter(function (x) { return x[0] === st.type; })[0][1];
       var dl = T.dims[st.type].filter(function (x) { return x; });
       var dimStr = d3.map(function (v, i) { return dl[i] + " " + fmt(v); }).join(" × ");
-      var lines = [T.mail_greet, "", T.mail_intro, "", T.mail_part + ": " + typ, T.mail_dims + ": " + dimStr, T.mail_mat + ": " + matLabel(st.mat), T.mail_qty + ": " + Math.round(st.q), "",
-        T.mail_fit + ": " + (fit.length ? fit.join(", ") : T.mail_none), "", T.mail_drawing, "", T.mail_bye];
+      var lines = [T.mail_greet, "", T.mail_intro, "", T.mail_part + ": " + typ, T.mail_dims + ": " + dimStr, T.mail_mat + ": " + matLabel(st.mat)];
+      if (isFinite(st.q)) lines.push(T.mail_qty + ": " + Math.round(st.q));
+      lines.push("", T.mail_fit + ": " + (fit.length ? fit.join(", ") : T.mail_none), "", T.mail_drawing, "", T.mail_bye);
       return lines.join("\n");
     }
+    function setCta(on) {
+      cta.setAttribute("href", on ? "mailto:" + data.email + "?subject=" + encodeURIComponent(T.mail_subject) + "&body=" + encodeURIComponent(last.text) : "mailto:" + data.email);
+    }
     function update() {
-      var arr = Object.keys(evs).map(function (k, i) { var r = evs[k](); r.id = k; r.i = i; return r; });
+      var need = st.type === "round" ? [st.a, st.b] : [st.a, st.b, st.c];
+      if (need.some(function (v) { return !isFinite(v) || v <= 0; })) {
+        resEl.innerHTML = ""; sumEl.textContent = T.sum_empty; qn.textContent = ""; last.text = ""; setCta(false); return;
+      }
+      var arr = [];
+      pref[st.type].forEach(function (k, i) { var r = evs[k](); if (r) { r.id = k; r.i = i; arr.push(r); } });
       arr.sort(function (x, y) { return order[x.st] - order[y.st] || x.i - y.i; });
-      var nOk = arr.filter(function (r) { return r.st === "ok"; }).length, nAsk = arr.filter(function (r) { return r.st === "ask"; }).length;
+      var nOk = arr.filter(function (r) { return r.st === "ok"; }).length, nAsk = arr.filter(function (r) { return r.st === "ask"; }).length, tot = arr.length;
       resEl.innerHTML = arr.map(function (r) {
-        return '<li class="is-' + r.st + '"><div class="rs__t"><span class="rs__n"><a href="' + pages[r.id] + '">' + T.proc_names[r.id] + '</a></span><span class="rs__b">' + T[r.st] + '</span></div>' +
-          '<p class="rs__w">' + r.why.join(" · ") + '</p><p class="rs__l">' + T.limit + ": " + limits[r.id]() + "</p></li>";
+        return '<li class="is-' + r.st + '"><div class="rs__t"><span class="rs__n"><a href="' + pages[r.id] + '">' + T.proc_names[r.id] + '</a></span><span class="rs__b">' + T[r.lab || r.st] + '</span></div>' +
+          '<p class="rs__w">' + r.why.join(" · ") + '</p><p class="rs__l">' + T.limit + ": " + T.lims[r.id] + "</p></li>";
       }).join("");
-      var txt = nOk + nAsk === 0 ? T.sum_none : nAsk ? tpl(T.sum_ask, { n: "<b>" + nOk + "</b>", m: nAsk }) : tpl(T.sum_ok, { n: "<b>" + nOk + "</b>" });
+      var txt = nOk + nAsk === 0 ? T.sum_none : nOk === 0 ? tpl(T.sum_askonly, { m: "<b>" + nAsk + "</b>", t: tot }) : nAsk ? tpl(T.sum_ask, { n: "<b>" + nOk + "</b>", m: nAsk, t: tot }) : tpl(T.sum_ok, { n: "<b>" + nOk + "</b>", t: tot });
       sumEl.innerHTML = txt;
       var fit = arr.filter(function (r) { return r.st !== "no"; }).map(function (r) { return T.proc_names[r.id] + (r.st === "ask" ? " (" + T.ask + ")" : ""); });
-      last.text = mailText(fit);
-      cta.setAttribute("href", "mailto:" + data.email + "?subject=" + encodeURIComponent(T.mail_subject) + "&body=" + encodeURIComponent(last.text));
+      last.text = mailText(fit); setCta(true);
       var notes = [];
-      if (arr.some(function (r) { return r.id === "stanz" && r.st !== "no"; })) notes.push(T.qty_note_stanz);
-      notes.push(T.qty_note_any, T.qty_start);
+      if (nOk + nAsk > 0) {
+        if (st.q >= 1000 && arr.some(function (r) { return r.id === "stanz" && r.st !== "no"; })) notes.push(T.qty_note_stanz);
+        notes.push(T.qty_note_any, T.qty_start);
+      }
       qn.textContent = notes.join("\n");
     }
     function labels() {
@@ -154,8 +162,7 @@
     function read() {
       var t = radios.filter(function (r) { return r.checked; })[0];
       st.type = t ? t.value : "flat"; st.mat = em.value;
-      var a = num(ea), b = num(eb), c = num(ec), q = num(eq);
-      st.a = isNaN(a) ? 1 : a; st.b = isNaN(b) ? 1 : b; st.c = isNaN(c) ? (st.type === "round" ? 0 : 1) : c; st.q = isNaN(q) ? 1 : q;
+      st.a = num(ea); st.b = num(eb); st.c = st.type === "round" ? 1 : num(ec); st.q = num(eq);
       labels(); update();
     }
     radios.forEach(function (r) { r.addEventListener("change", read); });
@@ -171,9 +178,24 @@
     if (cp) cp.addEventListener("click", function () {
       var old = cp.textContent;
       function done() { cp.textContent = cp.getAttribute("data-done"); setTimeout(function () { cp.textContent = old; }, 1800); }
-      if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(last.text).then(done, function () { });
+      if (last.text && navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(last.text).then(done, function () { });
     });
     read();
+  })();
+
+  /* ------------------------------------------------ contact form -> mailto draft (nothing is sent from the page) */
+  var cf = $("#cform");
+  if (cf) (function () {
+    var cfg = json("cform-data");
+    function v(id) { return $("#" + id).value.trim(); }
+    cf.addEventListener("submit", function (e) {
+      e.preventDefault();
+      var lines = [cfg.greet, ""];
+      if (v("c-msg")) lines.push(v("c-msg"), "");
+      lines.push(cfg.bye);
+      [v("c-name"), v("c-mail"), v("c-tel")].forEach(function (x) { if (x) lines.push(x); });
+      location.href = "mailto:" + cfg.to + "?subject=" + encodeURIComponent(cfg.subject) + "&body=" + encodeURIComponent(lines.join("\n"));
+    });
   })();
 
   /* ------------------------------------------------ office open now, from the published hours (Europe/Vienna) */
