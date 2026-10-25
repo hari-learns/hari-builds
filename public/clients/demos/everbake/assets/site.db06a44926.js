@@ -63,6 +63,30 @@
   });
 
 
+  /* news filter + show more */
+  $$("[data-news]").forEach(function (list) {
+    var cards = $$(".ncard", list), tag = "", shown = 12, more = $("[data-more]"), btn = $("[data-morebtn]");
+    function apply() {
+      var n = 0, total = 0;
+      cards.forEach(function (c) {
+        var ok = !tag || (" " + c.getAttribute("data-tags") + " ").indexOf(" " + tag + " ") >= 0;
+        if (ok) total++;
+        var vis = ok && n < shown; if (ok) n++;
+        c.hidden = !vis; if (vis) c.classList.add("is-in");
+      });
+      if (more) more.hidden = total <= shown;
+    }
+    $$(".jchip").forEach(function (b) {
+      b.addEventListener("click", function () {
+        tag = b.getAttribute("data-tag"); shown = 12;
+        $$(".jchip").forEach(function (x) { var on = x === b; x.classList.toggle("is-on", on); x.setAttribute("aria-pressed", on ? "true" : "false"); });
+        apply();
+      });
+    });
+    if (btn) btn.addEventListener("click", function () { shown += 12; apply(); });
+    apply();
+  });
+
   /* ------------------------------------------------ frying line picker */
   function mailto(to, subject, body) {
     return "mailto:" + to + "?subject=" + encodeURIComponent(subject) + "&body=" + encodeURIComponent(body).replace(/%0A/g, "%0D%0A");
