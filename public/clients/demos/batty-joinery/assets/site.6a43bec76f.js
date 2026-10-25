@@ -50,6 +50,14 @@
     f.addEventListener("change", apply); apply();
   });
 
+  /* projects strip arrows */
+  $$("[data-strip]").forEach(function (st) {
+    var sec = st.parentNode, prev = $("[data-prev]", sec), next = $("[data-next]", sec);
+    function by(dir) { var c = st.firstElementChild; var w = c ? c.getBoundingClientRect().width + 16 : 300; st.scrollBy({ left: dir * w * 2, behavior: reduce ? "auto" : "smooth" }); }
+    if (prev) prev.addEventListener("click", function () { by(-1); });
+    if (next) next.addEventListener("click", function () { by(1); });
+  });
+
   /* ------------------------------------------------ plan your joinery */
   function mailto(to, subject, body) {
     return "mailto:" + to + "?subject=" + encodeURIComponent(subject) + "&body=" + encodeURIComponent(body).replace(/%0A/g, "%0D%0A");
@@ -58,10 +66,10 @@
 
   function initTool(root_) {
     var D = JSON.parse($("[data-tooldata]", root_).textContent), L = D.labels, pid = root_.getAttribute("data-pid");
-    var kindBox = $("[data-kindbox]", root_), kindsEl = $("[data-kinds]", root_), resEl = $("[data-result]", root_), enq = $("[data-enq]", root_);
+    var kindWait = $("[data-kindwait]", root_), kindsEl = $("[data-kinds]", root_), resEl = $("[data-result]", root_), enq = $("[data-enq]", root_);
     var textEl = $("[data-text]", enq), mailEl = $("[data-mail]", enq), copyEl = $("[data-copy]", enq), copyLabel = $("[data-copylabel]", enq);
     var placeEl = $("[data-place]", root_), nameEl = $("[data-name]", root_), phoneEl = $("[data-phone]", root_);
-    var shownFor = "";
+    var shownFor = "", emptyHTML = resEl.innerHTML;
     function radio(name) { var c = $("input[name='" + pid + "-" + name + "']:checked", root_); return c ? c.value : ""; }
     function byKey(list, k) { for (var i = 0; i < list.length; i++) if (list[i].key === k) return list[i]; return null; }
     function labelOf(list, k) { for (var i = 0; i < list.length; i++) if (list[i][0] === k) return list[i][1]; return ""; }
@@ -73,7 +81,7 @@
         inp.type = "radio"; inp.name = pid + "-kind"; inp.value = k.key;
         sp.appendChild(el("b", "", k.label)); lab.appendChild(inp); lab.appendChild(sp); kindsEl.appendChild(lab);
       });
-      kindBox.hidden = false;
+      if (kindWait) kindWait.hidden = true;
     }
     function link(text, href) { var a = el("a", "tlink", text); a.href = href; a.insertAdjacentHTML("beforeend", ARROW); return a; }
     function section(h, node) { var w = el("div"); w.appendChild(el("h4", "", h)); w.appendChild(node); return w; }
@@ -84,8 +92,8 @@
       if (what && shownFor !== what) { fillKinds(what); shownFor = what; kindKey = ""; }
       var kind = what ? byKey(D.kinds[what] || [], kindKey) : null;
       resEl.innerHTML = ""; enq.hidden = true;
-      if (!what) { resEl.appendChild(el("p", "tool__empty", L.pick)); return; }
-      if (!kind) { resEl.appendChild(el("p", "tool__empty", L.kind)); return; }
+      if (!what) { resEl.innerHTML = emptyHTML; return; }
+      if (!kind) { resEl.appendChild(el("p", "tool__empty", L.kind_pick)); return; }
       var res = el("div", "res");
       var lede = el("div", "res__lede"); lede.appendChild(el("b", "", kind.label)); lede.appendChild(el("p", "", kind.summary)); res.appendChild(lede);
       var links = el("div"), svc = D.pages[kind.service];
@@ -124,7 +132,12 @@
       mailEl.href = mailto(D.to, M.subject + ": " + kind.label, body);
     }
     root_.addEventListener("input", render);
-    root_.addEventListener("change", render);
+    root_.addEventListener("change", function (ev) {
+      render();
+      if (ev.target && /-kind$/.test(ev.target.name) && window.innerWidth < 1000) {
+        safe(function () { resEl.scrollIntoView({ behavior: reduce ? "auto" : "smooth", block: "start" }); });
+      }
+    });
     if (copyEl) copyEl.addEventListener("click", function () {
       function done() { copyLabel.textContent = L.copied; setTimeout(function () { copyLabel.textContent = L.copy; }, 1800); }
       if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(textEl.value).then(done, function () { textEl.select(); safe(function () { d.execCommand("copy"); }); done(); });
