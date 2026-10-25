@@ -65,7 +65,7 @@
   // ---- stock tables: tabs + search
   var panels = qsa("[data-panel]");
   if (panels.length) {
-    var tabs = qsa("[data-tab]"), q = qs("[data-q]"), cnt = qs("[data-count]"), cur = null;
+    var tabs = qsa("[data-tab]"), q = qs("[data-q]"), cnt = qs("[data-tcount]"), cur = null;
     var norm = function (s) { return (s || "").toLowerCase().replace(/[’”"]/g, "'"); };
     function openPanel(k) {
       cur = k;
@@ -164,11 +164,11 @@
         var res = match(s), lim = expanded ? res.length : 6;
         if (!res.length) html = '<p class="finder__empty">' + esc(U.none) + "</p>";
         else {
-          html = '<p class="finder__src">' + esc(U.shown.replace("{n}", res.length)) + "</p><ul class=\"res\">";
+          html = '<p class="finder__src">' + esc(res.length === 1 ? U.shown1 : U.shown.replace("{n}", res.length)) + "</p><ul class=\"res\">";
           res.slice(0, lim).forEach(function (x) {
             var r = x.r, d = x.d, tag = x.tag === "eco" ? U.eco : U.stock + (r.d ? ", " + r.d : "");
             var df = [];
-            if (d.luff != null) df.push("luff " + dstr(d.luff, s.m)); if (d.foot != null) df.push("foot " + dstr(d.foot, s.m)); if (d.size != null) df.push("size " + dstr(d.size, s.m));
+            ["luff", "foot", "size"].forEach(function (k) { if (d[k] != null) { var v = s.m ? d[k] / FT : d[k], u = s.m ? " m" : " ft"; df.push(Math.abs(v) < 0.05 ? "your " + k + " matches" : U.yours.replace("{k}", k).replace("{d}", Math.abs(v).toFixed(s.m ? 2 : 1) + u).replace("{w}", v > 0 ? U.longer : U.shorter)); } });
             var extra = x.tag === "eco" ? (r.z ? r.z + " oz cloth" : "") : (r.t || "");
             var on = picks[r.c] ? "true" : "false";
             html += '<li class="res__i"><div><span class="res__code">' + esc(r.c) + '</span><span class="res__tag">' + esc(tag) + "</span></div>" +
@@ -193,7 +193,7 @@
     function compose(s) {
       var lines = ["Hello Jeckells,", "", "I would like a quote."];
       lines.push("Sail wanted: " + U.kind_label[s.sail]);
-      lines.push("Boat type: " + s.boat);
+      if (s.boat !== "Not chosen") lines.push("Boat type: " + s.boat);
       if (s.name) lines.push("Boat name or class: " + s.name);
       if (s.raw.blen) lines.push("Boat length: " + s.raw.blen + (s.m ? " m" : " ft"));
       if (single(s.sail)) { if (s.raw.size) lines.push("Size: " + s.raw.size + (s.m ? " m" : " ft")); }
