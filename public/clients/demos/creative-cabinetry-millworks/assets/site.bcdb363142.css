@@ -97,8 +97,9 @@ h3 { font-size: clamp(1.45rem, 2.6vw, 1.9rem); line-height: 1.12; }
 .hero__img img { width: 100%; height: 100%; object-fit: cover; object-position: 38% 50%; animation: settle 2.2s var(--ease) both; }
 .hero::before { content: ""; position: absolute; inset: 0; z-index: -1; background: linear-gradient(90deg, color-mix(in srgb, var(--ground) 82%, transparent) 0%, color-mix(in srgb, var(--ground) 46%, transparent) 55%, color-mix(in srgb, var(--ground) 10%, transparent) 100%), linear-gradient(0deg, color-mix(in srgb, var(--ground) 80%, transparent) 0%, transparent 45%); }
 @keyframes settle { from { transform: scale(1.07); } to { transform: scale(1); } }
-.hero__in { padding-block: clamp(48px, 9vw, 110px) clamp(84px, 9vw, 110px); }
-.hero h1 { max-width: 11ch; text-shadow: 0 2px 30px color-mix(in srgb, var(--black) 40%, transparent); }
+.hero__in { padding-block: clamp(48px, 9vw, 110px) calc(var(--bar-h) + 96px); }
+@media (min-width: 1100px) { .hero__in { padding-bottom: 104px; } }
+.hero h1 { max-width: 14ch; text-shadow: 0 2px 30px color-mix(in srgb, var(--black) 40%, transparent); }
 .hero .lead { color: var(--ink); margin-top: 22px; max-width: 54ch; }
 .hero .btns { margin-top: 30px; }
 .facts { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0; margin-top: clamp(36px, 6vw, 72px); border-top: 1px solid color-mix(in srgb, var(--ink) 30%, transparent); }
@@ -245,7 +246,8 @@ dialog.lb::backdrop { background: var(--black); }
 .lb__in { height: 100%; display: grid; grid-template-rows: auto minmax(0, 1fr) auto; padding: env(safe-area-inset-top) 12px env(safe-area-inset-bottom); }
 .lb__top, .lb__bot { display: flex; align-items: center; justify-content: space-between; gap: 10px; min-height: 56px; }
 .lb__img { display: grid; place-items: center; min-height: 0; }
-.lb__img img { max-width: 100%; max-height: 100%; width: auto; height: auto; object-fit: contain; }
+.lb__img { width: 100%; height: 100%; }
+.lb__img img { width: 100%; height: 100%; max-width: 100%; max-height: 100%; object-fit: contain; }
 .lb button { width: 48px; height: 48px; background: transparent; border: 1px solid var(--line); color: var(--ink); font-size: 1.4rem; cursor: pointer; border-radius: 2px; }
 .lb button:hover { background: var(--ink); color: var(--ground); }
 
@@ -302,6 +304,8 @@ dialog.lb::backdrop { background: var(--black); }
 .dock p { margin: 0; padding: 8px 0; flex: 1; }
 .dock button { flex: none; width: 44px; height: 44px; background: transparent; border: 0; color: var(--paper-ink); font-size: 1.4rem; cursor: pointer; }
 .dock[hidden] { display: none; }
+.dock.is-away { opacity: 0; pointer-events: none; transition: opacity .3s; }
+@media (min-width: 1100px) { .dock.is-away { opacity: 1; pointer-events: auto; } }
 @media (min-width: 1100px) { .dock { left: 20px; right: auto; bottom: 20px; max-width: 560px; } }
 
 /* reveals */

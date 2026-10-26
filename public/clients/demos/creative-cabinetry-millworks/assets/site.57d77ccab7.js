@@ -28,6 +28,8 @@
   if (dock && safe(function () { return sessionStorage.getItem("ccm-dock") === "1"; })) dock.hidden = true;
   if (dockX) dockX.addEventListener("click", function () { dock.hidden = true; safe(function () { sessionStorage.setItem("ccm-dock", "1"); }); });
 
+  if (dock) window.addEventListener("scroll", function () { dock.classList.toggle("is-away", window.scrollY > 260); }, { passive: true });
+
   /* reveals, with a sweep that also reveals anything already scrolled past */
   var rvs = $$(".rv, [data-weeks]");
   function activate(el) { el.classList.add("is-in"); }
@@ -61,11 +63,12 @@
       li.src = b.getAttribute("data-lb"); li.alt = b.getAttribute("data-alt"); li.width = +b.getAttribute("data-w"); li.height = +b.getAttribute("data-h");
       ln.textContent = (cur + 1) + " / " + items.length;
     }
-    items.forEach(function (b, i) { b.addEventListener("click", function () { show(i); lb.showModal(); root.style.overflow = "hidden"; }); });
+    var opener = null;
+    items.forEach(function (b, i) { b.addEventListener("click", function () { opener = b; show(i); lb.showModal(); root.style.overflow = "hidden"; }); });
     $("#lb-x").addEventListener("click", function () { lb.close(); });
     $("#lb-p").addEventListener("click", function () { show(cur - 1); });
     $("#lb-nx").addEventListener("click", function () { show(cur + 1); });
-    lb.addEventListener("close", function () { root.style.overflow = ""; });
+    lb.addEventListener("close", function () { root.style.overflow = ""; if (opener) opener.focus(); });
     lb.addEventListener("keydown", function (e) { if (e.key === "ArrowLeft") show(cur - 1); if (e.key === "ArrowRight") show(cur + 1); });
   }
 
@@ -87,60 +90,62 @@
   var form = $("#plan"), dataEl = $("#plan-data");
   if (form && dataEl) {
     var D = JSON.parse(dataEl.textContent), T = D.t, out = $("#out-b");
-    var fs = {}; ["std", "whl", "any"].forEach(function (k) { fs[k] = $$('[data-for="' + k + '"]', form); });
+    var fs = { std: $$('[data-for="std"]', form), whl: $$('[data-for="whl"]', form) };
     function val(n) { var x = $("input[name=" + n + "]:checked", form); return x ? x.value : ""; }
-    function row(dl, k, v, cls) { var r = el("div"); r.appendChild(el("dt", "", k)); var dd = el("dd", cls || "", v); r.appendChild(dd); dl.appendChild(r); }
+    function row(dl, k, v, cls) { var r = el("div"); r.appendChild(el("dt", "", k)); r.appendChild(el("dd", cls || "", v)); dl.appendChild(r); }
     function render() {
       var type = val("type"), whl = type === "wholesale";
       fs.std.forEach(function (n) { n.hidden = !type || whl; });
       fs.whl.forEach(function (n) { n.hidden = !whl; });
-      fs.any.forEach(function (n) { n.hidden = !type; });
-      var nn = $("[data-n]", form); if (nn) nn.textContent = whl ? "3" : "5";
       $$("[data-only=commercial]", form).forEach(function (c) {
         var show = type === "commercial"; c.hidden = !show; if (!show) { var i = $("input", c); if (i.checked) i.checked = false; }
       });
       out.textContent = "";
       if (!type) { out.appendChild(el("p", "", T.out_empty)); return; }
-      var area = form.elements.area.value, dl = el("dl"), lines = [], subj = D.types[type];
+      var area = form.elements.area.value, notes = form.elements.notes.value.trim(), dl = el("dl"), lines = [], subj = D.types[type];
+      var steps = D.proc.map(function (s) { return [s[0], s[1]]; }), links = [], done = 1, total = 1, complete = false;
       row(dl, "Project", D.types[type]); lines.push("Project type: " + D.types[type]);
-      var inArea = area && area !== "__other";
-      var areaTxt = !area ? "Not chosen yet" : (area === "__other" ? T.other_area : area);
-      var steps = D.proc.map(function (s) { return [s[0], s[1]]; }), links = [];
       if (whl) {
         var it = val("item"), q = parseInt(form.elements.qty.value, 10), info = D.items[it];
-        row(dl, "Product", info ? info.label : "Not chosen yet"); lines.push("Product: " + (info ? info.label : ""));
-        if (info) {
+        if (!(q >= 1)) q = 0;
+        total = 3; done += (info ? 1 : 0) + (q ? 1 : 0);
+        row(dl, "Product", info ? info.label : "Not chosen yet"); if (info) lines.push("Product: " + info.label);
+        if (info && q) {
           var meets = q >= info.min;
-          row(dl, "Quantity", q ? q + " " + info.unit : "Not entered yet", q ? (meets ? "ok" : "warn") : "");
-          if (q) row(dl, "Minimum", (meets ? T.meets : T.below), meets ? "ok" : "warn");
-          lines.push("Quantity: " + (q ? q + " " + info.unit : "") + " (their minimum: " + info.min + " " + info.unit + ")");
+          row(dl, "Quantity", q + " " + info.unit, meets ? "ok" : "warn"); row(dl, "Minimum", meets ? T.meets : T.below, meets ? "ok" : "warn");
+          lines.push("Quantity: " + q + " " + info.unit + " (our minimum: " + info.min + " " + info.unit + ")");
           subj += ": " + info.label;
-        }
-        steps = [["Ask for the wholesale price", "Send this brief. They quote wholesale doors and spec books on request."]];
+        } else row(dl, "Quantity", "Not entered yet");
+        complete = !!(info && q);
+        steps = [["Ask for the wholesale price", "Send this brief and we quote wholesale doors and spec books on request."]];
       } else {
-        var needs = $$("input[name=need]:checked", form).map(function (x) { return x.value; });
-        var nl = needs.map(function (k) { return D.needs[k].label; });
-        row(dl, "Needs", nl.length ? nl.join(", ") : "Not chosen yet"); lines.push("Project scope: " + nl.join(", "));
-        var mk = val("make"), dg = val("design");
-        row(dl, "Made", mk ? D.make[mk] : "Not chosen yet"); lines.push("Make: " + (mk ? D.make[mk] : ""));
-        row(dl, "Design", dg ? D.design[dg] : "Not chosen yet"); lines.push("Design: " + (dg ? D.design[dg] : ""));
-        if (nl.length) subj += ": " + nl.join(", ");
+        total = 5;
+        var needs = $$("input[name=need]:checked", form).map(function (x) { return x.value; }), nl = needs.map(function (k) { return D.needs[k].label; });
+        var mk = val("make"), dg = val("design"), inArea = area && area !== "__other";
+        done += (nl.length ? 1 : 0) + (mk ? 1 : 0) + (dg ? 1 : 0) + (area ? 1 : 0);
+        row(dl, "Needs", nl.length ? nl.join(", ") : "Not chosen yet"); if (nl.length) { lines.push("Project scope: " + nl.join(", ")); subj += ": " + nl.join(", "); }
+        row(dl, "Made", mk ? D.make[mk] : "Not chosen yet"); if (mk) lines.push("Make: " + D.make[mk]);
+        row(dl, "Design", dg ? D.design[dg] : "Not chosen yet"); if (dg) lines.push("Design: " + D.design[dg]);
+        var areaTxt = !area ? "Not chosen yet" : (area === "__other" ? T.other_area : area);
+        row(dl, "Area", areaTxt, area ? (inArea ? "ok" : "warn") : ""); if (area) { row(dl, "Check", inArea ? T.in_area : T.out_area, inArea ? "ok" : "warn"); lines.push("Area: " + areaTxt); }
         if (dg === "own") steps[1] = ["Send your design", T.own_next];
         if (dg === "theirs") steps[1] = ["Design & construction estimate", T.theirs_note];
         if (mk === "prefab") steps[0] = [steps[0][0], steps[0][1] + " " + T.prefab_note];
         var seen = {};
         needs.forEach(function (k) { var p = D.needs[k].page; if (p && !seen[p]) { seen[p] = 1; links.push([D.needs[k].label + ": photos", D.base + "/" + p + "/"]); } });
+        complete = done === total;
       }
-      row(dl, "Area", areaTxt + (area ? (area === "__other" ? " " : " ") : ""), area ? (inArea ? "ok" : "warn") : "");
-      if (area) row(dl, "Check", inArea ? T.in_area : T.out_area, inArea ? "ok" : "warn");
-      lines.push("Area: " + areaTxt);
+      if (notes) lines.push("Notes: " + notes);
+      var prog = el("p", "fine", done + " of " + total + " " + T.progress); prog.style.margin = "0 0 10px"; out.appendChild(prog);
       out.appendChild(dl);
       out.appendChild(el("h3", "", T.next_h));
       var ol = el("ol"); steps.forEach(function (s) { var li = el("li"); li.appendChild(el("b", "", s[0] + ". ")); li.appendChild(d.createTextNode(s[1])); ol.appendChild(li); }); out.appendChild(ol);
       if (links.length) { var lw = el("div", "links"); links.forEach(function (l) { var a = el("a", "", l[0]); a.href = l[1]; lw.appendChild(a); }); out.appendChild(lw); }
-      var body = lines.join("\n") + "\n\nName:\nPhone:\nProject address:\n\nSent from the redesign concept: plan my project.";
-      var bw = el("div", "btns");
-      var a1 = el("a", "btn", T.send); a1.href = mailto(D.email, T.subject + ": " + subj, body); bw.appendChild(a1);
+      var body = lines.join("\n") + "\n\nName:\nPhone:\nProject address:\n\nSent from Plan my project.";
+      var bw = el("div", "btns"), a1;
+      if (complete) { a1 = el("a", "btn", T.send); a1.href = mailto(D.email, T.subject + ": " + subj, body); }
+      else { a1 = el("button", "btn", T.send); a1.type = "button"; a1.disabled = true; a1.style.opacity = ".5"; a1.style.cursor = "not-allowed"; }
+      bw.appendChild(a1);
       var a2 = el("a", "btn btn--ghost", T.call); a2.href = "tel:" + D.tel; bw.appendChild(a2);
       var b3 = el("button", "btn btn--ghost", T.copy); b3.type = "button";
       b3.addEventListener("click", function () {
@@ -148,12 +153,13 @@
         if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(body).then(ok, ok); else ok();
       });
       bw.appendChild(b3); out.appendChild(bw);
+      if (!complete) out.appendChild(el("p", "fine", T.need_more));
       out.appendChild(el("p", "fine", T.disclaimer));
     }
     form.addEventListener("change", render); form.addEventListener("input", render); form.addEventListener("submit", function (e) { e.preventDefault(); });
     var q = new URLSearchParams(location.search);
     var t0 = q.get("type"); if (t0) { var r = $("input[name=type][value=" + t0 + "]", form); if (r) r.checked = true; }
-    var n0 = q.get("need"); if (n0) { var rr = $("input[name=type][value=residential]", form); if (n0 === "commercial") rr = $("input[name=type][value=commercial]", form); if (!val("type") && rr) rr.checked = true; render(); var c0 = $("input[name=need][value=" + n0 + "]", form); if (c0) c0.checked = true; }
+    var n0 = q.get("need"); if (n0) { var tt = n0 === "commercial" ? "commercial" : "residential"; if (!val("type")) { var rr = $("input[name=type][value=" + tt + "]", form); if (rr) rr.checked = true; } render(); var c0 = $("input[name=need][value=" + n0 + "]", form); if (c0) c0.checked = true; }
     var i0 = q.get("item"); if (i0) { var ri = $("input[name=item][value=" + i0 + "]", form); if (ri) ri.checked = true; }
     render();
   }
