@@ -19,7 +19,7 @@
   if (burgerX) burgerX.addEventListener("click", function () { setDrawer(false); });
   if (drawer) $$("a", drawer).forEach(function (a) { a.addEventListener("click", function () { setDrawer(false); }); });
   d.addEventListener("keydown", function (e) { if (e.key === "Escape") setDrawer(false); });
-  window.addEventListener("resize", function () { if (window.innerWidth >= 1060) setDrawer(false); });
+  window.addEventListener("resize", function () { if (window.innerWidth >= 1280) setDrawer(false); });
   if (drawer) { drawer.setAttribute("aria-hidden", "true"); }
 
   /* dock */
@@ -100,14 +100,35 @@
     });
   });
 
+  /* quotation request -> pre-filled mailto (nothing is sent from the page) */
+  $$("[data-qform]").forEach(function (f) {
+    var ui = JSON.parse(f.getAttribute("data-ui"));
+    f.addEventListener("submit", function (ev) {
+      ev.preventDefault();
+      var v = function (n) { return (f.elements[n] && f.elements[n].value || "").trim(); };
+      var lines = [ui.hello, "", ui.intro, "", ui.grp + ": " + ui.group];
+      if (v("m")) lines.push(ui.mach + ": " + v("m"));
+      if (v("d")) lines.push(ui.cont + ": " + v("d"));
+      if (v("o")) lines.push(ui.out + ": " + v("o"));
+      if (v("q")) lines.push(ui.qty + ": " + v("q"));
+      lines.push("", ui.cname + ": " + v("n"), ui.ccompany + ": " + v("c"), ui.ccountry + ": " + v("k"));
+      if (v("t")) lines.push("", ui.cmsg + ": " + v("t"));
+      var subj = ui.subj + ": " + ui.group + (v("m") ? " - " + v("m") : "");
+      location.href = "mailto:" + f.getAttribute("data-to") + "?cc=" + f.getAttribute("data-cc") + "&subject=" + encodeURIComponent(subj) + "&body=" + encodeURIComponent(lines.join("\n"));
+    });
+  });
+
   /* finder */
   $$("[data-finder]").forEach(function (root) {
     var data = JSON.parse($("[data-finder-data]", root).textContent), ui = data.ui, ko = data.lang === "ko";
-    var kindEls = $$("input[name$=-kind]", root), rateEls = $$("input[name$=-rate]", root);
+    var kindEls = $$("input[name$=-kind]", root), rateEls = $$("input[name$=-rate]", root), grpEls = $$("input[name$=-grp]", root), fixed = data.fixed || null;
     var num = $("input[type=number]", root), rng = $("input[type=range]", root), out = $("output", root), box = $("[data-results]", root), diaBox = $("[data-dia]", root);
     function val(els) { var c = els.filter(function (x) { return x.checked; })[0]; return c ? c.value : null; }
     function esc(s) { return String(s).replace(/[&<>"]/g, function (c) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]; }); }
     function rateOk(m, n) { if (m.rmin == null) return true; return m.rmax >= n && m.rmin <= n * 3; }
+    function grp() { var k = fixed || val(grpEls) || "any"; return k !== "any" && data.groups[k] ? k : null; }
+    function pick(els, v) { els.forEach(function (x) { x.checked = String(x.value) === String(v); }); }
+    function applyPreset(k) { var g = data.groups[k]; if (!g) return; pick(kindEls, g.kind); pick(rateEls, g.rate); num.value = g.dia; rng.value = g.dia; }
     function why(m, kind, dia, n) {
       var bits = [];
       if (ko) {
@@ -120,7 +141,7 @@
       return m.note;
     }
     function run() {
-      var kind = val(kindEls), n = +val(rateEls), dia = +num.value;
+      var kind = val(kindEls), n = +val(rateEls), dia = +num.value, gk = grp(), G = gk ? data.groups[gk] : null;
       var needDia = (kind === "capped" || kind === "liner");
       diaBox.hidden = !needDia;
       out.textContent = dia + " mm"; if (+rng.value !== dia && dia >= +rng.min && dia <= +rng.max) rng.value = dia;
@@ -132,6 +153,7 @@
         return rateOk(m, n);
       });
       list.sort(function (a, b) {
+        if (G) { var ia = G.prio.indexOf(a.slug) >= 0, ib = G.prio.indexOf(b.slug) >= 0; if (ia !== ib) return ia ? -1 : 1; }
         var sa = a.rmax ? Math.abs(Math.log(a.rmax / n)) : 0.5, sb = b.rmax ? Math.abs(Math.log(b.rmax / n)) : 0.5; return sa - sb;
       });
       if (!list.length) { box.innerHTML = '<p>' + esc(ui.none) + '</p><p><a class="btn btn-red" href="tel:' + "+82-32-573-6671" + '">' + (ko ? "032-573-6671 전화" : "Call 032-573-6671") + '</a></p>'; return; }
@@ -139,16 +161,18 @@
       var top = list.slice(0, 5);
       var html = '<div class="res">' + top.map(function (m) {
         var o = m.rmin == null ? (ko ? "컨베이어 라인" : "Conveyor line") : (m.rmin === m.rmax ? m.rmax + (ko ? "개/분" : " per min") : m.rmin + " to " + m.rmax + (ko ? "개/분" : " per min"));
-        return '<div class="res-i"><a class="res-img" href="' + m.href + '" tabindex="-1" aria-hidden="true"><img src="' + m.img + '" width="' + m.iw + '" height="' + m.ih + '" alt="" loading="lazy"></a><div class="res-b"><h4><a href="' + m.href + '">' + esc(m.name) + '</a></h4><div class="res-m"><span>' + esc(ui.out) + ": " + esc(o) + '</span>' + (m.dmin != null ? '<span>' + esc(ui.dia) + ": Ø" + m.dmin + " to " + m.dmax + " mm</span>" : '<span>' + esc(ui.madeto) + '</span>') + '</div><p>' + esc(why(m, kind, dia, n)) + '</p><a class="more" href="' + m.href + '">' + esc(ui.more) + '</a></div></div>';
+        return '<div class="res-i"><a class="res-img" href="' + m.href + '" tabindex="-1" aria-hidden="true"><img src="' + m.img + '" width="' + m.iw + '" height="' + m.ih + '" alt="" loading="lazy"></a><div class="res-b"><h4><a href="' + m.href + '">' + esc(m.name) + '</a></h4><div class="res-m"><span>' + esc(ui.out) + ": " + esc(o) + '</span>' + (m.dmin != null ? '<span>' + esc(ui.dia) + ": Ø" + m.dmin + " to " + m.dmax + " mm</span>" : '<span>' + esc(ui.madeto) + '</span>') + '</div><p>' + esc(G && G.why[m.slug] ? G.why[m.slug] : why(m, kind, dia, n)) + '</p>' + (G && G.prio.indexOf(m.slug) >= 0 ? '<span class="res-g">' + esc(ui.g_first) + " " + esc(G.who) + '</span>' : "") + '<a class="more" href="' + m.href + '">' + esc(ui.more) + '</a></div></div>';
       }).join("");
       if (n >= 20 || kind === "capped") html += '<div class="res-add"><b>' + esc(ui.addon) + ".</b> " + esc(ui.addon_t) + ' <a href="' + data.sim + '">SIM-1000C</a></div>';
       html += "</div>";
       var lines = top.map(function (m) { return "- " + m.name; }).join("\n");
-      var body = "Hello Smart Corporation,\n\n" + ui.sendline + ":\n- " + (kindEls.filter(function (x) { return x.checked; })[0].nextElementSibling.textContent) + "\n" + (needDia ? "- Cap diameter: " + dia + " mm\n" : "") + "- Output: " + rateLabel + "\n\nMachines shown:\n" + lines + "\n\nCompany:\nCountry:\n";
-      html += '<p class="res-send"><a class="btn btn-red" href="mailto:' + data.to + "?subject=" + encodeURIComponent(ui.sendline + (needDia ? " Ø" + dia + " mm" : "")) + "&body=" + encodeURIComponent(body) + '">' + esc(ui.send) + "</a></p>";
+      var body = "Hello Smart Corporation,\n\n" + ui.sendline + ":\n" + (G ? "- " + ui.send_g + ": " + G.name + "\n" : "") + "- " + (kindEls.filter(function (x) { return x.checked; })[0].nextElementSibling.textContent) + "\n" + (needDia ? "- Cap diameter: " + dia + " mm\n" : "") + "- Output: " + rateLabel + "\n\nMachines shown:\n" + lines + "\n\nCompany:\nCountry:\n";
+      html += '<p class="res-send"><a class="btn btn-red" href="mailto:' + data.to + "?cc=" + data.cc + "&subject=" + encodeURIComponent(ui.sendline + (needDia ? " Ø" + dia + " mm" : "")) + "&body=" + encodeURIComponent(body) + '">' + esc(ui.send) + "</a></p>";
       box.innerHTML = html;
     }
     kindEls.concat(rateEls).forEach(function (el) { el.addEventListener("change", run); });
+    grpEls.forEach(function (el) { el.addEventListener("change", function () { var k = grp(); if (k) applyPreset(k); run(); }); });
+    if (!fixed && grpEls.length) { var q = safe(function () { return new URLSearchParams(location.search).get("for"); }); if (q && data.groups[q]) { pick(grpEls, q); applyPreset(q); } }
     num.addEventListener("input", function () { if (num.value !== "") run(); });
     rng.addEventListener("input", function () { num.value = rng.value; run(); });
     run();
