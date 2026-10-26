@@ -16,7 +16,7 @@
   if (bg) bg.addEventListener("click", function () { setDrawer(true); });
   if (bx) bx.addEventListener("click", function () { setDrawer(false); });
   d.addEventListener("keydown", function (e) { if (e.key === "Escape") setDrawer(false); });
-  window.addEventListener("resize", function () { if (window.innerWidth >= 1100) setDrawer(false); });
+  window.addEventListener("resize", function () { if (window.innerWidth >= 1200) setDrawer(false); });
   if (dr) $$("a", dr).forEach(function (a) { a.addEventListener("click", function () { setDrawer(false); }); });
 
   /* dock */
@@ -27,10 +27,16 @@
   /* reveals */
   var rv = $$(".rv");
   if ("IntersectionObserver" in window && !matchMedia("(prefers-reduced-motion: reduce)").matches) {
-    var io = new IntersectionObserver(function (es) { es.forEach(function (e) { if (e.isIntersecting) { e.target.classList.add("in"); io.unobserve(e.target); } }); }, { rootMargin: "0px 0px -8% 0px", threshold: 0.05 });
-    rv.forEach(function (el, i) { el.style.setProperty("--d", (i % 4) * 0.06 + "s"); io.observe(el); });
+    var io = new IntersectionObserver(function (es) { es.forEach(function (e) { if (e.isIntersecting) { e.target.classList.add("in"); io.unobserve(e.target); } }); }, { rootMargin: "0px 0px 140px 0px", threshold: 0 });
+    rv.forEach(function (el, i) { el.style.setProperty("--d", (i % 3) * 0.05 + "s"); io.observe(el); });
     setTimeout(function () { rv.forEach(function (el) { var r = el.getBoundingClientRect(); if (r.top < window.innerHeight) el.classList.add("in"); }); }, 900);
   } else { rv.forEach(function (el) { el.classList.add("in"); }); }
+
+  /* sticky bar steps aside while the hero buttons are on screen */
+  var heroBtns = $(".hero .btn-row"), bar = $(".bar");
+  if (heroBtns && bar && "IntersectionObserver" in window) {
+    new IntersectionObserver(function (es) { bar.classList.toggle("bar--off", es[0].isIntersecting); }, { threshold: 0.2 }).observe(heroBtns);
+  }
 
   /* lightbox */
   var lb = $("#lb");
@@ -38,7 +44,10 @@
     var items = [], idx = 0, im = $("#lb-img", lb), cap = $("#lb-cap", lb), cnt = $("#lb-cnt", lb);
     var show = function (i) {
       idx = (i + items.length) % items.length; var b = items[idx];
-      im.src = b.getAttribute("data-full"); im.alt = b.getAttribute("data-alt"); im.width = +b.getAttribute("data-w"); im.height = +b.getAttribute("data-h");
+      var full = b.getAttribute("data-full"), th = b.querySelector("img");
+      im.src = th && th.currentSrc ? th.currentSrc : full; im.alt = b.getAttribute("data-alt"); im.width = +b.getAttribute("data-w"); im.height = +b.getAttribute("data-h");
+      var pre = new Image(); pre.onload = function () { if (items[idx] === b) im.src = full; }; pre.src = full;
+      var nx = items[(idx + 1) % items.length]; if (nx) { var p2 = new Image(); p2.src = nx.getAttribute("data-full"); }
       cap.textContent = b.getAttribute("data-alt"); cnt.textContent = (idx + 1) + " / " + items.length;
     };
     $$(".ph").forEach(function (b) {
@@ -87,7 +96,7 @@
           });
           if (best) res.push({ k: k, turned: best.turned, ow: best.w, od: best.d, sw: st.mode === "hold" ? best.w - need.w : st.w - best.w, sh: st.mode === "hold" ? k.h - need.h : st.h - k.h, sd: st.mode === "hold" ? best.d - need.d : st.d - best.d, vol: k.w * k.h * k.d });
         });
-        res.sort(function (a, b) { return st.mode === "hold" ? a.vol - b.vol : b.vol - a.vol; });
+        res.sort(function (a, b) { return (a.sw + a.sh + a.sd) - (b.sw + b.sh + b.sd) || a.vol - b.vol; });
         return { res: res, need: need };
       }
       function dia(label, kw, kh, yw, yh, kl, yl) {
@@ -109,7 +118,7 @@
         sync();
         var m = match(), res = m.res, html = "";
         if (!res.length) {
-          html = '<p class="fd__none" aria-live="polite">' + esc(T.none) + '</p><div class="fd__act"><a class="btn" href="' + mail(m, null) + '">' + esc(T.cta_none) + '</a><span class="fd__call">' + esc(T.call) + ' <a href="tel:' + D.tel + '">' + esc(D.phone) + "</a></span></div>";
+          html = '<p class="fd__none" aria-live="polite">' + esc(T.none) + '</p><div class="fd__act"><a class="btn" href="' + mail(m, null) + '">' + esc(T.cta_none) + '</a><button type="button" class="btn btn--ghost" data-copy>' + esc(T.copy) + '</button><span class="fd__call">' + esc(T.call) + ' <a href="tel:' + D.tel + '">' + esc(D.phone) + "</a></span></div>";
         } else {
           var b = res[0], bw = b.ow, bd = b.od;
           var yw = st.mode === "hold" ? st.w : st.w, yh = st.h, yd = st.d;
@@ -121,11 +130,11 @@
           html += '<div class="dia"><figure>' + f1 + "<figcaption>" + esc(T.front) + " (W × H)</figcaption></figure><figure>" + p1 + "<figcaption>" + esc(T.plan) + " (W × D)</figcaption></figure></div>";
           html += '<p class="fd__note">' + esc(T.you) + ": dashed. " + esc(T.kiosk) + ": solid. " + esc(T.col_spare) + " " + fmt(b.sw) + " / " + fmt(b.sh) + " / " + fmt(b.sd) + " mm.</p></div>";
           var shown = st.all ? res : res.slice(0, 6);
-          html += '<div class="fd__tbl scroller"><table><thead><tr><th>' + esc(T.col_size) + "</th><th>" + esc(T.col_mat) + '</th><th class="num">' + esc(T.col_spare) + "</th></tr></thead><tbody>";
-          shown.forEach(function (r, i) { html += "<tr" + (i === 0 ? ' class="top"' : "") + "><td>" + fmt(r.k.w) + " × " + fmt(r.k.h) + " × " + fmt(r.k.d) + (r.turned ? " (90°)" : "") + "</td><td>" + esc(r.k.m === "steel" ? T.steel : T.grp) + '</td><td class="num">' + fmt(r.sw) + " / " + fmt(r.sh) + " / " + fmt(r.sd) + "</td></tr>"; });
+          html += '<div class="fd__tbl scroller"><table><thead><tr><th>' + esc(T.col_both) + '</th><th class="num">' + esc(T.col_spare) + "</th></tr></thead><tbody>";
+          shown.forEach(function (r, i) { html += "<tr" + (i === 0 ? ' class="top"' : "") + "><td>" + fmt(r.k.w) + " × " + fmt(r.k.h) + " × " + fmt(r.k.d) + (r.turned ? " (90°)" : "") + '<br><span class="sub">' + esc(r.k.m === "steel" ? T.steel : T.grp) + '</span></td><td class="num">' + fmt(r.sw) + " / " + fmt(r.sh) + " / " + fmt(r.sd) + "</td></tr>"; });
           html += "</tbody></table></div>";
           if (res.length > 6) html += '<button type="button" class="fd__more" data-more>' + esc(st.all ? T.show_less : T.show_all.replace("{n}", res.length)) + "</button>";
-          html += '<div class="fd__act"><a class="btn" data-cta href="' + mail(m, b) + '">' + esc(T.cta) + '</a><span class="fd__call">' + esc(T.call) + ' <a href="tel:' + D.tel + '">' + esc(D.phone) + "</a></span></div>";
+          html += '<div class="fd__act"><a class="btn" data-cta href="' + mail(m, b) + '">' + esc(T.cta) + '</a><button type="button" class="btn btn--ghost" data-copy>' + esc(T.copy) + '</button><span class="fd__call">' + esc(T.call) + ' <a href="tel:' + D.tel + '">' + esc(D.phone) + "</a></span></div>";
         }
         html += '<p class="fd__note">' + esc(T.note) + "</p>";
         out.innerHTML = html;
@@ -142,6 +151,12 @@
         else if (t.hasAttribute("data-mat")) { st.mat = t.getAttribute("data-mat"); render(); }
         else if (t.hasAttribute("data-preset")) { var p = t.getAttribute("data-preset").split(","); st.w = +p[0]; st.h = +p[1]; st.d = +p[2]; st.mode = "hold"; render(); }
         else if (t.hasAttribute("data-more")) { st.all = !st.all; render(); }
+        else if (t.hasAttribute("data-copy")) {
+          var a = $("[data-cta]", root) || $(".fd__act a.btn", root), href = a ? a.getAttribute("href") : "", subj = decodeURIComponent((href.match(/subject=([^&]*)/) || [0, ""])[1]), body = decodeURIComponent((href.match(/body=(.*)$/) || [0, ""])[1]).replace(/\r\n/g, "\n");
+          var txt = "To: " + D.to + "\nSubject: " + subj + "\n\n" + body;
+          var done = function (ok) { t.textContent = ok ? "\u2713 " + T.copy : T.copy; var n = $("[data-copymsg]", root); if (!n) { n = d.createElement("p"); n.className = "fd__note"; n.setAttribute("data-copymsg", ""); t.parentNode.parentNode.appendChild(n); } n.textContent = (ok ? T.copied : T.copy_fail).replace("{to}", D.to); };
+          if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(txt).then(function () { done(true); }, function () { done(false); }); else done(false);
+        }
       });
       render();
     });
@@ -156,9 +171,18 @@
     sel.addEventListener("change", upd); upd();
     cf.addEventListener("submit", function (e) {
       e.preventDefault(); var r = R[sel.value], f = cf.elements;
+      f.email.setCustomValidity(f.email.value || f.phone.value ? "" : cf.getAttribute("data-need")); if (!cf.reportValidity()) return;
       var body = cf.getAttribute("data-greet").replace("{type}", r.label) + "\n\n" + f.msg.value + "\n\nName: " + f.name.value + "\nPhone: " + f.phone.value + "\nEmail: " + f.email.value + "\n";
       var u = "mailto:" + r.to + "?subject=" + encodeURIComponent(cf.getAttribute("data-subject").replace("{type}", r.label)) + (r.cc ? "&cc=" + r.cc : "") + "&body=" + encodeURIComponent(body).replace(/%0A/g, "%0D%0A");
+      cf._mail = { to: r.to, text: "To: " + r.to + (r.cc ? "\nCc: " + r.cc : "") + "\nSubject: " + cf.getAttribute("data-subject").replace("{type}", r.label) + "\n\n" + body };
       window.location.href = u;
+    });
+    var cp = $("#f-copy", cf);
+    if (cp) cp.addEventListener("click", function () {
+      var r = R[sel.value], f = cf.elements, body = cf.getAttribute("data-greet").replace("{type}", r.label) + "\n\n" + f.msg.value + "\n\nName: " + f.name.value + "\nPhone: " + f.phone.value + "\nEmail: " + f.email.value + "\n";
+      var txt = "To: " + r.to + "\nSubject: " + cf.getAttribute("data-subject").replace("{type}", r.label) + "\n\n" + body, m = $("#f-copymsg", cf);
+      var done = function (ok) { m.textContent = ok ? cf.getAttribute("data-copied").replace("{to}", r.to) : r.to; };
+      if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(txt).then(function () { done(true); }, function () { done(false); }); else done(false);
     });
   }
 })();
