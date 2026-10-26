@@ -1,0 +1,27 @@
+/* Tokens only. Brand: Sunyi's logo red and navy (from sunyi.com.sg/wp-content/uploads/2021/05/Sunyi-business-logo-5.png), tuned for contrast on paper and on dark. */
+:root {
+  --paper: #f6f5f0;
+  --paper-2: #ecebe3;
+  --white: #ffffff;
+  --ink: #0c1535;
+  --muted: #4a5473;
+  --line: #d3d1c6;
+  --navy: #0a1a55;
+  --navy-2: #12236e;
+  --navy-3: #070f38;
+  --on-navy: #eef0fa;
+  --on-navy-muted: #b6bddb;
+  --navy-line: #2c3b82;
+  --red: #c9161d;
+  --red-hi: #e0252c;
+  --on-red: #ffffff;
+  --red-on-navy: #ff8e92;
+  --ok: #136a45;
+  --bad: #a3231c;
+  --warn: #8a5a00;
+  --shadow: rgba(12, 21, 53, .14);
+  --scrim: rgba(7, 15, 56, .62);
+
+  --ease: cubic-bezier(.16, 1, .3, 1);
+  --gut: clamp(20px, 5vw, 56px);
+}
