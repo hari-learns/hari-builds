@@ -134,7 +134,7 @@ body{padding-bottom:calc(var(--bar-h) + env(safe-area-inset-bottom))}
 .hero{position:relative;color:var(--on-ink);background:var(--ink);isolation:isolate;min-height:min(100svh,880px);min-height:min(100dvh,880px);display:flex;align-items:flex-end;overflow:hidden}
 .hero__img{position:absolute;inset:0;z-index:-2}
 .hero__img img{width:100%;height:100%;object-fit:cover;object-position:68% 50%}
-.hero::after{content:"";position:absolute;inset:0;z-index:-1;background:linear-gradient(90deg,var(--scrim-strong) 0%,var(--scrim) 48%,var(--scrim-clear) 100%),linear-gradient(0deg,var(--scrim-strong) 0%,var(--scrim-clear) 38%)}
+.hero::after{content:"";position:absolute;inset:0;z-index:-1;background:linear-gradient(90deg,var(--scrim-strong) 0%,var(--scrim) 40%,var(--scrim-clear) 85%),linear-gradient(0deg,var(--scrim-strong) 0%,var(--scrim-clear) 30%)}
 .hero__in{width:100%;padding-block:calc(var(--hdr-h) + 40px) clamp(28px,5vw,56px)}
 .hero h1{max-width:12ch}
 .hero__sub{font-size:clamp(1.1rem,1rem + .6vw,1.4rem);max-width:36rem;margin:20px 0 0;color:var(--on-ink)}
@@ -155,7 +155,7 @@ body{padding-bottom:calc(var(--bar-h) + env(safe-area-inset-bottom))}
 .crumb{display:flex;flex-wrap:wrap;gap:4px 8px;font-size:.9375rem;margin:0 0 18px;color:var(--on-ink-2)}
 .crumb a{display:inline-flex;align-items:center;justify-content:center;min-height:44px;min-width:44px;padding-inline:4px;color:var(--on-ink-2)}
 .crumb a:hover{color:var(--on-ink)}
-.crumb span[aria-hidden]{align-self:center}
+.crumb span{display:inline-flex;align-items:center;min-height:44px}
 
 /* ------------------------------------------------ sections */
 .sec{padding-block:var(--sec-y);position:relative}
@@ -297,6 +297,7 @@ input[type=range]{width:100%;height:44px;background:transparent;accent-color:var
 .stat{display:inline-flex;flex-direction:column;border-left:4px solid var(--gold);padding-left:14px;margin-top:8px}
 .stat strong{font-family:var(--f-display);text-transform:uppercase;font-size:2rem;line-height:1}
 .stat span{font-size:.9688rem;color:var(--muted)}
+.theme-ink .stat span,.theme-ink2 .stat span{color:var(--on-ink-2)}
 
 /* ------------------------------------------------ steps, people, testimonials */
 .steps{display:grid;gap:16px;grid-template-columns:repeat(auto-fit,minmax(min(100%,240px),1fr));counter-reset:s}
@@ -360,15 +361,15 @@ input[type=range]{width:100%;height:44px;background:transparent;accent-color:var
 .cta h2{max-width:22ch}
 .cta p{margin:10px 0 0;max-width:40rem}
 .ftr{background:var(--ink);color:var(--on-ink-2);padding-block:clamp(40px,6vw,72px) 28px}
-.ftr__grid{display:grid;gap:32px;grid-template-columns:repeat(auto-fit,minmax(min(100%,200px),1fr))}
+.ftr__grid{display:grid;gap:32px;grid-template-columns:repeat(auto-fit,minmax(min(100%,235px),1fr))}
 .ftr h2{font-family:var(--f-mono);font-weight:500;font-size:.875rem;letter-spacing:.08em;text-transform:uppercase;color:var(--teal-hi);margin-bottom:10px}
 .ftr li p,.ftr li{margin:0}
-.ftr a{display:inline-flex;align-items:center;min-height:44px;min-width:44px;color:var(--on-ink);text-decoration:none;overflow-wrap:anywhere}
+.ftr a{display:inline-flex;align-items:center;min-height:44px;min-width:44px;color:var(--on-ink);text-decoration:none;overflow-wrap:break-word}
 .ftr a:hover{text-decoration:underline}
 .ftr .brand-f{width:190px;height:auto}
 .ftr__note{margin:32px 0 0;padding-top:20px;border-top:1px solid var(--line-ink);font-size:.9375rem}
 .ftr__note a{text-decoration:underline}
-.ftr p{overflow-wrap:anywhere}
+.ftr p{overflow-wrap:break-word}
 
 /* ------------------------------------------------ motion (only real content moves; reduced motion gets the static site) */
 .js .rv{opacity:0;transform:translateY(18px);transition:opacity .8s var(--ease),transform .8s var(--ease);transition-delay:var(--d,0s)}
@@ -386,3 +387,6 @@ input[type=range]{width:100%;height:44px;background:transparent;accent-color:var
 
 .alsoposts{display:grid;gap:0;margin-top:10px}
 .alsoposts a{display:flex;align-items:center;min-height:44px;font-size:.9688rem;color:var(--teal-deep);overflow-wrap:anywhere}
+
+@media (max-width:639px){#p-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}#p-grid .card__body{padding:10px 12px 14px}#p-grid .card__body h3{font-size:1.15rem}#p-grid .litres{font-size:1.1rem}#p-grid .tags{display:none}}
+.ncard.is-hid,.pcard.is-hid{display:none}

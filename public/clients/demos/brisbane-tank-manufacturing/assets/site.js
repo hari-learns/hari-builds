@@ -9,6 +9,7 @@
   /* ---- concept dock */
   var dock = $("#dock"), dx = $("#dock-x");
   if (dock && store("btm-dock") === "1") dock.hidden = true;
+  if (dock && w.matchMedia("(max-width:899px)").matches) { var hd = function () { if (w.scrollY > 120) { dock.hidden = true; w.removeEventListener("scroll", hd); } }; w.addEventListener("scroll", hd, { passive: true }); }
   if (dx) dx.addEventListener("click", function () { dock.hidden = true; store("btm-dock", "1"); });
 
   /* ---- drawer */
@@ -83,13 +84,20 @@
   /* ---- news: filter by year */
   var ng = $("#n-grid");
   if (ng) {
-    var items = $$(".ncard", ng), nc = $("#n-count");
+    var items = $$(".ncard", ng), nc = $("#n-count"), yr = "all", lim = 24, more = $("#n-more");
+    var paint = function () {
+      var n = 0, shown = 0;
+      items.forEach(function (c) { var ok = yr === "all" || c.getAttribute("data-y") === yr; if (ok) n++; var vis = ok && shown < lim; if (vis) shown++; c.classList.toggle("is-hid", !vis); });
+      if (nc) nc.textContent = n + (n === 1 ? " post" : " posts") + (n > shown ? ", showing " + shown : "");
+      if (more) more.hidden = n <= shown;
+    };
+    if (more) more.addEventListener("click", function () { lim += 24; paint(); });
+    paint();
     $$("#n-filters .chip").forEach(function (b) {
       b.addEventListener("click", function () {
-        var y = b.getAttribute("data-y"), n = 0;
+        yr = b.getAttribute("data-y"); lim = 24;
         $$("#n-filters .chip").forEach(function (x) { x.setAttribute("aria-pressed", x === b ? "true" : "false"); });
-        items.forEach(function (c) { var ok = y === "all" || c.getAttribute("data-y") === y; c.classList.toggle("is-hid", !ok); if (ok) n++; });
-        if (nc) nc.textContent = n + (n === 1 ? " post" : " posts");
+        paint();
       });
     });
   }
@@ -110,6 +118,7 @@
   if (root) {
     var D = JSON.parse($("#finder-data").textContent);
     var out = $("#f-out"), nIn = $("#f-litres"), rIn = $("#f-range"), lay = $("#f-layout"), mat = $("#f-mat");
+    var touched = !!(w.location.search.indexOf("app=") > -1 || w.location.search.indexOf("l=") > -1);
     var S = { app: "dairy", L: 15000, needs: { cip: true }, layout: "", mat: "" };
     var appBy = {}, needBy = {};
     D.apps.forEach(function (a) { appBy[a.id] = a; });
@@ -143,6 +152,7 @@
       var a = appBy[S.app], sc = {};
       famOrder.forEach(function (f) { sc[f] = (a.fams[f] || 0); });
       Object.keys(S.needs).forEach(function (n) { var fs = needBy[n].fams; Object.keys(fs).forEach(function (f) { if (sc[f] !== undefined) sc[f] += fs[f]; }); });
+      famOrder.forEach(function (f) { if (!D.fams[f].max && S.L > biggest) sc[f] -= 3; });
       var r = famOrder.slice().sort(function (x, y) { return sc[y] - sc[x] || famOrder.indexOf(x) - famOrder.indexOf(y); }).map(function (f) { return { id: f, s: sc[f] }; });
       /* if the best fit is published only up to a smaller size than asked, a close second that is published up to that size takes over */
       var t = D.fams[r[0].id];
@@ -173,6 +183,7 @@
       var p = (b.litres - S.L) / S.L * 100, ab = Math.abs(Math.round(p));
       var q = b.qty && b.qty > 1 ? b.qty + " built, " : "";
       if (ab <= 5) return q + "about the size you asked for";
+      if (ab > 100) return q + fmt(b.litres) + " L, against your " + fmt(S.L) + " L";
       return q + ab + "% " + (p < 0 ? "smaller" : "larger") + " than yours";
     }
 
@@ -216,7 +227,8 @@
       var text = brief(top, rk, info);
       var subject = "Tank enquiry: " + a.label + ", " + fmt(L) + " L";
       var href = "mailto:" + D.email + "?subject=" + encodeURIComponent(subject) + "&body=" + encodeURIComponent(text.replace(/\n/g, "\r\n"));
-      var h = '<div class="res-top"><span class="res-badge">Best fit</span><h3>' + esc(f.name) + '</h3><p>' + esc(f.pitch) + '</p></div>';
+      var h = touched ? "" : '<p class="fine"><b>Example loaded</b> (dairy, 15,000 L, CIP). Change any answer on the left.</p>';
+      h += '<div class="res-top"><span class="res-badge">Best fit</span><h3>' + esc(f.name) + '</h3><p>' + esc(f.pitch) + '</p></div>';
       h += '<div class="verdict' + (warn ? " verdict--warn" : "") + '">' + verdict + '</div>';
       h += '<div><h4>Why this one</h4><ul class="why">' + why.map(function (x) { return "<li>" + esc(x) + "</li>"; }).join("") + "</ul></div>";
       h += '<div><h4>Spec to quote</h4><table class="spec"><tbody>' + spec.map(function (r) { return "<tr><th scope=\"row\">" + esc(r[0]) + "</th><td>" + esc(r[1]) + "</td></tr>"; }).join("") + "</tbody></table></div>";
@@ -244,15 +256,18 @@
 
     root.addEventListener("click", function (e) {
       var b = e.target.closest("button"); if (!b) return;
+      if (b.id !== "f-copy") touched = true;
       if (b.hasAttribute("data-app")) { S.app = b.getAttribute("data-app"); render(); }
       else if (b.hasAttribute("data-need")) { var n = b.getAttribute("data-need"); if (S.needs[n]) delete S.needs[n]; else S.needs[n] = true; render(); }
       else if (b.hasAttribute("data-l")) { S.L = +b.getAttribute("data-l"); render(); }
     });
-    nIn.addEventListener("input", function () { var v = Math.round(+nIn.value); if (v > 0) { S.L = Math.min(1000000, v); render(); } });
+    nIn.addEventListener("input", function () { touched = true; var v = Math.round(+nIn.value); if (v > 0) { S.L = Math.min(1000000, v); render(); } });
     nIn.addEventListener("blur", function () { nIn.value = S.L; });
-    rIn.addEventListener("input", function () { S.L = fromSlider(+rIn.value); render(); });
-    lay.addEventListener("change", function () { S.layout = lay.value; render(); });
-    mat.addEventListener("change", function () { S.mat = mat.value; render(); });
+    rIn.addEventListener("input", function () { touched = true; S.L = fromSlider(+rIn.value); render(); });
+    ["change", "input"].forEach(function (ev) {
+      lay.addEventListener(ev, function () { S.layout = lay.value; touched = true; render(); });
+      mat.addEventListener(ev, function () { S.mat = mat.value; touched = true; render(); });
+    });
     render();
   }
 })();
