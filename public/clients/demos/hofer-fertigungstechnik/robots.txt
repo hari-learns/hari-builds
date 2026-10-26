@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://hharan.site/clients/demos/hofer-fertigungstechnik/sitemap.xml
