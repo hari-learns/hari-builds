@@ -150,13 +150,13 @@
       f.inputs.forEach(function (i) {
         var need = vals[i.id]; if (need == null) return; out.n++;
         var v = m.v[i.spec];
-        if (!v) { out.unk++; out.ok.push({ q: 1, t: i.label + ": dato non pubblicato nella scheda" }); return; }
+        if (!v) { out.unk++; out.ok.push({ q: 1, t: i.label + ": dato non pubblicato" }); return; }
         if (i.mode === "range") {
-          if (need >= v[0] && need <= v[1]) out.ok.push({ t: i.label + ": " + nf(need) + " mm rientra in " + nf(v[0]) + "–" + nf(v[1]) + " mm" });
+          if (need >= v[0] && need <= v[1]) out.ok.push({ t: i.label + " " + nf(need) + " mm (macchina " + nf(v[0]) + "–" + nf(v[1]) + ")" });
           else out.fail = true;
         } else {
-          if (need <= v[0]) { out.ok.push({ t: i.label + ": " + nf(need) + " " + i.unit + ", la macchina arriva a " + nf(v[0]) + " " + i.unit }); out.slack += (v[0] - need) / v[0]; }
-          else if (v[1] && need <= v[1]) { out.ok.push({ t: i.label + ": " + nf(need) + " " + i.unit + ", con l'optional arriva a " + nf(v[1]) + " " + i.unit }); out.slack += 0.5; }
+          if (need <= v[0]) { out.ok.push({ t: i.label + " " + nf(need) + " → macchina " + nf(v[0]) + " " + i.unit }); out.slack += (v[0] - need) / v[0]; }
+          else if (v[1] && need <= v[1]) { out.ok.push({ t: i.label + " " + nf(need) + " → con optional " + nf(v[1]) + " " + i.unit }); out.slack += 0.5; }
           else out.fail = true;
         }
       });
