@@ -113,7 +113,7 @@
   var fEl = $("[data-finder]");
   if (fEl) (function () {
     var data = JSON.parse($("[data-finder-data]", fEl).textContent), ui = data.ui, ms = data.machines;
-    var resEl = $("[data-results]", fEl), msgEl = $("[data-msg]", fEl), waEl = $("[data-wa]", fEl), mailEl = $("[data-mail]", fEl), copyEl = $("[data-copy]", fEl);
+    var resEl = $("[data-results]", fEl), sumEl = $("[data-sum]", fEl), othersEl = $("[data-others]", fEl), othersH = $("[data-others-h]", fEl), othersList = $("[data-others-list]", fEl), msgEl = $("[data-msg]", fEl), waEl = $("[data-wa]", fEl), mailEl = $("[data-mail]", fEl), copyEl = $("[data-copy]", fEl);
     var st = { tab: "carton", L: 60, W: 40, H: 30, S: 100, T: 100, tube: "any", pin: "" };
     var q = new URLSearchParams(location.search);
     function num(k, lo, hi) { var v = Number(q.get(k)); return isFinite(v) && q.get(k) !== null && v >= lo && v <= hi ? Math.round(v) : null; }
@@ -180,7 +180,7 @@
       row.appendChild(tr); row.appendChild(mk("span", "g__v", g.txt));
       return row;
     }
-    function card(r, i) {
+    function card(r) {
       var m = r.m, c = mk("article", "res" + (r.v === "fits" || r.v === "ext" ? " is-fit" : "") + ((m.page === st.pin || m.id === st.pin) ? " is-pin" : ""));
       var top = mk("div", "res__top");
       if (m.img) { var th = mk("div", "res__thumb"), im = d.createElement("img"); im.src = m.img; im.alt = m.alt; im.width = m.iw; im.height = m.ih; im.loading = "lazy"; th.appendChild(im); top.appendChild(th); }
@@ -196,14 +196,22 @@
     }
     function render() {
       var list = ms.filter(function (m) { return m.kind === st.tab; }).map(st.tab === "carton" ? evalCarton : evalTube);
-      list.sort(function (a, b) {
-        var pa = (a.m.page === st.pin || a.m.id === st.pin) ? -1 : 0, pb = (b.m.page === st.pin || b.m.id === st.pin) ? -1 : 0;
-        return (order[a.v] - order[b.v]) || (pa - pb);
-      });
-      resEl.textContent = "";
+      function isPin(m) { return m.page === st.pin || m.id === st.pin; }
+      list.sort(function (a, b) { return (order[a.v] - order[b.v]) || ((isPin(a.m) ? -1 : 0) - (isPin(b.m) ? -1 : 0)); });
+      resEl.textContent = ""; othersList.textContent = "";
       var fit = list.filter(function (r) { return r.v === "fits" || r.v === "ext"; });
-      if (!fit.length && !list.some(function (r) { return r.v === "ask" || r.v === "below"; })) resEl.appendChild(mk("p", "res res--none", st.tab === "carton" ? ui.none_carton : ui.none_tube));
-      list.forEach(function (r, i) { resEl.appendChild(card(r, i)); });
+      var maybe = list.filter(function (r) { return r.v === "ask" || r.v === "below"; });
+      var no = list.filter(function (r) { return r.v === "no" && !isPin(r.m); });
+      var shown = list.filter(function (r) { return r.v !== "no" || isPin(r.m); });
+      /* summary line */
+      var bits = [];
+      fit.forEach(function (r) { bits.push(fmt(ui[r.v === "ext" ? "sum_ext" : "sum_fit"], { m: r.m.name })); });
+      maybe.forEach(function (r) { bits.push(fmt(ui.sum_ask, { m: r.m.name })); });
+      sumEl.textContent = bits.length ? bits.join(" ") : (st.tab === "carton" ? ui.none_carton : ui.none_tube);
+      shown.forEach(function (r) { resEl.appendChild(card(r)); });
+      othersEl.hidden = !no.length;
+      othersH.textContent = fmt(ui.others_h, { n: no.length });
+      no.forEach(function (r) { othersList.appendChild(card(r)); });
       /* message */
       var lines = [ui.msg_intro];
       if (st.tab === "carton") lines.push(fmt(ui.msg_carton, { L: st.L, W: st.W, H: st.H, S: st.S }));
