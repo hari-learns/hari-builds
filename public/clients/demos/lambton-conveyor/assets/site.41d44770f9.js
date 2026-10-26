@@ -259,6 +259,8 @@
         if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(location.href).then(done, function () { window.prompt("Copy this link", location.href); });
         else window.prompt("Copy this link", location.href);
       });
+      var lv = $("[data-live]", root);
+      if (lv) lv.innerHTML = "<b>Best fit</b> " + (pb ? esc((pb.n > 1 ? pb.n + " \u00d7 " : "") + pb.d + "' bin, " + pb.rings + " rings") : "more bins needed") + (pe ? " \u00b7 " + esc(pe[0]) : "") + (full ? " <a href='#plan'>Jump to my plan</a>" : "");
       if (full) writeHash();
     }
 

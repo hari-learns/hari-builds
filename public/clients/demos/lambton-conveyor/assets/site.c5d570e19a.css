@@ -330,3 +330,10 @@ ul{margin:0;padding:0;list-style:none}
 
 .mtab a{display:inline-flex;align-items:center;min-height:44px;min-width:44px}
 .res .note a{display:inline-flex;align-items:center;min-height:44px;min-width:44px}
+
+@media (max-width:640px){.dtab th,.dtab td{padding:10px 9px}.dtab{font-size:.9375rem}}
+
+.live{margin:18px 0 0;padding-top:14px;border-top:1px solid var(--line);font:500 .9375rem/1.5 var(--f-mono)}
+.live b{display:block;font:600 .875rem/1.2 var(--f-text);letter-spacing:.1em;text-transform:uppercase;color:var(--accent);margin-bottom:4px}
+.theme-paper .live b{color:var(--paper-accent)}
+.live a{display:inline-flex;align-items:center;min-height:44px;margin-left:8px;color:var(--accent);font-family:var(--f-text);font-weight:600}
