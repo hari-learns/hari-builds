@@ -245,12 +245,13 @@
       var all = mm(u.width), sum = 0, i;
       for (i = 0; i < u.n; i++) sum += mm((u.secs[i] || {}).v);
       if (!all || !sum) return { s: "none" };
+      for (i = 0; i < u.n; i++) if (!mm((u.secs[i] || {}).v)) return { s: "missing", n: i + 1 };
       var diff = all - sum;
       return { s: diff === 0 ? "ok" : diff > 0 ? "short" : "over", d: Math.abs(diff), all: all, sum: sum };
     }
     function paintUnit(el, u) {
       var W = T.windows, r = checkUnit(u), st = $(".status", el);
-      st.textContent = r.s === "none" ? W.sum_none : r.s === "ok" ? W.sum_ok : fill(r.s === "short" ? W.sum_short : W.sum_over, { d: fmt(r.d) });
+      st.textContent = r.s === "none" ? W.sum_none : r.s === "missing" ? fill(W.sum_missing, { n: r.n }) : r.s === "ok" ? W.sum_ok : fill(r.s === "short" ? W.sum_short : W.sum_over, { d: fmt(r.d) });
       st.className = "status " + (r.s === "ok" ? "is-ok" : r.s === "none" ? "" : "is-bad");
       /* sketch to scale */
       var wv = mm(u.width) || 1200, hv = mm(u.height) || 1000, maxW = 240, maxH = 170, sc = Math.min(maxW / wv, maxH / hv), pw = Math.max(wv * sc, 24), ph = Math.max(hv * sc, 24);
@@ -407,6 +408,15 @@
     function rerender(focus) { if (toolRoot) renderTool(focus); if (miniBody) renderMini(focus); }
     function fieldsRepaint(scope) { if (scope.closest("[data-mini]")) paintWalls(miniBody); else { paintWalls(toolRoot); paintUnits(toolRoot); updateBrief(); } }
 
+    function convertUnits(from, to) {
+      var f = from === "mm" && to === "cm" ? 0.1 : from === "cm" && to === "mm" ? 10 : 1;
+      function cv(x) { var n = parseFloat(String(x).replace(",", ".")); return isFinite(n) && String(x).trim() !== "" ? String(Math.round(n * f * 10) / 10) : x; }
+      S.walls.forEach(function (w) { w.len = cv(w.len); w.segs.forEach(function (g) { g.v = cv(g.v); }); });
+      S.k.sink = cv(S.k.sink || ""); S.k.hob = cv(S.k.hob || "");
+      S.w.units.forEach(function (u) { u.width = cv(u.width); u.height = cv(u.height); u.secs.forEach(function (g) { g.v = cv(g.v); }); });
+    }
+    d.addEventListener("focusin", function (e) { var t = e.target; if (t.matches && t.matches("input[type=number]") && inScope(t)) safe(function () { t.select(); }); });
+
     /* events */
     function inScope(t) { return t.closest("[data-tool-root],[data-mini-body]"); }
     d.addEventListener("input", function (e) {
@@ -417,6 +427,7 @@
       var t = e.target; if (!t.matches || !inScope(t)) return;
       if (t.matches("[data-p]") && (t.type === "radio" || t.tagName === "SELECT")) {
         var v = t.value; if (t.hasAttribute("data-int")) v = parseInt(v, 10);
+        if (t.getAttribute("data-p") === "unit" && v !== S.unit) convertUnits(S.unit, v);
         setP(t.getAttribute("data-p"), v);
         if (t.getAttribute("data-p").slice(-2) === ".n") { var u = getP(t.getAttribute("data-p").replace(/\.n$/, "")); while (u.secs.length < u.n) u.secs.push({ v: "", s: "fixed" }); }
         save();
