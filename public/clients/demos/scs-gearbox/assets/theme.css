@@ -1,0 +1,25 @@
+/* Colour tokens only. SCS logo yellow on their charcoal; green is their site's accent, used for "in range" signals. */
+:root{
+  --ground:#231f20;
+  --ground-2:#2d2829;
+  --ground-3:#3a3435;
+  --line:#4c4345;
+  --ink:#f5f4f0;
+  --muted:#c9c4c1;
+  --accent:#f7ee24;
+  --accent-hi:#fff55c;
+  --on-accent:#231f20;
+  --ok:#3ed660;
+  --bad:#ff8a80;
+  --paper:#f2f2ee;
+  --paper-2:#e4e4de;
+  --paper-ink:#231f20;
+  --paper-muted:#5a5456;
+  --paper-ok:#0b6b3a;
+  --paper-bad:#a31212;
+  --white:#ffffff;
+  --shade:rgba(35,31,32,.72);
+  --shade-soft:rgba(35,31,32,.38);
+  --hair:rgba(245,244,240,.14);
+  --hair-paper:rgba(35,31,32,.16);
+}
