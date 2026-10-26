@@ -130,6 +130,7 @@
     else if (od < z.od[0]) { s = "ask"; L.push(tpl(T.c_small, { od: nf(od) })); }
     else { s = "ask"; L.push(tpl(T.c_ask, { od: nf(od) })); }
     if (hole) L.push(tpl(hole < z.hole ? T.c_hole : T.c_hole_ok, { hole: nf(hole) }));
+    if (len && len / od > 10) L.push(tpl(T.c_slender, { r: nf(len / od) }));
     return { k: "cut", s: s, lines: L };
   }
   var rank = { best: 0, ok: 1, ask: 2 };
@@ -166,7 +167,7 @@
     }
     el.svg.innerHTML = s;
     if (el.key && !el.key.getAttribute("data-done")) {
-      el.key.innerHTML = D.refs.map(function (r, k) { return "<li><b>" + (k + 1) + "</b><a href=\"" + r.url + "\">" + esc(r.name) + "</a><span>φ" + nf(r.od) + " × " + nf(r.len) + " mm</span></li>"; }).join("");
+      el.key.innerHTML = D.refs.map(function (r, k) { return "<li><b>" + (k + 1) + "</b><a href=\"" + r.url + "\">" + esc(r.name) + "</a><span>φ" + nf(r.od) + " × " + nf(r.len) + " mm" + (r.slug === "temp-sensor-case-press" ? " · " + esc(T.flange_note) : "") + "</span></li>"; }).join("");
       el.key.setAttribute("data-done", "1");
     }
   }
@@ -201,6 +202,7 @@
       (shapeL ? tpl(T.mail_shape, { shape: shapeL }) + "\n" : "") + (qty ? tpl(T.mail_qty, { q: qty.toLocaleString(D.lang === "ja" ? "ja-JP" : "en-US") }) + "\n" : "") + T.mail_res +
       list.map(function (r) { return "・" + T[r.k] + "：" + T[stLabel[r.s]]; }).join("\n") + "\n" + T.mail_foot;
     out += '<div class="res-act"><a class="btn btn-red btn-lg" href="mailto:' + D.email + "?subject=" + encodeURIComponent(subject) + "&body=" + encodeURIComponent(body) + '">' + esc(T.ask_btn) + '</a><a class="btn btn-ghost-l btn-lg" href="' + D.telhref + '">' + esc(T.call_btn) + " " + D.tel + '</a><a class="btn btn-ghost-l" href="' + D.form + '" target="_blank" rel="noopener">' + esc(T.form_btn) + '</a><p class="res-note">' + esc(T.form_note) + "</p></div>";
+    out += '<p class="res-note">' + esc(T.foot) + "</p>";
     el.res.innerHTML = out;
   }
 

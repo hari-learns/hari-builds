@@ -72,7 +72,7 @@ ul,ol{padding:0;list-style:none}
 .hero-video{opacity:0;transition:opacity 1.2s}
 .hero.is-playing .hero-video{opacity:1}
 @keyframes settle{from{transform:scale(1.06)}to{transform:none}}
-.hero-shade{position:absolute;inset:0;z-index:-1;background:linear-gradient(90deg,color-mix(in srgb,var(--ink) 82%,transparent) 0%,color-mix(in srgb,var(--ink) 45%,transparent) 55%,color-mix(in srgb,var(--ink) 12%,transparent) 100%),linear-gradient(0deg,color-mix(in srgb,var(--ink) 88%,transparent) 0%,transparent 45%)}
+.hero-shade{position:absolute;inset:0;z-index:-1;background:linear-gradient(90deg,color-mix(in srgb,var(--ink) 74%,transparent) 0%,color-mix(in srgb,var(--ink) 34%,transparent) 55%,color-mix(in srgb,var(--ink) 4%,transparent) 100%),linear-gradient(0deg,color-mix(in srgb,var(--ink) 84%,transparent) 0%,transparent 38%)}
 .hero-in{padding-top:clamp(24px,5vw,72px);padding-bottom:clamp(16px,2.4vw,28px)}
 .en-tag{font-family:var(--font-num);font-style:italic;font-size:clamp(1.3rem,1rem + 1.2vw,2rem);letter-spacing:.01em;text-transform:none;color:var(--on-dark);font-weight:400;margin-bottom:.2em}
 .hero h1{font-family:var(--font-jp);font-weight:700;font-size:var(--fs-h1);line-height:1.12;letter-spacing:.04em;text-wrap:balance;color:var(--white)}
@@ -397,3 +397,19 @@ h3{font-size:var(--fs-h3);line-height:1.5;font-weight:700}
 .tablewrap a,.pd-r a,.muted a,.lead-p a{display:inline-flex;align-items:center;min-height:44px;min-width:44px}
 .res-m a{display:inline-flex;align-items:center;min-height:44px}
 .eyebrow-a{display:inline-flex;align-items:center;min-height:44px}
+.hero h1{word-break:keep-all}
+@media (max-width:599px){
+ .home-compact .pgrid{gap:10px}
+ .pgrid .pcard{flex-direction:row}
+ .pgrid .pcard-img{flex:none;width:112px;aspect-ratio:1;border-bottom:0;border-right:1px solid var(--line)}
+ .pgrid .pcard-tx{padding:10px 12px;gap:2px}
+ .pgrid .pcard-keys{display:none}
+ .pgrid .pcard-lead{font-size:.875rem;line-height:1.55}
+ .pgrid .pcard-tx strong{font-size:1rem}
+ .sgrid .site{flex-direction:row}
+ .sgrid .site-img{flex:none;width:112px;aspect-ratio:auto}
+ .sgrid .site-img img{height:100%}
+ .sgrid .site>div{padding:10px 12px}
+ .sgrid .site h3{font-size:1rem}
+ .sgrid .site p{font-size:.9rem;line-height:1.5}
+}
