@@ -1,0 +1,12 @@
+:root{
+  --ink:#14181D; --ink-2:#1C2229; --ink-3:#2B343D; --line-d:#3E4955;
+  --paper:#F3F4F5; --paper-2:#E7EAED; --white:#FFFFFF; --line:#C9CFD5;
+  --red:#C30000; --red-hi:#9C0000; --on-red:#FFFFFF;
+  --signal:#F2994A; --signal-ink:#8A4300;
+  --muted:#4B5560; --on-dark:#F3F4F5; --muted-d:#B7C0C9;
+  --font-sans:"Hiragino Sans","Hiragino Kaku Gothic ProN","Noto Sans JP","Yu Gothic UI","Yu Gothic","Meiryo",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --font-num:"SF Pro Display","Helvetica Neue","Segoe UI",Arial,"Hiragino Sans","Noto Sans JP",sans-serif;
+  --fs-h1:clamp(2.1rem,1.2rem + 4.4vw,4.4rem); --fs-h2:clamp(1.5rem,1.1rem + 1.7vw,2.45rem); --fs-h3:clamp(1.08rem,1rem + .45vw,1.3rem);
+  --gut:clamp(16px,4vw,48px); --maxw:1200px; --hd:64px;
+  --ease:cubic-bezier(.2,.7,.2,1);
+}
