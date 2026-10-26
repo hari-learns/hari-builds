@@ -32,6 +32,8 @@
   if (dock && safe(function () { return sessionStorage.getItem("fjm-dock") === "1"; })) dock.hidden = true;
   if (dockX) dockX.addEventListener("click", function () { dock.hidden = true; safe(function () { sessionStorage.setItem("fjm-dock", "1"); }); });
 
+  if (dock) window.addEventListener("scroll", function () { if (window.innerWidth < 860 && window.scrollY > 160) dock.hidden = true; }, { passive: true });
+
   /* reveals (also reveals anything already scrolled past) */
   var rvs = $$(".rv, .stage");
   function activate(el) { el.classList.add("is-in"); }
@@ -143,7 +145,7 @@
     var data = JSON.parse($("#tool-data").textContent), M = data.machines, UI = data.ui, J = data.jirei, BASE = data.base;
     var stepsEl = $("[data-steps]", tEl), sumEl = $("[data-sum]", tEl), warnEl = $("[data-warn]", tEl), nearEl = $("[data-near]", tEl), ctaEl = $("[data-cta]", tEl);
     var RM = { steel: 400, sus: 600, alu: 250 };
-    var st = { mat: "steel", t: 3.2, l: 420, w: 130, h: 110, b: 420, qty: "s", procs: { cut: 1, bend: 1, weld: 1 } };
+    var st = { mat: "steel", t: 1.6, l: 420, w: 130, h: 110, b: 420, qty: "s", procs: { cut: 1, bend: 1, weld: 1 } };
     var NAMES = { steel: "スチール", sus: "ステンレス", alu: "アルミ" };
 
     function by(key) { for (var i = 0; i < M.length; i++) if (M[i].md === key || M[i].n.indexOf(key) === 0) return M[i]; return null; }
@@ -163,8 +165,9 @@
       var r = el("div", "mrow" + (o.status ? " is-" + o.status : ""));
       var left = el("div");
       left.appendChild(el("p", "mrow__n", m.n.replace(/（.*$/, "")));
-      var spec = [m.mk, m.md, m.cap].filter(Boolean).join(" ・ ");
-      if (spec) left.appendChild(el("p", "mrow__s", spec));
+      var sp = el("p", "mrow__s");
+      [m.mk, m.md, m.cap].filter(Boolean).forEach(function (x, i) { if (i) sp.appendChild(d.createTextNode(" ・ ")); sp.appendChild(el("span", "nw", x)); });
+      if (sp.firstChild) left.appendChild(sp);
       r.appendChild(left);
       var right = el("div"); right.style.display = "flex"; right.style.gap = "6px"; right.style.flexWrap = "wrap"; right.style.justifyContent = "flex-end";
       if (o.status) right.appendChild(el("span", "badge " + (o.status === "ok" ? "ok" : o.status === "mid" ? "mid" : "no"), o.label));
@@ -233,7 +236,8 @@
         add("YC-300WX", UI.weld_tags.tig);
         if ((steel || sus) && thin) { add("SLAJS-75", UI.weld_tags.spot); add("NK-21", UI.weld_tags.spot, true); }
         if (!alu) add("KR-2000", UI.weld_tags.fiber);
-        if (!alu && (st.qty === "m" || st.qty === "l")) { add("YA-1QAR61T00", UI.weld_tags.robot); add("Robot CRX-10iA/L", UI.weld_tags.robot); }
+        if (!alu) { add("YA-1QAR61T00", UI.weld_tags.robot); add("Robot CRX-10iA/L", UI.weld_tags.robot); }
+        if (alu) warnEl.appendChild(el("p", "warn warn--mid", UI.aluminum_note));
         wl.forEach(function (x) { count(x[0]); });
         step("weld", wl.map(function (x) { return row(x[0], { note: x[1], area: x[2] }); }));
       }
@@ -274,7 +278,7 @@
         scored.forEach(function (x) {
           var a = el("a", "nc"); a.href = BASE + "/jirei/";
           var im = d.createElement("img"); im.src = data.img[x.j.k]; im.alt = x.j.cat + "の板金部品"; im.width = 226; im.height = 152; im.loading = "lazy"; a.appendChild(im);
-          var tt = el("div", "nc__t"); tt.appendChild(el("b", null, x.j.cat)); tt.appendChild(d.createTextNode(x.j.mat + " ／ " + x.j.size)); a.appendChild(tt); g.appendChild(a);
+          var tt = el("div", "nc__t"); tt.appendChild(el("b", null, x.j.cat)); tt.appendChild(d.createTextNode(x.j.mat + " ／ " + x.j.size + " ／ 版厚 " + x.j.t.replace(/\u3000/g, " "))); a.appendChild(tt); g.appendChild(a);
         });
         nearEl.appendChild(g);
       }

@@ -460,3 +460,11 @@ ul, ol { margin: 0; padding: 0; list-style: none; }
 @media (max-width: 699px) { .jc__t div { grid-template-columns: 1fr; gap: 0; } .jc__t dt { font-size: .875rem; } }
 .bar--c { grid-template-columns: 1fr 1fr; }
 .bar .btn { white-space: nowrap; }
+
+.nw { white-space: nowrap; }
+.mrow__n { word-break: keep-all; }
+.force b { word-break: keep-all; }
+.sec--tight { padding-top: clamp(36px, 5vw, 64px); }
+.teaser { max-width: 46em; }
+.teaser .btn-row { margin-top: 24px; }
+@media (max-width: 899px) { .stage__img { aspect-ratio: 16 / 9; } }
