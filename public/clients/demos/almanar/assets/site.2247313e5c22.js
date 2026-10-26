@@ -231,9 +231,10 @@
       var html = "";
       function group(k, title, open) {
         if (!G[k].length) return "";
+        var hint = k === "chk" ? '<p class="note" style="margin:-4px 0 12px">' + esc(UI.check_why) + "</p>" : "";
         var inner = '<div class="res">' + G[k].map(card).join("") + "</div>";
         if (k === "no") return '<details class="grp-d"' + (open ? " open" : "") + '><summary class="grp"><h3>' + title + '</h3><span class="n">' + G[k].length + " systems, tap to see why</span></summary>" + inner + "</details>";
-        return '<div class="grp"><h3>' + title + '</h3><span class="n">' + G[k].length + " system" + (G[k].length > 1 ? "s" : "") + "</span></div>" + inner;
+        return '<div class="grp"><h3>' + title + '</h3><span class="n">' + G[k].length + " system" + (G[k].length > 1 ? "s" : "") + "</span></div>" + hint + inner;
       }
       var LIM = parseInt(fEl.getAttribute("data-limit") || "0", 10), more = 0;
       if (LIM) { ["ok", "chk"].forEach(function (k) { if (G[k].length > LIM) { more += G[k].length - LIM; G[k] = G[k].slice(0, LIM); } }); G.no = []; }
@@ -254,6 +255,7 @@
       var body = lines.join("\n");
       ctaEl.setAttribute("href", "mailto:" + D.to + "?subject=" + encodeURIComponent(UI.mail_subject) + "&body=" + encodeURIComponent(body));
       if (ventsWrap) ventsWrap.hidden = st.open !== "curtain";
+      var jb = $("[data-jump]", fEl); if (jb) jb.textContent = "Show the matches (" + tot.ok + " fit, " + tot.chk + " to confirm)";
     }
 
     $$('input[name="open"]', fEl).forEach(function (i) { i.addEventListener("change", function () { st.open = i.value; render(); }); });

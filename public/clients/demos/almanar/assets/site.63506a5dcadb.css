@@ -438,3 +438,15 @@ details.grp-d[open] > summary::after { content: "–"; }
 .p-l { stroke: var(--accent); stroke-width: 1.2; fill: none; }
 .p-t { fill: var(--accent); font: 500 13px "IBM Plex Mono", monospace; }
 .p-w { fill: var(--ink); font: 500 14px "IBM Plex Mono", monospace; }
+
+.out.theme-paper { background: var(--bg); color: var(--fg); padding: clamp(16px, 2.5vw, 28px); }
+.out.theme-paper .grp .n { color: var(--fg-2); }
+.out .rc { background: var(--white); }
+.out .rc--no { background: var(--bg-2); }
+.out .pill--chk { color: var(--paper-accent); }
+.out .mt__bar { background: var(--paper-line); }
+.jump { display: none; }
+@media (max-width: 959px) { .jump { display: inline-flex; width: 100%; } }
+
+.grp { flex-wrap: wrap; row-gap: 2px; }
+@media (max-width: 480px) { .hide-s { display: none; } }
