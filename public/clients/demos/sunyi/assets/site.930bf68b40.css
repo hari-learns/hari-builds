@@ -136,6 +136,7 @@ main { padding-top: calc(68px + env(safe-area-inset-top)); }
 .tool__fields { display: grid; gap: 14px; margin-top: 22px; }
 .fgrid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
 .fgrid--3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+@media (max-width: 440px) { .fgrid:not(.fgrid--3) { grid-template-columns: minmax(0, 1fr); } .procs { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); } }
 .fld { display: grid; gap: 6px; font-size: .9375rem; font-weight: 600; min-width: 0; }
 .fld small { font-weight: 400; color: var(--muted); font-size: .875rem; }
 .fld input, .fld select, .form input, .form textarea { width: 100%; min-height: 48px; padding: 10px 12px; font: 400 1rem/1.3 "Hanken Grotesk", sans-serif; color: var(--ink); background: var(--paper); border: 1px solid var(--line); border-radius: 2px; }
