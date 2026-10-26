@@ -44,10 +44,11 @@
       if(wh.series&&wh.series.indexOf(S.series)<0)return false;
       return true}
     function brief(steps){
-      var L=U.mail_lines,n=[];
-      var needs=S.need.length?S.need.map(function(k){return label(D.needs,k)}).join(", "):L.none;
-      var out=U.mail_intro+"\n"+L.mat+": "+label(D.mat,S.mat)+"\n"+L.need+": "+needs+"\n"+L.series+": "+(S.series?U.series_label[S.series]:"-")+"\n"+L.drawing+": "+(S.drawing==="yes"?L.draw_yes:S.drawing==="no"?L.draw_no:"-")+"\n"+L.route+": "+steps.map(function(s){return s.t}).join(" > ")+"\n"+U.mail_outro+"";
-      return out}
+      var L=U.mail_lines,o=U.mail_intro+"\n"+L.mat+": "+label(D.mat,S.mat)+"\n";
+      if(S.need.length)o+=L.need+": "+S.need.map(function(k){return label(D.needs,k)}).join(", ")+"\n";
+      if(S.series)o+=L.series+": "+U.series_label[S.series]+"\n";
+      if(S.drawing)o+=L.drawing+": "+(S.drawing==="yes"?L.draw_yes:L.draw_no)+"\n";
+      return o+U.mail_outro}
     function render(){
       var note=$("[data-note=mat]",root);
       var jp=$("[data-jump]",root);
@@ -58,9 +59,9 @@
       var parts=[label(D.mat,S.mat)];if(S.series)parts.push(U.series_label[S.series]);
       h+='<p class="res__sum">'+esc(parts.join(", "))+' · '+steps.length+' '+esc(U.steps_word)+'</p><ol class="route">';
       steps.forEach(function(s,i){h+='<li><img src="'+s.src+'" width="'+s.w+'" height="'+s.h+'" alt="" loading="lazy"><div><h4><span>0'+(i+1)+'</span>'+esc(s.t)+'</h4><p>'+esc(s.x)+'</p><a href="'+s.href+'">'+esc(D.more)+'</a></div></li>'});
-      h+='</ol><div class="res__check"><h4>'+esc(U.checklist_h)+'</h4><ul>'+U.checklist.map(function(c){return "<li>"+esc(c)+"</li>"}).join("")+'</ul><p>'+esc(U.checklist_note)+'</p></div>';
+      h+='</ol><div class="res__check"><h4>'+esc(U.checklist_h)+'</h4><ul>'+U.checklist.map(function(c,i){return "<li>"+esc(c)+(i===0&&S.drawing==="yes"?" "+esc(U.attach):"")+"</li>"}).join("")+'</ul><p>'+esc(U.checklist_note)+'</p></div>';
       var b=brief(steps),subj=U.mail_subject.replace("{mat}",label(D.mat,S.mat)).replace("{series}",S.series?U.series_label[S.series]:"-");
-      var href="mailto:"+D.to+"?subject="+encodeURIComponent(subj)+"&body="+encodeURIComponent(b+D.sig);
+      var href="mailto:"+D.to+"?subject="+encodeURIComponent(subj)+"&body="+encodeURIComponent(b);
       h+='<div class="res__act"><a class="btn" href="'+href+'">'+esc(U.mail_to_label)+'</a><a class="btn btn--ghost" href="tel:'+D.tel.replace(/[^\d+]/g,"")+'">'+esc(U.call)+'</a><button type="button" class="btn btn--ghost" data-copy>'+esc(U.copy)+'</button></div><p class="res__call">'+esc(U.call_note)+'</p>';
       res.innerHTML=h;
       var cp=$("[data-copy]",res);
