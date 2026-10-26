@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+# concept: noindex
+Sitemap: https://hharan.site/clients/demos/actionpaq/sitemap.xml
