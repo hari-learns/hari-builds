@@ -437,5 +437,5 @@ p a.long, .muted a { display: inline-flex; align-items: center; min-height: 44px
 
 .brandimg { margin-bottom: 28px; border: 1px solid var(--line); } .brandimg img { width: 100%; height: auto; }
 
-@media (max-width: 759px) { :root { --bar-h: 60px; } .bar { padding-block: 6px calc(6px + env(safe-area-inset-bottom)); } .bar .btn { min-height: 48px; } .dock p { padding: 4px 0; } .dock button { width: 40px; } }
+@media (max-width: 759px) { :root { --bar-h: 60px; } .bar { padding-block: 6px calc(6px + env(safe-area-inset-bottom)); } .bar .btn { min-height: 48px; } .dock p { padding: 4px 0; } .dock button { width: 44px; } }
 .tool__reset { margin-top: 4px; background: none; border: 0; color: var(--blue-ink); font: inherit; font-weight: 700; text-decoration: underline; cursor: pointer; min-height: 44px; padding: 0 4px; }
