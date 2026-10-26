@@ -137,8 +137,8 @@
       // rate
       var cap=m.rate;
       if(m.stack&&res.size==="fit"){
-        var n=Math.max(1,Math.min(3,Math.floor(m.env[1]/h)));var best=0;for(var k=1;k<=n;k++)best=Math.max(best,m.stack[k]||0);cap=best||m.rate;
-        res.stacked=n;
+        var n=Math.max(1,Math.min(3,Math.floor(m.env[1]/h)));var best=0,bk=1;for(var k=1;k<=n;k++){if((m.stack[k]||0)>best){best=m.stack[k];bk=k}}cap=best||m.rate;
+        res.stacked=bk;
       }
       res.cap=cap;
       if(res.size==="fit"&&cap&&r){
@@ -155,6 +155,10 @@
       var h=val(fh), w=round?h:val(fw), r=val(fr), sl=hasSlice?val(fs):null;
       if(!h||(!round&&!w)||(hasSlice&&!sl)){
         out.innerHTML='<div class="tool-empty"><b>Enter your product size to see which Millitec machines take it.</b><span>'+(hasSlice?'For a sandwich the check needs the bread slice thickness (butterers and the de-nester see the single slice) and the finished height (cutters and conveyors see the whole sandwich). ':'')+'Stage by stage, using the published product sizes and speeds from millitec.com. Try an example to see how it reads.</span></div>';
+        if(act)act.hidden=true;return;
+      }
+      if(h>500||(w&&w>1000)||(sl&&sl>60)||(r&&r>3000)){
+        out.innerHTML='<div class="tool-empty"><b>That is outside the sizes any Millitec machine publishes.</b><span>The published ranges run up to about 130 mm wide and 125 mm high for sandwiches and wraps, and larger belts for conveyors. Check the numbers, or call to discuss a custom machine.</span></div>';
         if(act)act.hidden=true;return;
       }
       var stages=[],covered=0,total=0,ceil=null,ceilBy="",lines=[];
@@ -176,8 +180,8 @@
         else{lines.push(st+": no published match, custom solution to discuss")}
         stages.push({st:st,rows:rows,state:state});
       });
-      var html='<div class="sumbar"><b>'+covered+' of '+total+(total===1?' stage has':' stages have')+' a Millitec machine for '+(round?esc(h)+' mm round':(hasSlice?esc(sl)+' mm slice, ':'')+esc(h)+' mm high &times; '+esc(w)+' mm wide')+(r?' at '+esc(r)+' per minute':'')+'.</b>';
-      if(ceil){html+='<span>Published speed ceiling for one machine per stage: <strong>'+ceil+' per minute</strong>, set by '+esc(ceilBy)+'.'+(r?(r<=ceil?' Your target of '+r+' per minute is inside it.':' Your target of '+r+' per minute needs '+Math.ceil(r/ceil)+' in parallel at that stage.'):'')+'</span>'}
+      var html='<div class="sumbar"><b>'+covered+' of '+total+(total===1?' stage has':' stages have')+' a Millitec machine whose published size range takes '+(round?esc(h)+' mm round':(hasSlice?esc(sl)+' mm slice, ':'')+esc(h)+' mm high &times; '+esc(w)+' mm wide')+(r?' at '+esc(r)+' per minute':'')+'.</b>';
+      if(ceil){html+='<span>Fastest published machine at each stage, then the slowest of those stages (stages with no published speed left out): <strong>'+ceil+' per minute</strong>, at '+esc(ceilBy)+'.'+(r?(r<=ceil?' Your target of '+r+' per minute is inside it.':' Your target of '+r+' per minute needs '+Math.ceil(r/ceil)+' in parallel at that stage.'):'')+'</span>'}
       html+='</div><ol class="belt">';
       stages.forEach(function(s){
         var pill=s.state==="covered"?'<span class="pill ok">Covered</span>':s.state==="check"?'<span class="pill warn">Confirm with Millitec</span>':'<span class="pill no">No published match</span>';
@@ -185,7 +189,7 @@
         s.rows.forEach(function(x){
           var m=x.m,lab=x.size==="fit"?"Fits":x.size==="multi"?"Fits, "+x.n+" needed":x.size==="check"?"Check":"Does not fit";
           var rate="";
-          if(x.size==="fit"||x.size==="multi"){ if(x.cap)rate=" Published speed: up to "+x.cap+" per minute"+(x.stacked>1?" ("+x.stacked+" stacked)":"")+(m.lanes?" ("+esc(m.lanes)+")":"")+"."+(x.size==="multi"?" For "+r+" per minute run "+x.n+" machines in parallel.":""); else rate=" No speed is published for this machine."}
+          if(x.size==="fit"||x.size==="multi"){ if(x.cap)rate=" Published speed: up to "+x.cap+" per minute"+(x.stacked>1?" ("+x.stacked+" stacked)":"")+(m.lanes&&!m.stack&&!/^up to/i.test(m.lanes)?" ("+esc(m.lanes)+")":"")+"."+(x.size==="multi"?" For "+r+" per minute run "+x.n+" machines in parallel.":""); else rate=" No speed is published for this machine."}
           html+='<div class="mrow '+x.size+'"><a class="code" href="'+base+'machines/'+m.slug+'/">'+esc(m.code)+'</a><span class="nm"><span class="st">'+lab+'</span>'+esc(m.name)+'</span><span class="why">'+esc(x.why)+rate+'</span></div>';
         });
         html+='</li>';
