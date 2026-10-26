@@ -89,7 +89,8 @@
   if (gf && dataEl) {
     var D = JSON.parse(dataEl.textContent);
     var cfgLabel = { under: 'underdrive', over: 'overdrive' };
-    var state = { setup: 'qc' };
+    var state = { setup: 'qc', touched: false };
+    var srcName = { qc: function (v) { return 'SCS ' + v.spline + ' spline quick change gear chart'; }, drop1266: function () { return 'SCS 12.66 drop transfer case calculator'; }, ten66: function () { return 'SCS 10.66 / straight thru calculator'; }, cs: function () { return 'SCS 20, 30 and 40 series gear chart'; } };
     var el = function (id) { return $('#' + id, gf); };
     var num = function (id) { var v = parseFloat(el(id).value); return isFinite(v) && v > 0 ? v : null; };
     var f3 = function (x) { return x.toFixed(3); };
@@ -163,6 +164,7 @@
     }
     function esc(s) { return String(s).replace(/[&<>"]/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]; }); }
     var out = el('gf-results');
+    $$('input,select', gf).forEach(function (n) { if (n.name === 'gf-setup') return; ['input', 'change'].forEach(function (ev) { n.addEventListener(ev, function () { state.touched = true; }, true); }); });
     var names = { qc: 'Circle track quick change', drop1266: '12.66 drop transfer case', ten66: '10.66 / straight thru transfer case', cs: 'Twin & single countershaft' };
     var finalName = { qc: 'Final drive ratio', drop1266: 'Overall driveline ratio', ten66: 'Overall driveline ratio', cs: 'Overall gear ratio' };
 
@@ -184,14 +186,14 @@
       all.sort(function (a, b) { var da = Math.abs(a.final - target) - Math.abs(b.final - target); return Math.abs(da) > 1e-9 ? da : a.over - b.over; });
       var seen = {}, top = [];
       for (var i = 0; i < all.length && top.length < 6; i++) { var key = all[i].final.toFixed(3); if (seen[key]) continue; seen[key] = 1; top.push(all[i]); }
-      html += '<div class="gf-sum"><span class="t">Closest to ' + (v.aim === 'speed' ? v.val + ' MPH' : v.val + ':1') + '</span><span class="s">' +
-        (v.aim === 'speed' ? 'needs an overall ratio of about ' + target.toFixed(3) + ':1 · ' : '') + names[state.setup] + '</span></div><ol class="gf-list">';
+      html += '<div class="gf-sum"><span class="t">' + (state.touched ? '' : 'Example: ') + 'Closest to ' + (v.aim === 'speed' ? v.val + ' MPH' : v.val + ':1') + '</span><span class="s">' +
+        (v.aim === 'speed' ? 'needs an overall ratio of about ' + target.toFixed(3) + ':1 · ' : '') + names[state.setup] + '</span></div><p class="gf-vis">Indicative: from ' + esc(srcName[state.setup](v)) + '. Confirm with SCS before ordering.</p><ol class="gf-list">';
       top.forEach(function (c, n) {
         var dlt = c.final - target, ad = Math.abs(dlt);
         var mph = v.rpm && v.tire ? v.rpm * v.tire / (c.final * 336) : null;
         html += '<li class="gc' + (n === 0 ? ' best' : '') + '" style="--i:' + n + '">' + (n === 0 ? '<span class="tag">Closest</span>' : '') +
           '<h3>' + esc(c.title) + '</h3><div class="big">' + c.final.toFixed(3) + '<small>:1 ' + esc(finalName[state.setup].toLowerCase()) + '</small></div>' +
-          '<div class="d' + (ad > 0.05 * target ? ' off' : '') + '">' + (ad < 0.0005 ? 'exact match' : (dlt > 0 ? '+' : '') + dlt.toFixed(3) + ' from target') + '</div>' +
+          '<div class="d' + (ad > 0.01 * target ? ' off' : '') + '">' + (ad < 0.0005 ? 'exact match' : (dlt > 0 ? '+' : '') + dlt.toFixed(3) + ' from target') + '</div>' +
           (mph ? '<div class="mph">≈ ' + mph.toFixed(1) + ' MPH</div>' : '') +
           '<ul>' + c.lines.map(function (l) { return '<li><b>' + esc(l[0]) + '</b> ' + esc(l[1]) + '</li>'; }).join('') + '</ul>' +
           '<a class="btn small" href="' + mailFor(c, v, target) + '" data-goat="gear-email">Send this setup to SCS</a></li>';
