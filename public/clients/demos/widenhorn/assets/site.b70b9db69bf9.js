@@ -117,10 +117,11 @@
   /* ------------------------------------------------ signature tool: does it fit my machine? */
   $$("[data-tool]").forEach(function (root_) {
     var data = JSON.parse($("[data-tool-data]", root_).textContent), UI = data.ui;
-    var chipsEl = $("[data-types]", root_), input = $("[data-q]", root_), out = $("[data-out]", root_), sugEl = $("[data-sug]", root_), dl = $("#tool-brands", root_), resetBtn = $("[data-reset]", root_);
+    var chipsEl = $("[data-types]", root_), input = $("[data-q]", root_), out = $("[data-out]", root_), sugEl = $("[data-sug]", root_), resetBtn = $("[data-reset]", root_);
     var state = { type: "", q: "" };
     function norm(s) { return (s || "").toLowerCase().replace(/[^a-z0-9]+/g, ""); }
     function typeLabel(k) { var t = data.types.filter(function (x) { return x.key === k; })[0]; return t ? t.label : ""; }
+    function typeNoun(k) { var t = data.types.filter(function (x) { return x.key === k; })[0]; return t ? t.noun : "machine"; }
 
     data.types.forEach(function (t) {
       var b = el("button", "tchip"); b.type = "button"; b.setAttribute("aria-pressed", "false"); b.setAttribute("data-t", t.key);
@@ -136,12 +137,31 @@
       var all = {}; Object.keys(data.brands_by_type).forEach(function (k) { data.brands_by_type[k].forEach(function (b) { all[b] = 1; }); });
       return Object.keys(all).sort(function (a, b) { return a.toLowerCase() < b.toLowerCase() ? -1 : 1; });
     }
+    function allBrands() {
+      var all = {}; Object.keys(data.brands_by_type).forEach(function (k) { data.brands_by_type[k].forEach(function (b) { all[b] = 1; }); });
+      return Object.keys(all).sort(function (a, b) { return a.toLowerCase() < b.toLowerCase() ? -1 : 1; });
+    }
+    function lev(a, b) {
+      var m = a.length, n = b.length, d_ = []; for (var i = 0; i <= m; i++) { d_[i] = [i]; } for (var j = 1; j <= n; j++) d_[0][j] = j;
+      for (i = 1; i <= m; i++) for (j = 1; j <= n; j++) d_[i][j] = Math.min(d_[i - 1][j] + 1, d_[i][j - 1] + 1, d_[i - 1][j - 1] + (a.charAt(i - 1) === b.charAt(j - 1) ? 0 : 1));
+      return d_[m][n];
+    }
+    function canonical(q) {
+      var nq = norm(q); if (!nq) return null;
+      var hit = allBrands().filter(function (b) { return norm(b) === nq; })[0];
+      return hit || null;
+    }
+    function nearest(q) {
+      var nq = norm(q); if (nq.length < 4) return null;
+      var best = null, bd = 99;
+      allBrands().forEach(function (b) { var nb = norm(b); if (nb.indexOf(nq) > -1) return; var dd = lev(nq, nb); if (dd < bd) { bd = dd; best = b; } });
+      return bd <= (nq.length > 6 ? 2 : 1) ? best : null;
+    }
     function renderSug() {
-      sugEl.textContent = ""; dl.textContent = "";
-      var bs = brandsForType();
-      bs.forEach(function (b) { var o = d.createElement("option"); o.value = b; dl.appendChild(o); });
-      var pick = data.popular.filter(function (p) { return bs.indexOf(p) > -1; });
-      if (!pick.length) pick = bs.slice(0, 8);
+      sugEl.textContent = "";
+      var q = norm(state.q), bs = brandsForType(), pick;
+      if (q.length >= 1) pick = bs.filter(function (b) { return norm(b).indexOf(q) > -1 && norm(b) !== q; });
+      else { pick = data.popular.filter(function (p) { return bs.indexOf(p) > -1; }); if (!pick.length) pick = bs.slice(0, 8); }
       pick.slice(0, 8).forEach(function (b) {
         var s = el("button", "sug", b); s.type = "button";
         s.addEventListener("click", function () { input.value = b; state.q = b; sync(true); input.focus({ preventScroll: true }); });
@@ -183,11 +203,11 @@
       return data.tubes.filter(function (r) { var s = norm(r.join(" ")); return trumpf ? true : s.indexOf(q) > -1; });
     }
     function mailtoFor(res) {
-      var typ = state.type ? typeLabel(state.type).toLowerCase() : "machine";
-      var brand = state.q.trim() || "(merk invullen)";
+      var typ = state.type ? typeNoun(state.type) : "machine";
+      var brand = canonical(state.q) || state.q.trim() || "(merk invullen)";
       var items = res.filter(function (r) { return r.st !== "ask" || true; }).map(function (r) { return "- " + r.p.label + (r.st === "listed" ? " (merk staat op de lijst)" : r.st === "ask" ? " (vraag het na)" : ""); }).join("\n");
       var body = UI.mail_hello + "\n\n" + UI.mail_body.replace("{type}", typ).replace("{brand}", brand).replace("{items}", items);
-      var subj = UI.mail_subject.replace("{brand}", state.q.trim() || "machine").replace("{type}", typ);
+      var subj = UI.mail_subject.replace("{brand}", canonical(state.q) || state.q.trim() || "machine").replace("{type}", typ);
       return "mailto:" + data.mail + "?subject=" + encodeURIComponent(subj) + "&body=" + encodeURIComponent(body);
     }
     function card(r, q) {
@@ -218,13 +238,21 @@
       if (!state.type && q.length < 2) return;
       var res = compute();
       var sum = el("p", "res__sum");
-      var typ = state.type ? typeLabel(state.type).toLowerCase() : "machine";
+      var typ = state.type ? typeNoun(state.type) : "machine";
+      var shown = canonical(state.q) || state.q.trim();
       sum.appendChild(document.createTextNode("Voor uw " + typ));
-      if (state.q.trim()) { sum.appendChild(document.createTextNode(" van ")); var em = el("em", "", state.q.trim()); sum.appendChild(em); }
+      if (shown) { sum.appendChild(document.createTextNode(" van ")); var em = el("em", "", shown); sum.appendChild(em); }
       var nl = res.filter(function (r) { return r.st === "listed"; }).length;
       var rest = res.length - nl;
-      sum.appendChild(document.createTextNode(q.length >= 2 ? (nl ? ": " + nl + " op de merkenlijst" + (rest ? ", " + rest + " meer om te bekijken." : ".") : ": het merk staat niet op de lijsten, maar vragen kost niets.") : ": dit is het aanbod."));
+      var known = canonical(state.q);
+      sum.appendChild(document.createTextNode(q.length >= 2 ? (nl ? ": " + nl + " op de merkenlijst" + (rest ? ", " + rest + " meer om te bekijken." : ".") : (known && state.type ? ": " + UI.other_type : ": dit merk staat niet op de lijsten, maar vragen kost niets.")) : ": dit is het aanbod."));
       out.appendChild(sum);
+      var nn = (!nl && !known) ? nearest(state.q) : null;
+      if (nn) {
+        var dym = el("p", "res__dym"); dym.appendChild(document.createTextNode(UI.did_you_mean + " "));
+        var db = el("button", "sug", nn); db.type = "button"; db.addEventListener("click", function () { input.value = nn; state.q = nn; sync(true); });
+        dym.appendChild(db); dym.appendChild(document.createTextNode("?")); out.appendChild(dym);
+      }
       var ul = el("ul", "res__list");
       res.forEach(function (r) { ul.appendChild(card(r, q)); });
       out.appendChild(ul);
