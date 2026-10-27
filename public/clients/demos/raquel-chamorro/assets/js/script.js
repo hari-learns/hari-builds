@@ -64,8 +64,10 @@
       var s = slides[si], c = s.getAttribute('data-cap'), h = s.getAttribute('data-href');
       if (cap) { cap.textContent = c || ''; if (h) cap.setAttribute('href', h); else cap.removeAttribute('href'); }
       if (num) num.textContent = ('0' + (si + 1)).slice(-2) + ' / ' + ('0' + slides.length).slice(-2);
-      var nx = slides[(si + 1) % slides.length].querySelector('img'); if (nx) nx.loading = 'eager';
+      warm(si); warm(si + 1);
     };
+    function warm(n) { var im = slides[(n + slides.length) % slides.length].querySelector('img[data-srcset]'); if (!im) return; im.srcset = im.getAttribute('data-srcset'); im.src = im.getAttribute('data-src'); im.removeAttribute('data-srcset'); }
+    addEventListener('load', function () { setTimeout(function () { warm(1); }, 1200); });
     var start = function () { clearInterval(timer); if (!reduce) timer = setInterval(function () { if (!document.hidden) go(si + 1); }, 6500); };
     start();
     var nb = $('[data-sl-next]', slider), pb = $('[data-sl-prev]', slider);
