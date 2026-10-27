@@ -1,0 +1,34 @@
+/* Tokens only. Colours from their Elementor kit (post-6.css): #FFFFFF, #3E3E48 (logo ink), #7D7470, #E5DCD0, #F1EEE7. */
+:root {
+  --white: #ffffff;
+  --paper: #f1eee7;
+  --paper-2: #f7f5f0;
+  --sand: #e5dcd0;
+  --sand-2: #d9cdbd;
+  --ink: #3e3e48;
+  --ink-2: #2e2e36;
+  --night: #24242b;
+  --taupe: #7d7470;
+  --muted: #645d59;
+  --on-dark: #f1eee7;
+  --on-dark-muted: #c9c1b6;
+  --line: #d9d1c5;
+  --line-dark: #4a4a55;
+  --shade: #14141a;
+  --veil-0: rgba(20, 20, 26, 0);
+  --veil-1: rgba(20, 20, 26, .28);
+  --veil-2: rgba(20, 20, 26, .55);
+  --veil-3: rgba(20, 20, 26, .72);
+  --shadow: rgba(36, 36, 43, .16);
+  --glass: rgba(241, 238, 231, .86);
+
+  --f-script: "Inspiration", "Snell Roundhand", cursive;
+  --f-display: "Libre Baskerville", "Baskerville", Georgia, serif;
+  --f-text: "Raleway", system-ui, -apple-system, "Segoe UI", sans-serif;
+
+  --gut: clamp(18px, 5vw, 64px);
+  --max: 1320px;
+  --sec: clamp(72px, 10vw, 150px);
+  --ease: cubic-bezier(.16, 1, .3, 1);
+  --radius: 2px;
+}
