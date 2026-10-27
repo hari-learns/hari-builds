@@ -30,6 +30,8 @@
   try { if (dock && sessionStorage.getItem("dock-x")) dock.hidden = true; } catch (e) {}
   if (dx) dx.addEventListener("click", function () { dock.hidden = true; try { sessionStorage.setItem("dock-x", "1"); } catch (e) {} });
 
+  if (dock && w.innerWidth < 860) setTimeout(function () { dock.hidden = true; }, 9000);
+
   /* reveals (sweep without lower bound: nothing is stranded invisible) */
   var rvs = $$(".rv");
   function activate(el) { el.classList.add("in"); }
@@ -162,7 +164,7 @@
       var open = openState(data.hours_days, data.hours_from, data.hours_to);
       var stat = open === null ? esc(data.hours_short) : esc((open ? t.open_now : t.closed_now) + " · " + data.hours_short);
       h += '<div class="next"><h4>' + t.steps_h + '</h4><ol>' + steps + '</ol><p class="status' + (open ? ' is-open' : '') + '">' + stat + '</p>' +
-        '<div class="tool__actions"><a class="btn" id="tool-send" href="#">' + t.send + '</a><a class="btn btn--ghost" href="' + data.tel + '">' + t.call + ' ' + esc(data.tel_display) + '</a>' +
+        '<div class="tool__actions"><a class="btn" id="tool-send" href="mailto:' + data.to + '">' + t.send + '</a><a class="btn btn--ghost" href="' + data.tel + '">' + t.call + ' ' + esc(data.tel_display) + '</a>' +
         '<button type="button" class="btn btn--ghost" id="tool-copy">' + t.copy + '</button><button type="button" class="btn btn--ghost" id="tool-reset">' + t.reset + '</button></div>' +
         '<p class="tool__note">' + t.note + '</p></div>';
       res.innerHTML = h; res.hidden = false; wire();

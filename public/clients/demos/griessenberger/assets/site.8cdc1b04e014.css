@@ -398,3 +398,7 @@ em,.it{font-style:italic}
 .tiles img{width:100%;height:auto}
 @media (min-width:560px){.tiles{grid-template-columns:repeat(4,minmax(0,1fr))}}
 @media (min-width:900px){.tiles{grid-template-columns:repeat(6,minmax(0,1fr))}}
+
+.theme-paper .status,.theme-sand .status{color:var(--paper-muted)}
+.phead--plain .wrap{padding-top:112px;padding-bottom:clamp(24px,3vw,40px)}
+@media (min-width:860px){.band figure:first-child{grid-column:span 2;grid-row:span 2}}
