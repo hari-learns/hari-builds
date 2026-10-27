@@ -123,76 +123,41 @@
     fb.addEventListener('close', function () { fv.pause(); if (window.__lenis) window.__lenis.start(); });
   }
 
-  /* ---------------- scroll scenes (GSAP), all on their own assets */
-  function scenes() {
-    var gsap = window.gsap, ST = window.ScrollTrigger;
-    if (!gsap || !ST || reduce) return;
-    gsap.registerPlugin(ST);
-    if (window.Lenis && matchMedia('(pointer: fine)').matches) {
-      var lenis = new window.Lenis({ lerp: 0.11, smoothWheel: true });
-      window.__lenis = lenis;
-      lenis.on('scroll', ST.update);
-      gsap.ticker.add(function (t) { lenis.raf(t * 1000); });
-      gsap.ticker.lagSmoothing(0);
+  /* hero: their homepage slider, kept: slow crossfade through their six slides, caption names the project */
+  var slider = $('[data-slider]');
+  if (slider) {
+    var slides = $$('.slide', slider), cap = $('[data-slide-cap]'), num = $('[data-slide-n]'), si = 0, timer;
+    var go = function (n) {
+      slides[si].classList.remove('is-on'); si = (n + slides.length) % slides.length; slides[si].classList.add('is-on');
+      var s = slides[si];
+      if (cap) { cap.textContent = s.getAttribute('data-cap'); var h = s.getAttribute('data-href'); if (h) { cap.setAttribute('href', h); cap.removeAttribute('aria-disabled'); } else { cap.removeAttribute('href'); } }
+      if (num) num.textContent = ('0' + (si + 1)).slice(-2) + ' / ' + ('0' + slides.length).slice(-2);
+    };
+    if (!reduce && slides.length > 1) {
+      var start = function () { clearInterval(timer); timer = setInterval(function () { if (!document.hidden) go(si + 1); }, 6500); };
+      start();
+      slider.addEventListener('click', function () { go(si + 1); start(); });
     }
-    var mm = gsap.matchMedia();
-    var frame = $('[data-hero-frame]'), himg = $('[data-hero-img]');
-
-    /* hero: the framed salon of their old slider opens to full bleed */
-    if (frame) {
-      mm.add('(min-width: 900px) and (min-height: 620px)', function () {
-        var g = parseFloat(getComputedStyle(frame).marginLeft) || 40;
-        frame.style.marginLeft = frame.style.marginRight = '0px';
-        var st = { trigger: frame, start: 'top 34%', end: 'top 68px', scrub: 0.6 };
-        gsap.fromTo(frame, { clipPath: 'inset(0px ' + g + 'px 0px ' + g + 'px)' }, { clipPath: 'inset(0px 0px 0px 0px)', ease: 'none', scrollTrigger: st });
-        gsap.to('.hero-title', { opacity: 0, y: -30, ease: 'none', scrollTrigger: { trigger: frame, start: 'top 34%', end: 'top 120px', scrub: true } });
-        gsap.fromTo(himg, { yPercent: 0, scale: 1 }, { yPercent: 6, scale: 1.05, ease: 'none', scrollTrigger: { trigger: frame, start: 'top 34%', end: 'bottom top', scrub: true } });
-        return function () { frame.style.marginLeft = frame.style.marginRight = ''; frame.style.clipPath = ''; };
-      });
-      mm.add('(max-width: 899px), (max-height: 619px)', function () {
-        gsap.fromTo(himg, { yPercent: 0 }, { yPercent: 10, ease: 'none', scrollTrigger: { trigger: frame, start: 'top top+=64', end: 'bottom top', scrub: true } });
-      });
-    }
-
-    /* collage: their five homepage slides drift at their own depth */
-    $$('.cl').forEach(function (el) {
-      var sp = parseFloat(el.getAttribute('data-speed')) || 0, im = $('img', el);
-      gsap.fromTo(el, { y: function () { return sp * 600; } }, { y: function () { return -sp * 600; }, ease: 'none', scrollTrigger: { trigger: '.cl-stage', start: 'top bottom', end: 'bottom top', scrub: true, invalidateOnRefresh: true } });
-      if (im) gsap.fromTo(im, { scale: 1.18 }, { scale: 1, ease: 'none', scrollTrigger: { trigger: el, start: 'top bottom', end: 'bottom top', scrub: true } });
-    });
-
-    /* recent projects: pinned, the 2026 houses slide past */
-    var track = $('[data-track]');
-    if (track) {
-      mm.add('(min-width: 900px) and (min-height: 620px)', function () {
-        var dist = function () { return Math.max(0, track.scrollWidth - innerWidth); };
-        gsap.to(track, { x: function () { return -dist(); }, ease: 'none', scrollTrigger: { trigger: '.recent', start: 'top top', end: function () { return '+=' + dist(); }, pin: true, scrub: 0.8, invalidateOnRefresh: true, anticipatePin: 1 } });
-        $$('.hcard-img img', track).forEach(function (im) { gsap.fromTo(im, { xPercent: -5, scale: 1.14 }, { xPercent: 5, scale: 1.14, ease: 'none', scrollTrigger: { trigger: '.recent', start: 'top top', end: function () { return '+=' + dist(); }, scrub: true, invalidateOnRefresh: true } }); });
-      });
-    }
-
-    /* Somió: the house's rooms stack up beside her words */
-    mm.add('(min-width: 900px)', function () {
-      var layers = $$('.fs-layer');
-      $$('.fstep').forEach(function (step, i) {
-        var L = layers[i]; if (!L || i === 0) return;
-        gsap.fromTo(L, { clipPath: 'inset(100% 0% 0% 0%)' }, { clipPath: 'inset(0% 0% 0% 0%)', ease: 'none', scrollTrigger: { trigger: step, start: 'top 78%', end: 'top 52%', scrub: 0.4 } });
-        gsap.fromTo($('img', L), { scale: 1.2 }, { scale: 1, ease: 'none', scrollTrigger: { trigger: step, start: 'top 85%', end: 'bottom 20%', scrub: true } });
-      });
-      if (layers[0]) gsap.fromTo($('img', layers[0]), { scale: 1.12 }, { scale: 1, ease: 'none', scrollTrigger: { trigger: '.feat-body', start: 'top bottom', end: 'top top', scrub: true } });
-    });
-
-    /* studio film opens like a door */
-    var film = $('[data-film]');
-    if (film) gsap.fromTo(film, { clipPath: 'inset(10% 12% 10% 12%)' }, { clipPath: 'inset(0% 0% 0% 0%)', ease: 'none', scrollTrigger: { trigger: film, start: 'top 90%', end: 'top 15%', scrub: true } });
-
-    /* press covers move in three columns */
-    $$('.pcol').forEach(function (c) {
-      var sp = parseFloat(c.getAttribute('data-speed')) || 0;
-      gsap.fromTo(c, { yPercent: sp * -60 }, { yPercent: sp * 60, ease: 'none', scrollTrigger: { trigger: '.press', start: 'top bottom', end: 'bottom top', scrub: true } });
-    });
-
-    addEventListener('load', function () { ST.refresh(); });
   }
-  if (document.readyState === 'complete') scenes(); else addEventListener('load', scenes);
+
+  /* Somió: the room beside each sentence crossfades in as you read */
+  var steps = $$('.fstep'), layers = $$('.fs-layer');
+  if (steps.length && layers.length && 'IntersectionObserver' in window) {
+    var so = new IntersectionObserver(function (es) {
+      es.forEach(function (e) {
+        if (!e.isIntersecting) return;
+        var i = +e.target.getAttribute('data-step');
+        layers.forEach(function (l, k) { l.classList.toggle('is-on', k === i); });
+      });
+    }, { rootMargin: '-45% 0px -45% 0px' });
+    steps.forEach(function (s) { so.observe(s); });
+  }
+
+  /* gentle smooth scrolling on desktop pointers only */
+  if (!reduce && window.Lenis && matchMedia('(pointer: fine)').matches) {
+    var lenis = new window.Lenis({ lerp: 0.12, smoothWheel: true });
+    window.__lenis = lenis;
+    var raf = function (t) { lenis.raf(t); requestAnimationFrame(raf); };
+    requestAnimationFrame(raf);
+  }
 })();
