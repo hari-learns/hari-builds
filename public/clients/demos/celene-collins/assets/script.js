@@ -14,8 +14,7 @@
   function onScroll() {
     var y = window.scrollY || 0, vh = window.innerHeight;
     if (hdr) {
-      var over = hdr.classList.contains("hdr--over");
-      hdr.classList.toggle("is-solid", !over || y > (document.body.classList.contains("is-home") ? Math.min(vh * 0.75, 600) : 40));
+      hdr.classList.toggle("is-small", y > 40);
       hdr.classList.toggle("is-hidden", y > vh && y > lastY + 4 && !doc.classList.contains("menu-open"));
       if (y < lastY - 4) hdr.classList.remove("is-hidden");
     }
@@ -200,11 +199,11 @@
     if (win) {
       var fr = $("[data-window-frame]", win);
       mm.add("(min-width: 701px)", function () {
-        gsap.fromTo(fr, { clipPath: "inset(10% 12% 10% 12%)" }, { clipPath: "inset(0% 0% 0% 0%)", ease: "none", scrollTrigger: { trigger: win, start: "top 90%", end: "top top", scrub: true } });
-        gsap.fromTo($("img", fr), { scale: 1.2 }, { scale: 1, ease: "none", scrollTrigger: { trigger: win, start: "top bottom", end: "bottom top", scrub: true } });
+        gsap.fromTo(fr, { clipPath: "inset(6% 9% 6% 9%)" }, { clipPath: "inset(0% 0% 0% 0%)", ease: "none", scrollTrigger: { trigger: win, start: "top 90%", end: "top top", scrub: true } });
+        gsap.fromTo($("img", fr), { scale: 1.12 }, { scale: 1, ease: "none", scrollTrigger: { trigger: win, start: "top bottom", end: "bottom top", scrub: true } });
       });
       mm.add("(max-width: 700px)", function () {
-        gsap.fromTo(fr, { clipPath: "inset(6% 5% 6% 5%)" }, { clipPath: "inset(0% 0% 0% 0%)", ease: "none", scrollTrigger: { trigger: win, start: "top 95%", end: "top 20%", scrub: true } });
+        gsap.fromTo(fr, { clipPath: "inset(4% 4% 4% 4%)" }, { clipPath: "inset(0% 0% 0% 0%)", ease: "none", scrollTrigger: { trigger: win, start: "top 95%", end: "top 20%", scrub: true } });
       });
     }
 
@@ -223,6 +222,13 @@
         return function () { hg.classList.remove("is-pinned-x"); gsap.set(track, { x: 0 }); };
       });
     }
+
+    /* gentle parallax inside project photos (desktop only) */
+    mm.add("(min-width: 901px)", function () {
+      $$(".hcard .pcard__img img, .gcard .pcard__img img").forEach(function (im) {
+        gsap.fromTo(im, { yPercent: -4, scale: 1.1 }, { yPercent: 4, scale: 1.1, ease: "none", scrollTrigger: { trigger: im.parentNode, start: "top bottom", end: "bottom top", scrub: true } });
+      });
+    });
 
     /* services image follows the row in view */
     var rows = $$("[data-srow]");
