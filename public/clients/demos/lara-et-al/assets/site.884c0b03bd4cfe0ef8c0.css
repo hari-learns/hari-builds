@@ -43,7 +43,7 @@ address{font-style:normal}
 .h2{font-size:clamp(2rem,1.3rem + 2.6vw,3.8rem);line-height:1.05;letter-spacing:-.03em;margin-bottom:.5em}
 .h3{font-size:clamp(1.45rem,1.15rem + 1vw,2.1rem);line-height:1.15;letter-spacing:-.02em}
 .lead{font-size:clamp(1.08rem,.98rem + .45vw,1.35rem);line-height:1.55;max-width:58ch;color:var(--ink-2)}
-.small{font-size:.875rem;line-height:1.5;color:var(--muted)}
+.small{font-size:1rem;line-height:1.5;color:var(--muted)}
 .prose{max-width:62ch}
 .prose--lg p{font-size:clamp(1.05rem,1rem + .3vw,1.25rem)}
 .q,.tq blockquote,.sk-card blockquote{font-family:var(--serif);font-style:italic;font-weight:500;letter-spacing:-.005em}
@@ -73,7 +73,7 @@ address{font-style:normal}
   .btn--ghost-light:hover{background:var(--paper);color:var(--ink)}
 }
 .actions{display:flex;flex-wrap:wrap;gap:12px;margin-top:1.6rem}
-.arrow-link{display:inline-flex;align-items:center;gap:.7em;min-height:44px;color:var(--accent-ink);text-decoration:none;font-weight:500}
+.arrow-link{display:inline-flex;align-items:center;gap:.7em;min-height:48px;color:var(--accent-ink);text-decoration:none;font-weight:500}
 .arrow-link svg{width:30px;height:20px;transition:transform .4s var(--ease)}
 .sec--night .arrow-link{color:var(--accent-night)}
 @media (hover:hover){.arrow-link:hover svg{transform:translateX(6px)}}
@@ -432,22 +432,21 @@ address{font-style:normal}
 .ft-mail{overflow-wrap:anywhere}
 .ft-soc{display:flex;gap:20px}
 @media (hover:hover){.ft a:hover{color:var(--accent-night)}}
-.ft-legal{margin-top:clamp(40px,5vw,72px);padding-top:24px;border-top:1px solid var(--night-2);font-size:.875rem;color:var(--on-night-muted)}
+.ft-legal{margin-top:clamp(40px,5vw,72px);padding-top:24px;border-top:1px solid var(--night-2);font-size:1rem;color:var(--on-night-muted)}
 .ft-legal p{margin:0 0 .4rem}
 @media (min-width:800px){.ft-grid{grid-template-columns:1.4fr 1fr 1fr 1fr}}
+.bar.is-off{transform:translateY(110%)!important}
 .bar{position:fixed;left:0;right:0;bottom:0;z-index:60;display:flex;gap:8px;padding:8px 10px calc(8px + env(safe-area-inset-bottom));background:var(--glass);-webkit-backdrop-filter:blur(14px);backdrop-filter:blur(14px);border-top:1px solid var(--line-soft);transform:translateY(110%);transition:transform .5s var(--ease)}
 .bar.is-on{transform:none}
 .bar-main{flex:1;display:flex;align-items:center;justify-content:center;min-height:50px;border-radius:999px;background:var(--accent);color:var(--on-accent);text-decoration:none;font-weight:500}
 .bar-i{display:flex;align-items:center;justify-content:center;gap:6px;min-height:50px;padding-inline:18px;border-radius:999px;border:1px solid var(--accent);color:var(--accent-ink);text-decoration:none}
 @media (min-width:900px){.bar{display:none}}
 @media (max-width:899px){body{padding-bottom:calc(68px + env(safe-area-inset-bottom))}}
-.dock{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(12px + env(safe-area-inset-bottom));z-index:70;display:flex;align-items:center;gap:6px;width:max-content;max-width:min(440px,calc(100vw - 24px));padding:6px 6px 6px 14px;border-radius:12px;background:var(--night);color:var(--on-night);font-size:.875rem;line-height:1.35;box-shadow:0 8px 30px var(--shade)}
-.dock p{margin:0}
-.dock button{flex:none;width:44px;height:44px;border:0;background:transparent;color:var(--on-night);cursor:pointer;display:grid;place-items:center}
+.dock{display:flex;align-items:center;justify-content:center;gap:4px;padding:4px var(--gut);background:var(--paper-2);color:var(--ink-2);font-size:1rem;line-height:1.4;border-top:1px solid var(--line-soft)}
+.dock p{margin:0;text-align:center}
+.dock button{flex:none;width:44px;height:44px;border:0;background:transparent;color:var(--ink-2);cursor:pointer;display:grid;place-items:center}
+.dock button svg{width:18px;height:18px}
 .dock[hidden]{display:none}
-.dock{transition:opacity .4s var(--ease),visibility 0s linear 0s}
-.dock.is-away{opacity:0;visibility:hidden;transition:opacity .4s var(--ease),visibility 0s linear .4s}
-@media (max-width:899px){.dock{top:calc(var(--hd) + env(safe-area-inset-top) + 6px);bottom:auto;font-size:.875rem}}
 
 /* reveals */
 .js .rv{opacity:0;transform:translateY(26px);transition:opacity .9s var(--ease),transform .9s var(--ease)}
@@ -469,3 +468,4 @@ address{font-style:normal}
 
 .is-project .hd{background:var(--glass);-webkit-backdrop-filter:blur(14px);backdrop-filter:blur(14px)}
 .is-project .phero{margin-top:0}
+@media (max-width:899px){.band::after{background:linear-gradient(to top,var(--scrim-1) 0%,var(--scrim-1) 45%,var(--scrim-0) 90%)}}

@@ -13,8 +13,6 @@
     var y = w.scrollY || 0;
     if (hd) hd.classList.toggle("is-scrolled", y > 24);
     if (bar) bar.classList.toggle("is-on", y > w.innerHeight * 0.6);
-    var dk = d.getElementById("dock");
-    if (dk) dk.classList.toggle("is-away", w.innerWidth < 900 && y > 260);
   }
   w.addEventListener("scroll", onScroll, { passive: true }); onScroll();
 
@@ -36,6 +34,32 @@
   var dock = $("#dock"), dockX = $("#dock-x");
   try { if (sessionStorage.getItem("le-dock") === "1" && dock) dock.hidden = true; } catch (e) {}
   dockX && dockX.addEventListener("click", function () { dock.hidden = true; try { sessionStorage.setItem("le-dock", "1"); } catch (e) {} });
+
+  /* ---------- sticky bar steps aside for Room Studio, the form and the footer ---------- */
+  if (bar && "IntersectionObserver" in w) {
+    var busy = new Set();
+    var bio = new IntersectionObserver(function (es) {
+      es.forEach(function (en) { if (en.isIntersecting) busy.add(en.target); else busy.delete(en.target); });
+      bar.classList.toggle("is-off", busy.size > 0);
+    });
+    $$(".rs-embed, #enq, .ft, .dock").forEach(function (el) { bio.observe(el); });
+  }
+
+  /* ---------- Room Studio: phone comfort inside the widget (open shadow root) ---------- */
+  var RS_CSS = ".chip{height:44px!important;min-height:44px}.caption{font-size:13px!important}.card .nm{font-size:max(13px,1em)!important}";
+  $$(".rs-embed").forEach(function (box) {
+    var tries = 0;
+    var ensure = function (sr) {
+      if (!sr.querySelector("style[data-le]")) { var st = d.createElement("style"); st.setAttribute("data-le", ""); st.textContent = RS_CSS; sr.appendChild(st); }
+    };
+    var t = setInterval(function () {
+      var host = box.shadowRoot ? box : $$("*", box).filter(function (x) { return x.shadowRoot; })[0];
+      if (host && host.shadowRoot) {
+        clearInterval(t); ensure(host.shadowRoot);
+        new MutationObserver(function () { ensure(host.shadowRoot); }).observe(host.shadowRoot, { childList: true });
+      } else if (++tries > 60) clearInterval(t);
+    }, 250);
+  });
 
   /* ---------- reveals (IO + sweep fallback) ---------- */
   var rv = $$(".rv, .um");
