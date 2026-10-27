@@ -111,66 +111,39 @@
     d.addEventListener("visibilitychange", function () { d.hidden ? stop() : play(); });
   }
 
-  /* ---------- Room Studio: Dutch UI + Dutch enquiry (widget mounted by its own script from data-roomstudio) */
+  /* ---------- Room Studio: the UI is fully Dutch via its JSON `text` option; only the enquiry e-mail the widget
+     composes itself is translated here (strings from the host's data-rs-mail attribute) */
   function patchRoomStudio() {
-    var hosts = $$("[data-roomstudio]"), cfgEl = $("#rs-nl");
-    if (!hosts.length || !cfgEl) return;
-    var N; try { N = JSON.parse(cfgEl.textContent); } catch (e) { return; }
-    var T = N.t, M = N.m;
-    var fmt = function (s, o) { return String(s).replace(/\{(\w+)\}/g, function (m, k) { return o[k] != null ? o[k] : m; }); };
-    var lc = function (s) { return String(s || "").toLowerCase(); };
-    hosts.forEach(function (el) {
-      var inst = el.__rs; if (!inst || inst.__nl) return; inst.__nl = true;
-      var proto = Object.getPrototypeOf(inst), t = inst.t;
-      t.detected = function (r) { return fmt(T.detected, { r: lc(r) }); };
-      t.designsQ = function (b) { return fmt(T.designsQ, { b: b }); };
-      t.left = function (n) { return n === 1 ? T.left1 : fmt(T.left, { n: n }); };
-      t.working = function (room) { return fmt(T.working, { room: lc(room) }); };
-      t.workingSub = function (s) { return fmt(T.workingSub, { d: s }); };
-      t.applying = function (s) { return fmt(T.applying, { d: s }); };
-      t.resultT = function (room, st) { return room === t.planOpt ? fmt(T.resultTplan, { s: st }) : fmt(T.resultT, { room: lc(room), s: st }); };
-      ["pass", "disclaimer", "passTitle", "passSub", "sentBody", "limitBtn"].forEach(function (k) { t[k] = function (b) { return fmt(T[k], { b: b }); }; });
-      t.sentTitle = function (n) { return n ? fmt(T.sentTitleN, { n: n }) : T.sentTitle; };
-      var dutch = {}; Object.keys(T).forEach(function (k) { if (typeof T[k] === "string") dutch[T[k]] = 1; });
-      var EN = { "Use a JPG or PNG photo.": M.badfile, "This image could not be opened. Try a JPG or PNG.": M.badopen };
-      inst.set = function (p) {
-        if (p && p.error) { if (EN[p.error]) p.error = EN[p.error]; else if (!dutch[p.error]) p.error = t.err; }
-        return proto.set.call(this, p);
-      };
+    $$("[data-roomstudio]").forEach(function (el) {
+      var inst = el.__rs, M; if (!inst || inst.__nl) return;
+      try { M = JSON.parse(el.getAttribute("data-rs-mail") || "{}"); } catch (e) { return; }
+      inst.__nl = true;
+      var proto = Object.getPrototypeOf(inst);
+      var fmt = function (s, o) { return String(s).replace(/\{(\w+)\}/g, function (m, k) { return o[k] != null ? o[k] : m; }); };
+      var lc = function (s) { return String(s || "").toLowerCase(); };
       inst.message = function () {
-        var o = this.s.lead, r = this.render, link = this.shareUrl(), b = this.c.brand;
-        var lines = [fmt(M.hello, { b: b, room: lc((r && r.room) || this.s.room), s: (r && r.style) || this.style.label }),
+        var o = this.s.lead, r = this.render, link = this.shareUrl();
+        var lines = [fmt(M.hello, { b: this.c.brand, room: lc((r && r.room) || this.s.room), s: (r && r.style) || this.style.label }),
           link ? fmt(M.link, { u: link }) : "", r && r.notes ? fmt(M.asked, { t: r.notes }) : "", "",
           M.name + ": " + o.name, o.phone ? M.phone + ": " + o.phone : "", o.email ? M.email + ": " + o.email : "", o.msg ? "\n" + o.msg : ""];
         return lines.filter(function (l, i, a) { return l !== "" || a[i - 1] !== ""; }).join("\n").trim();
       };
-      var origSend = proto.send;
       inst.send = function (via) {
-        if (via !== "mail") return origSend.call(this, via);
+        if (via !== "mail") return proto.send.call(this, via);
         var o = this.s.lead, c = this.c.contact || {};
-        if (!o.name.trim() || !(o.phone.trim() || o.email.trim())) return this.set({ error: t.needContact });
+        if (!o.name.trim() || !(o.phone.trim() || o.email.trim())) return this.set({ error: this.t.needContact });
         var subj = fmt(M.subject, { room: lc(this.s.room), s: (this.render && this.render.style) || "" });
         location.href = "mailto:" + c.email + "?subject=" + encodeURIComponent(subj) + "&body=" + encodeURIComponent(this.message());
         try { w.goatcounter && w.goatcounter.count && w.goatcounter.count({ path: "roomstudio-pass-mail", title: "Room Studio: pass-mail", event: true }); } catch (e) {}
         this.set({ phase: "sent", sentName: o.name.trim().split(" ")[0], error: "" });
       };
-      var fixAria = function () {
-        var r = inst.root; if (!r) return;
-        $$("[aria-label]", r).forEach(function (n) { var v = n.getAttribute("aria-label"); if (M.aria[v]) n.setAttribute("aria-label", M.aria[v]); else if (/ and /.test(v)) n.setAttribute("aria-label", v.replace(" and ", " en ")); });
-        $$("img[alt]", r).forEach(function (n) { var v = n.getAttribute("alt"); if (M.aria[v]) n.alt = M.aria[v]; var m = /^Your room in the (.+) design$/.exec(v); if (m) n.alt = M.aria["Your room"] + " · " + m[1]; });
-      };
-      ["draw", "drawStage", "drawPanel", "drawSteps"].forEach(function (k) {
-        inst[k] = function () { var out = proto[k].apply(this, arguments); fixAria(); return out; };
-      });
-      inst.draw();
     });
   }
   if (d.readyState === "loading") d.addEventListener("DOMContentLoaded", patchRoomStudio); else patchRoomStudio();
   w.addEventListener("load", patchRoomStudio);
 
   /* ---------- motion (GSAP + ScrollTrigger + Lenis), skipped entirely for reduced motion */
-  function inkStatic() { $$(".ink .w").forEach(function (s) { s.style.setProperty("--o", 1); }); }
-  if (reduce || !G || !ST) { inkStatic(); if (hero) hero.querySelector(".hero__media").style.setProperty("--p", 0); return; }
+  if (reduce || !G || !ST) { if (hero) hero.querySelector(".hero__media").style.setProperty("--p", 0); return; }
   G.registerPlugin(ST);
   root.classList.add("has-motion");
   if (canPin()) root.classList.add("has-pin");
@@ -201,61 +174,16 @@
     if (line) G.fromTo(line, { scaleY: 0 }, { scaleY: 1, duration: 1.6, ease: "expo.out", delay: 0.6 });
   }
 
-  /* ink: words come in with scroll */
-  $$(".ink").forEach(function (blk) {
-    var ws = $$(".w", blk), n = ws.length;
-    ST.create({ trigger: blk, start: "top 85%", end: "bottom 45%", scrub: true, onUpdate: function (s) {
-      var k = s.progress * (n + 4);
-      for (var i = 0; i < n; i++) ws[i].style.setProperty("--o", clamp(0.16 + (k - i) * 0.28, 0.16, 1).toFixed(3));
-    }, onLeave: function () { ws.forEach(function (x) { x.style.setProperty("--o", 1); }); } });
-  });
-
-  /* walk-through: pinned horizontal rail of their rooms */
-  var walk = $(".walk");
-  if (walk) {
-    mm.add("(min-width: 900px) and (min-height: 640px)", function () {
-      var track = $(".walk__track", walk), pin = $(".walk__pin", walk), barI = $(".walk__bar", walk);
-      var dist = function () { return Math.max(0, track.scrollWidth - w.innerWidth); };
-      var tw = G.to(track, { x: function () { return -dist(); }, ease: "none",
-        scrollTrigger: { trigger: walk, start: "top top", end: function () { return "+=" + Math.round(dist() * 0.8); }, pin: pin, scrub: 0.8, invalidateOnRefresh: true,
-          onUpdate: function (s) { if (barI) barI.style.setProperty("--wp", s.progress.toFixed(3)); } } });
-      $$(".walk__fig", walk).forEach(function (fig) {
-        var im = $(".walk__img", fig);
-        G.fromTo(fig, { scale: 0.86, opacity: 0.55 }, { scale: 1, opacity: 1, ease: "none", scrollTrigger: { trigger: fig, containerAnimation: tw, start: "left 100%", end: "center 55%", scrub: true } });
-        G.fromTo(im, { scale: 1.16 }, { scale: 1, ease: "none", scrollTrigger: { trigger: fig, containerAnimation: tw, start: "left 100%", end: "right 0%", scrub: true } });
-      });
-      return function () { G.set(track, { clearProps: "transform" }); };
-    });
-  }
-
-  /* layered house: each room slides over the last */
-  var layer = $(".layer");
-  if (layer) {
-    mm.add("(min-width: 900px) and (min-height: 640px)", function () {
-      var figs = $$(".layer__fig", layer), dots = $$(".layer__dots li", layer), n = figs.length;
-      G.set(figs.slice(1), { yPercent: 104 });
-      var tl = G.timeline({ scrollTrigger: { trigger: layer, start: "top top", end: "+=" + (n - 1) * 85 + "%", pin: $(".layer__pin", layer), scrub: 0.7,
-        onUpdate: function (s) { var k = Math.round(s.progress * (n - 1)); dots.forEach(function (dd, i) { dd.classList.toggle("on", i === k); }); } } });
-      for (var i = 1; i < n; i++) {
-        tl.to(figs[i], { yPercent: 0, ease: "power2.inOut", duration: 1 }, i - 1)
-          .to(figs[i - 1], { scale: 0.92, filter: "brightness(.55)", ease: "power2.inOut", duration: 1 }, i - 1);
-      }
-      return function () { G.set(figs, { clearProps: "transform,filter" }); };
-    });
-    mm.add("(max-width: 899px), (max-height: 639px)", function () {
-      $$(".layer__fig", layer).forEach(function (f) {
-        G.fromTo(f, { clipPath: "inset(14% 0 0 0)" }, { clipPath: "inset(0% 0 0 0)", ease: "none", scrollTrigger: { trigger: f, start: "top 95%", end: "top 45%", scrub: true } });
-      });
-    });
-  }
-
   /* zoom-out: their photos settle as they cross the screen */
   $$("[data-zoom]").forEach(function (im) {
-    G.fromTo(im, { scale: 1.16 }, { scale: 1, ease: "none", scrollTrigger: { trigger: im.parentElement, start: "top bottom", end: "bottom 35%", scrub: true } });
+    G.fromTo(im, { scale: 1.07 }, { scale: 1, ease: "none", scrollTrigger: { trigger: im.parentElement, start: "top bottom", end: "bottom 40%", scrub: true } });
   });
-  /* parallax: quote photo */
-  $$("[data-par]").forEach(function (im) {
-    G.fromTo(im, { yPercent: -8 }, { yPercent: 8, ease: "none", scrollTrigger: { trigger: im.closest("section"), start: "top bottom", end: "bottom top", scrub: true } });
+  /* gentle parallax: their collage photos drift at slightly different speeds (desktop only) */
+  mm.add("(min-width: 900px)", function () {
+    $$("[data-par]").forEach(function (im) {
+      var v = +im.getAttribute("data-par") || 6, box = im.closest("figure,a") || im.parentElement;
+      G.fromTo(box, { yPercent: v }, { yPercent: -v, ease: "none", scrollTrigger: { trigger: box, start: "top bottom", end: "bottom top", scrub: true } });
+    });
   });
   /* project heads: framed photo opens */
   $$("[data-aperture]").forEach(function (el) {
