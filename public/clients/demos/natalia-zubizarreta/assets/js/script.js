@@ -11,7 +11,7 @@
 
   /* header */
   var head = $('[data-head]');
-  function onScroll() { if (head) head.classList.toggle('is-scrolled', window.scrollY > 40); var dk = document.querySelector('[data-dock]'); if (dk && !dk.__done && window.scrollY > innerHeight * 0.9) { dk.__done = 1; dk.classList.add('is-on'); if (innerWidth < 900) setTimeout(function () { dk.classList.remove('is-on'); }, 7000); } }
+  function onScroll() { if (head) head.classList.toggle('is-scrolled', window.scrollY > 40); }
   addEventListener('scroll', onScroll, { passive: true }); onScroll();
 
   /* drawer */
@@ -27,6 +27,14 @@
   if (burger) burger.addEventListener('click', function () { setDrawer(true); });
   $$('[data-close]').forEach(function (b) { b.addEventListener('click', function () { setDrawer(false); }); });
   addEventListener('keydown', function (e) { if (e.key === 'Escape' && drawer && drawer.classList.contains('is-open')) setDrawer(false); });
+
+  /* phone action bar steps aside while the Room Studio form (or the footer) is on screen, so it never covers it */
+  var bar = $('[data-actbar]'), zones = $$('[data-roomstudio], .site-foot, .cta');
+  if (bar && zones.length && 'IntersectionObserver' in window) {
+    var seen = new Set();
+    var zo = new IntersectionObserver(function (es) { es.forEach(function (e) { e.isIntersecting ? seen.add(e.target) : seen.delete(e.target); }); bar.classList.toggle('is-away', seen.size > 0); }, { threshold: 0 });
+    zones.forEach(function (z) { zo.observe(z); });
+  }
 
   /* concept dock */
   var dock = $('[data-dock]');
