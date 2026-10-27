@@ -409,3 +409,8 @@ input[type=range]::-moz-range-thumb{width:20px;height:20px;border-radius:50%;bac
 @media (max-width:480px){.btn--copy span{display:none}.btn--copy{flex:none;width:52px;padding-inline:0}.send .btn{padding-inline:16px}}
 .dock p{font-size:.875rem}
 @media (max-width:899px){.dock{padding:2px 2px 2px 12px}}
+
+/* new machines: catalogue download strip on the brochure page */
+.cat{display:flex;align-items:center;justify-content:space-between;gap:28px;flex-wrap:wrap;padding:32px;border:1px solid var(--rule);border-radius:18px;background:var(--white)}
+.cat .lead{max-width:60ch;margin-top:8px}
+@media (max-width:640px){.cat{padding:22px}.cat .btn{width:100%;justify-content:center}}
