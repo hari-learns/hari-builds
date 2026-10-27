@@ -345,3 +345,5 @@ textarea { resize: vertical; line-height: 1.5; }
 }
 
 .split--info .h3 { margin-top: 36px; margin-bottom: 8px; }
+
+@media (max-width: 359px) { .hdr__in { gap: 6px; } .brand img { height: 30px; } .hdr__r { gap: 2px; } .drawer .brand img { height: 30px; } }
