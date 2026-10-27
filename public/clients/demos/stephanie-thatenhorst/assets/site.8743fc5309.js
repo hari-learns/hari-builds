@@ -15,9 +15,9 @@
   /* ---------- header */
   var hd = $("#hd");
   function onScroll() {
-    if (dock) dock.classList.toggle("is-away", scrollY > 420);
+    if (dock) dock.classList.toggle("is-away", innerWidth < 900 && (scrollY < 120 || scrollY > 1400));
     if (!hd) return;
-    var lim = de.classList.contains("motion") && $("#stage") ? innerHeight * 0.32 : innerHeight * 0.75;
+    var lim = innerHeight * 0.8;
     hd.classList.toggle("is-solid", scrollY > (hd.classList.contains("hd--over") ? lim : 4));
   }
   addEventListener("scroll", onScroll, { passive: true }); onScroll();
@@ -105,40 +105,19 @@
       gsap.ticker.add(function (t) { lenis.raf(t * 1000); });
       gsap.ticker.lagSmoothing(0);
     }
-    var stage = $("#stage");
-    if (stage) {
-      var geo = function () {
-        var vw = innerWidth, vh = innerHeight, aw = Math.min(vw * 0.34, 540), top = 64 + 36, bot = 44;
-        stage.style.setProperty("--arch-w", aw + "px");
-        return { s: (vw - aw) / 2, t: top, b: bot, r: aw / 2 };
-      };
-      var tl = gsap.timeline({ scrollTrigger: { trigger: stage, start: "top top", end: "bottom bottom", scrub: 0.7, invalidateOnRefresh: true } });
-      tl.to("#hero-in", { autoAlpha: 0, y: -70, duration: 0.28, ease: "power2.in" }, 0)
-        .to(["#seal", "#hero-credit"], { autoAlpha: 0, duration: 0.18 }, 0)
-        .fromTo("#hero-frame", { clipPath: "inset(0px 0px 0px 0px round 0px 0px 0px 0px)" },
-          { clipPath: function () { var g = geo(); return "inset(" + g.t + "px " + g.s + "px " + g.b + "px " + g.s + "px round " + g.r + "px " + g.r + "px 10px 10px)"; }, ease: "power2.inOut", duration: 0.62 }, 0.04)
-        .to(".hero-shade", { opacity: 0.15, duration: 0.5 }, 0.1)
-        .fromTo("#intro .intro-a", { autoAlpha: 0, x: -50 }, { autoAlpha: 1, x: 0, duration: 0.26 }, 0.5)
-        .fromTo("#intro .intro-b", { autoAlpha: 0, x: 50 }, { autoAlpha: 1, x: 0, duration: 0.26 }, 0.56)
-        .to({}, { duration: 0.2 });
+    /* hero: their film drifts gently as you leave it (no shape change) */
+    if ($("#hero")) {
+      gsap.to("#hero-frame", { yPercent: 12, ease: "none", scrollTrigger: { trigger: "#hero", start: "top top", end: "bottom top", scrub: 0.5 } });
+      gsap.to("#hero-in", { autoAlpha: 0, y: -30, ease: "none", scrollTrigger: { trigger: "#hero", start: "top top", end: "60% top", scrub: 0.5 } });
     }
     /* two worlds: the columns drift against each other */
     var city = $(".wcol--city .wcol-list"), land = $(".wcol--land .wcol-list");
     if (city && land) {
-      gsap.fromTo(city, { y: 60 }, { y: -60, ease: "none", scrollTrigger: { trigger: ".worlds-grid", start: "top bottom", end: "bottom top", scrub: 0.6 } });
-      gsap.fromTo(land, { y: -40 }, { y: 120, ease: "none", scrollTrigger: { trigger: ".worlds-grid", start: "top bottom", end: "bottom top", scrub: 0.6 } });
+      gsap.fromTo(city, { y: 24 }, { y: -24, ease: "none", scrollTrigger: { trigger: ".worlds-grid", start: "top bottom", end: "bottom top", scrub: 0.6 } });
+      gsap.fromTo(land, { y: -16 }, { y: 48, ease: "none", scrollTrigger: { trigger: ".worlds-grid", start: "top bottom", end: "bottom top", scrub: 0.6 } });
       $$(".wf-img img").forEach(function (im) {
-        gsap.fromTo(im, { scale: 1.16 }, { scale: 1, ease: "none", scrollTrigger: { trigger: im, start: "top bottom", end: "bottom 40%", scrub: 0.6 } });
+        gsap.fromTo(im, { scale: 1.06 }, { scale: 1, ease: "none", scrollTrigger: { trigger: im, start: "top bottom", end: "bottom 40%", scrub: 0.6 } });
       });
-    }
-    /* selected homes: horizontal track */
-    var track = $("#track"), rail = $("#track-rail");
-    if (track && rail) {
-      var dist = function () { return Math.max(0, rail.scrollWidth - innerWidth + 48); };
-      var size = function () { track.style.height = (innerHeight + dist()) + "px"; };
-      size(); ST.addEventListener("refreshInit", size);
-      gsap.to(rail, { x: function () { return -dist(); }, ease: "none", scrollTrigger: { trigger: track, start: "top top", end: "bottom bottom", scrub: 0.6, invalidateOnRefresh: true } });
-      $$(".slide-img img", rail).forEach(function (im) { im.classList.remove("unveil"); gsap.fromTo(im, { scale: 1.12 }, { scale: 1, ease: "none", scrollTrigger: { trigger: track, start: "top bottom", end: "bottom top", scrub: 0.6 } }); });
     }
     addEventListener("load", function () { ST.refresh(); });
   }
