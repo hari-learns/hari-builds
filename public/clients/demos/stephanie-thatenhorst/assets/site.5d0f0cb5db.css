@@ -255,7 +255,7 @@ button{font:inherit;color:inherit}
 .rs-mount{min-width:0}
 .room-note{margin:18px 0 0;font-size:15px;color:var(--muted);display:flex;flex-wrap:wrap;gap:4px 16px;align-items:center}
 .room-note a{color:var(--nougat-ink);display:inline-flex;align-items:center;gap:6px;min-height:44px}
-.room--page{background:transparent;border:0;padding-top:0}
+.room--page{background:transparent;border:0;padding:0 max(var(--gut),env(safe-area-inset-left)) clamp(40px,6vw,80px)}
 @media (max-width:800px){.steps{grid-template-columns:1fr}.rs-wrap{padding:16px 12px;border-radius:var(--r-md)}}
 
 /* ---------- areas */
