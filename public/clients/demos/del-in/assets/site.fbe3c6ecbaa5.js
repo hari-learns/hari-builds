@@ -9,8 +9,26 @@
   var store = { get: function (k) { try { return localStorage.getItem(k); } catch (e) { return null; } },
                 set: function (k, v) { try { localStorage.setItem(k, v); } catch (e) {} } };
 
+  /* ---- Room Studio: legibility floor on phones (labels >= 13px, chips >= 44px tall), scoped to its open shadow root */
+  $$("[data-roomstudio]").forEach(function (host) {
+    var r = host.shadowRoot; if (!r || r.querySelector("style[data-delin]")) return;
+    var st = doc.createElement("style"); st.setAttribute("data-delin", "");
+    st.textContent = ".caption{font-size:13px}.st li i{font-size:13px}.dsg.sw3 .card .nm{font-size:13px}.chip{min-height:44px;height:auto}@media (max-width:560px){.dsg.sw3 .card .nm{font-size:15px}}";
+    r.appendChild(st);
+  });
+
   /* ---- header */
-  var hd = $("[data-header]"), lastY = win.scrollY, cbar = $("[data-cbar]");
+  var hd = $("[data-header]"), lastY = win.scrollY, cbar = $("[data-cbar]"), rsOnScreen = false;
+  /* the Écrire/Appeler bar steps aside while the Room Studio tool is on screen */
+  var rsEls = $$(".rs-frame");
+  if (rsEls.length && "IntersectionObserver" in win) {
+    var seen = new Set();
+    var rio = new IntersectionObserver(function (ents) {
+      ents.forEach(function (en) { if (en.isIntersecting) seen.add(en.target); else seen.delete(en.target); });
+      rsOnScreen = seen.size > 0; onHeader();
+    }, { threshold: 0 });
+    rsEls.forEach(function (el) { rio.observe(el); });
+  }
   function onHeader() {
     var y = win.scrollY;
     if (hd) {
@@ -19,7 +37,7 @@
       hd.classList.toggle("is-hidden", !drawerOpen && y > 700 && y > lastY + 2);
       if (y < lastY - 2) hd.classList.remove("is-hidden");
     }
-    if (cbar) cbar.classList.toggle("is-on", y > 380);
+    if (cbar) cbar.classList.toggle("is-on", y > 380 && !rsOnScreen);
     lastY = y;
   }
 
