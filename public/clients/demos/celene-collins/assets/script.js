@@ -18,11 +18,19 @@
       hdr.classList.toggle("is-hidden", y > vh && y > lastY + 4 && !doc.classList.contains("menu-open"));
       if (y < lastY - 4) hdr.classList.remove("is-hidden");
     }
-    if (mbar) { mbar.classList.toggle("is-on", y > vh * 0.6); doc.classList.toggle("bar-on", y > vh * 0.6); }
+    if (mbar) { mbar.classList.toggle("is-on", y > vh * 0.6); }
     lastY = y;
   }
   window.addEventListener("scroll", onScroll, { passive: true });
   onScroll();
+
+  /* the bottom bar steps aside while the Room Studio form is on screen */
+  var rsEls = $$(".rs-wrap");
+  if (mbar && rsEls.length && "IntersectionObserver" in window) {
+    var rsOn = new Set();
+    var rio = new IntersectionObserver(function (es) { es.forEach(function (en) { en.isIntersecting ? rsOn.add(en.target) : rsOn.delete(en.target); }); mbar.classList.toggle("is-off", rsOn.size > 0); });
+    rsEls.forEach(function (el) { rio.observe(el); });
+  }
 
   var dock = $("[data-dock]");
   if (dock) {
