@@ -42,7 +42,7 @@
       es.forEach(function (en) { if (en.isIntersecting) busy.add(en.target); else busy.delete(en.target); });
       bar.classList.toggle("is-off", busy.size > 0);
     });
-    $$(".rs-embed, #enq, .ft, .dock").forEach(function (el) { bio.observe(el); });
+    $$("#room, .rs-page, .rs-embed, #enq, .ft, .dock").forEach(function (el) { bio.observe(el); });
   }
 
   /* ---------- Room Studio: phone comfort inside the widget (open shadow root) ---------- */
