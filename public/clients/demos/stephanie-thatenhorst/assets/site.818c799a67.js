@@ -7,15 +7,19 @@
   var $$ = function (s, r) { return Array.prototype.slice.call((r || d).querySelectorAll(s)); };
 
   /* ---------- dock */
-  var dock = $("#dock");
-  try { if (sessionStorage.getItem("st-dock") === "1" && dock) dock.classList.add("is-hidden"); } catch (e) {}
   var dx = $("#dock-x");
-  if (dx) dx.addEventListener("click", function () { dock.classList.add("is-hidden"); try { sessionStorage.setItem("st-dock", "1"); } catch (e) {} });
+  if (dx) dx.addEventListener("click", function () { de.classList.add("dock-off"); try { sessionStorage.setItem("st-dock", "1"); } catch (e) {} if (W.ScrollTrigger) W.ScrollTrigger.refresh(); });
+  /* the phone action bar steps aside while Room Studio is on screen */
+  var bar = $(".bar"), rs = $$(".rs-wrap");
+  if (bar && rs.length && "IntersectionObserver" in W) {
+    var on = new Set();
+    var bio = new IntersectionObserver(function (es) { es.forEach(function (en) { if (en.isIntersecting) on.add(en.target); else on.delete(en.target); }); bar.classList.toggle("is-away", on.size > 0); }, { threshold: 0 });
+    rs.forEach(function (x) { bio.observe(x); });
+  }
 
   /* ---------- header */
   var hd = $("#hd");
   function onScroll() {
-    if (dock) dock.classList.toggle("is-away", innerWidth < 900 && (scrollY < 120 || scrollY > 1400));
     if (!hd) return;
     var lim = innerHeight * 0.8;
     hd.classList.toggle("is-solid", scrollY > (hd.classList.contains("hd--over") ? lim : 4));
