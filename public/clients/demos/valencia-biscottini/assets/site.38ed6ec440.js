@@ -12,9 +12,14 @@
   function onScroll() {
     var y = W.scrollY || 0;
     if (hdr) hdr.classList.toggle("is-scrolled", y > 8);
-    if (bar) bar.classList.toggle("is-on", y > W.innerHeight * 0.55);
+    if (bar) bar.classList.toggle("is-on", y > W.innerHeight * 0.55 || !!d.querySelector(".page-top"));
   }
   W.addEventListener("scroll", onScroll, { passive: true }); onScroll();
+  /* the sticky bar steps aside while Room Studio is on screen, so it never covers the form or its button */
+  var studio = $("#studio");
+  if (bar && studio && "IntersectionObserver" in W) {
+    new IntersectionObserver(function (es) { bar.classList.toggle("is-off", es[0].isIntersecting); }, { rootMargin: "0px 0px -10% 0px" }).observe(studio);
+  }
   var dock = $(".dock");
   if (dock) {
     try { if (localStorage.getItem("vb-dock") === "1") dock.hidden = true; } catch (e) {}
