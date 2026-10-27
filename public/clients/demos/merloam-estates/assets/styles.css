@@ -798,8 +798,11 @@ address{font-style:normal}
 .fzd .ex-grid{grid-template-columns:minmax(0,5fr) minmax(0,6fr)}
 .fzd .ex-calc{order:-1}
 .fzd .ex-near{border-right:0;border-left:1px solid var(--ink)}
-.tbb{min-height:100svh;display:flex;align-items:center;padding:calc(var(--hdr) + 60px) 0 80px;background:var(--paper)}
-.tbb-h{max-width:14ch;margin-bottom:8px}
+.tbb{min-height:62svh;display:flex;align-items:center;padding:calc(var(--hdr) + 60px) 0 80px;background:var(--paper)}
+.tbb-h{font-family:var(--f-display);font-weight:500;font-size:clamp(1.35rem,1.1rem + .8vw,1.9rem);line-height:1.25;letter-spacing:-.01em;color:var(--ink);margin:0}
+.tbb .eyebrow{margin-bottom:14px}
+.tbb-btns{margin-top:22px}
+.tbb-btns .btn{min-height:48px;font-size:.9375rem}
 .tbb>.wrap{width:100%}
 /* site plan */
 .pl{background:var(--paper-2)}
