@@ -310,3 +310,17 @@ html[data-focus] .top, html[data-focus] .doc, html[data-focus] .work-title { opa
 
 /* Italic glyphs overhang their box and the sheen only paints inside it, so the text gets a little room on each side. */
 .role-text { padding: .1em .45em .1em .12em; margin: -.1em -.45em -.1em -.12em; }
+
+/* The last book, "Your business": a call to action instead of a project. */
+.book.cta .spine-title { font-style: italic; }
+.cover-future { font-family: var(--font-serif), serif; font-style: italic; font-size: clamp(1.6rem, 5vw, 2.1rem); line-height: 1.05; letter-spacing: -0.02em; max-width: 14ch; text-shadow: 0 1px 14px rgba(0,0,0,.45); padding-right: .3em; }
+.cover-actions { display: flex; align-items: center; gap: .75rem; margin-top: .2rem; }
+.cover-cta { display: inline-flex; align-items: center; gap: .6rem; padding: .75rem 1.25rem; background: #fff; color: #12031f; text-decoration: none; font-size: .92rem; font-weight: 500; letter-spacing: .01em;
+  transition: transform .3s cubic-bezier(.2,.8,.2,1), box-shadow .3s; }
+.cover-cta:hover, .cover-cta:focus-visible { transform: translateY(-2px); box-shadow: 0 14px 30px -14px rgba(255,255,255,.7); outline: none; }
+.cover-wa { position: relative; width: 2.9rem; height: 2.9rem; display: grid; place-items: center; background: #25d366; transition: transform .3s cubic-bezier(.2,.8,.2,1), box-shadow .3s; }
+.cover-wa svg { width: 24px; height: 24px; fill: #fff; }
+.cover-wa:hover, .cover-wa:focus-visible { transform: translateY(-2px); box-shadow: 0 14px 30px -10px #25d366; outline: none; }
+.book.open .cover-wa::after { content: ""; position: absolute; inset: 0; border: 1px solid #25d366; pointer-events: none; animation: wa-ping 2.2s ease-out .8s infinite; }
+@keyframes wa-ping { from { transform: scale(1); opacity: .85; } to { transform: scale(1.7); opacity: 0; } }
+@media (prefers-reduced-motion: reduce) { .book.open .cover-wa::after { animation: none; opacity: 0; } }

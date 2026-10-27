@@ -2,11 +2,14 @@
 
 import { useEffect, useRef, useState } from "react";
 import { ShaderCanvas } from "./ShaderCanvas";
+import { WHATSAPP_PATH } from "./WhatsAppButton";
 
 export type Book = {
   title: string; industry: string; body: string;
   colors: [string, string, string, string];
   href?: string; preview?: string; video?: string;
+  /** A book that is a call to action, not a project: opens to a reach-out button and a WhatsApp icon. */
+  action?: { email: string; phone: string };
 };
 
 // Spine heights vary a little so the row reads as books, not tabs.
@@ -53,7 +56,7 @@ export function Shelf({ books }: { books: Book[] }) {
         return (
           <div
             key={b.title}
-            className={`book${open ? " open" : ""}`}
+            className={`book${open ? " open" : ""}${b.action ? " cta" : ""}`}
             style={{ "--h": `${HEIGHTS[i % HEIGHTS.length]}rem` } as React.CSSProperties}
             role="button"
             tabIndex={0}
@@ -86,22 +89,39 @@ export function Shelf({ books }: { books: Book[] }) {
             </span>
 
             <span className="cover" aria-hidden={!open}>
+              {b.action ? (
+                <>
+                  <span className="cover-future">{b.body}</span>
+                  <span className="cover-title">{b.title}</span>
+                  <span className="cover-actions">
+                    <a href={`mailto:${b.action.email}`} className="cover-cta" tabIndex={open ? 0 : -1} onClick={(e) => e.stopPropagation()}>
+                      Reach out to me <span aria-hidden>{"\u2192"}</span>
+                    </a>
+                    <a href={`https://wa.me/${b.action.phone}`} target="_blank" rel="noopener noreferrer" className="cover-wa" aria-label="Message me on WhatsApp" tabIndex={open ? 0 : -1} onClick={(e) => e.stopPropagation()}>
+                      <svg viewBox="0 0 24 24" aria-hidden="true"><path d={WHATSAPP_PATH} /></svg>
+                    </a>
+                  </span>
+                </>
+              ) : (
+                <>
               {b.preview && (
-                <span className="cover-frame">
-                  <span className="cover-bar"><i /><i /><i /><span>{b.href?.replace("https://", "")}</span></span>
-                  {b.video ? (
-                    <video ref={(el) => { videos.current[i] = el; }} src={b.video} poster={b.preview} muted loop playsInline preload="auto" disableRemotePlayback />
-                  ) : (
-                    <img src={b.preview} alt="" loading="lazy" />
-                  )}
-                </span>
-              )}
-              <span className="cover-title">{b.title}</span>
-              <span className="cover-body">{b.body}</span>
-              {b.href && (
-                <a href={b.href} target="_blank" rel="noopener noreferrer" className="cover-link" tabIndex={open ? 0 : -1} onClick={(e) => e.stopPropagation()}>
-                  Visit <span aria-hidden>↗</span>
-                </a>
+                  <span className="cover-frame">
+                    <span className="cover-bar"><i /><i /><i /><span>{b.href?.replace("https://", "")}</span></span>
+                    {b.video ? (
+                      <video ref={(el) => { videos.current[i] = el; }} src={b.video} poster={b.preview} muted loop playsInline preload="auto" disableRemotePlayback />
+                    ) : (
+                      <img src={b.preview} alt="" loading="lazy" />
+                    )}
+                  </span>
+                )}
+                <span className="cover-title">{b.title}</span>
+                <span className="cover-body">{b.body}</span>
+                {b.href && (
+                  <a href={b.href} target="_blank" rel="noopener noreferrer" className="cover-link" tabIndex={open ? 0 : -1} onClick={(e) => e.stopPropagation()}>
+                    Visit <span aria-hidden>↗</span>
+                  </a>
+                )}
+                </>
               )}
             </span>
             </span>

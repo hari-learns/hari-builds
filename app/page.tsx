@@ -12,6 +12,7 @@ const work = [
   { title: "ownwords.page", industry: "SaaS industry", body: "Turn your thoughts into income.", href: "https://ownwords.page", preview: "/previews/ownwords.page.jpg", video: "/previews/ownwords.page.mp4", colors: ["#09090b", "#2b2b33", "#8d8d9c", "#f4f4f8"] },
   { title: "vedarthika.in", industry: "Fashion industry", body: "Kanchipuram silk sarees, woven in silk and gold zari.", href: "https://vedarthika.in", preview: "/previews/vedarthika.in.jpg", video: "/previews/vedarthika.in.mp4", colors: ["#0a0b24", "#7a0f26", "#d99a2b", "#ffe9b0"] },
   { title: "ravoraapps.tech", industry: "IT industry", body: "A creative studio in Chennai, building modern products accelerated with AI.", href: "https://ravoraapps.tech", preview: "/previews/ravoraapps.tech.jpg", video: "/previews/ravoraapps.tech.mp4", colors: ["#070818", "#2a3cc9", "#6f8cff", "#e4e9ff"] },
+  { title: "Your business", industry: "Your industry", body: "Let\u2019s build for the future.", colors: ["#12031f", "#7c1fd1", "#ff4f9a", "#ffd166"], action: { email: "hariharanrp.dev@gmail.com", phone: "919884966442" } },
 ] satisfies Book[];
 
 export default function Home() {
