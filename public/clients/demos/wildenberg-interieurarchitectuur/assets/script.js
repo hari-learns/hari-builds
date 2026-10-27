@@ -133,55 +133,23 @@
   });
 })();
 
-/* Room Studio (signature tool): loaded when its section comes near, mounted with Wildenberg's gold, type and Dutch UI. */
+/* Room Studio (signature tool): the widget script loads when its section comes near; it mounts itself from the
+   data-roomstudio JSON on the element (Wildenberg's gold, their type, Dutch UI). */
 (() => {
-  const mountEl = document.querySelector('[data-studio]');
-  const cfgEl = document.getElementById('rs-config');
-  if (!mountEl || !cfgEl) return;
+  const el = document.querySelector('[data-roomstudio]');
+  if (!el) return;
   const SRC = 'https://roomstudio.vercel.app/v1/roomstudio.js';
-  const NL = {
-    steps: ['Upload', 'Beschrijf', 'Resultaat'],
-    drop: 'Upload een foto van je kamer', dropSub: 'Of een plattegrond. JPG of PNG, vanaf je telefoon of computer.', choose: 'Kies een foto', samples: 'Of probeer een van de onze',
-    change: 'Andere foto kiezen', looking: 'We bekijken je ruimte',
-    roomQ: 'Welke ruimte is dit?', detected: r => `Wij denken dat dit een ${r.toLowerCase()} is. Pas het aan als dat niet klopt.`, planOpt: 'Plattegrond (hele woning)',
-    styleQ: 'Kies een stijl', designsQ: b => `Ontwerpen van ${b}`,
-    wantQ: 'Wat wil je?', wantPh: 'Bijvoorbeeld: een eiken kastenwand rond de tv, de bank bij het raam, meer licht',
-    vibeQ: 'Bepaal de sfeer', mood: ['Rustig', 'In balans', 'Uitgesproken'], palette: ['Warm', 'Neutraal', 'Koel'], tier: ['Basis', 'Doordacht', 'Premium'],
-    moodL: 'Sfeer', paletteL: 'Palet', tierL: 'Afwerking',
-    go: 'Ontwerp mijn ruimte', needImg: 'Upload eerst een foto van je kamer',
-    left: n => `Vandaag nog ${n} gratis ${n === 1 ? 'poging' : 'pogingen'}`, time: 'Duurt ongeveer 30 seconden',
-    working: room => `We ontwerpen je ${room.toLowerCase()}`, workingSub: s => `Stijl: ${s}`,
-    status: ['Je ruimte lezen', 'Muren, ramen en licht behouden', 'Het ontwerp toepassen', 'Meubels op schaal plaatsen', 'Laatste licht en details'],
-    applying: s => `Stijl ${s} toepassen`, drag: 'Sleep om te vergelijken', elapsed: 'Verstreken',
-    keepOpen: 'Houd deze pagina open terwijl we werken.',
-    before: 'Voor', after: 'Na',
-    resultT: (room, st) => room === 'Plattegrond (hele woning)' ? `Je woning in ${st}-stijl` : `Je ${room.toLowerCase()} in ${st}-stijl`,
-    resultSub: 'Sleep over de foto om voor en na te vergelijken.', youAsked: 'Jouw wensen',
-    pass: b => `Stuur het naar ${b}`, again: 'Andere stijl proberen', download: 'Afbeelding bewaren',
-    disclaimer: b => `Een concept om het idee te laten zien. ${b} werkt het echte ontwerp met je uit.`,
-    passTitle: b => `Stuur het naar ${b}`, passSub: b => `${b} neemt contact met je op over de mogelijkheden voor jouw ruimte.`,
-    name: 'Je naam', phone: 'Telefoon', email: 'E-mail', msg: 'Nog iets wat ze moeten weten? (optioneel)',
-    sendWa: 'Stuur via WhatsApp', sendMail: 'Stuur per e-mail', sendHook: 'Stuur naar de studio', back: 'Terug naar mijn ontwerp',
-    needContact: 'Vul je naam en een telefoonnummer of e-mailadres in, zodat we kunnen reageren.',
-    sentTitle: n => `Dank je${n ? ', ' + n : ''}`, sentBody: b => `${b} heeft je ruimte en het ontwerp dat je mooi vond, en neemt contact met je op.`,
-    another: 'Nog een ruimte ontwerpen', limit: 'Je gratis pogingen van vandaag zijn op. Stuur je foto en wensen, dan ontwerpt Wildenberg het met je.',
-    limitBtn: b => `Stuur je ruimte naar ${b}`,
-    preview: 'Voorbeeldmodus: geen echte render', err: 'Er ging iets mis. Probeer het opnieuw.',
-  };
   let started = false;
   function boot() {
     if (started) return; started = true;
-    const cfg = JSON.parse(cfgEl.textContent);
-    cfg.text = { ...NL, chips: cfg.chips || [] }; delete cfg.chips;
-    const mount = () => { mountEl.innerHTML = ''; window.RoomStudio.mount(mountEl, cfg); };
-    if (window.RoomStudio) return mount();
+    const wait = el.querySelector('.studio-wait');
     const s = document.createElement('script'); s.src = SRC; s.defer = true;
-    s.onload = mount;
-    s.onerror = () => { console.warn('[studio] widget failed to load'); mountEl.querySelector('.studio-wait').textContent = 'De studio kon niet laden. Mail ons gerust je foto: info@vandenwildenberg.nl'; };
+    s.onload = () => { if (wait && el.shadowRoot) wait.remove(); };
+    s.onerror = () => { console.warn('[studio] widget failed to load'); if (wait) wait.textContent = 'De studio kon niet laden. Mail ons gerust je foto: info@vandenwildenberg.nl'; };
     document.head.appendChild(s);
   }
   if ('IntersectionObserver' in window) {
     const io = new IntersectionObserver(es => { if (es.some(x => x.isIntersecting)) { io.disconnect(); boot(); } }, { rootMargin: '900px 0px' });
-    io.observe(mountEl);
+    io.observe(el);
   } else boot();
 })();
