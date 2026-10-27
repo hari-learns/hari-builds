@@ -438,3 +438,16 @@ input[type=range]::-moz-range-thumb{width:20px;height:20px;border-radius:50%;bac
 @media (max-width:520px){.hero__cap{left:10px;bottom:10px;padding:8px 12px}.hero__cap b{font-size:1rem}.hero__cap span{font-size:.875rem}}
 @media (prefers-reduced-motion:reduce){.hslide .hero__img img,.hslide .hero__cap{transition:opacity .01s;transform:none}.hero__stage:not(.is-started) .hslide.is-on .hero__img img{animation:none}}
 .hero__ctl{flex-wrap:wrap}.hpause,.hdot{flex:none}.hdots{flex-wrap:wrap;justify-content:center}
+
+/* page loader: blurred page, Magnus mark in front. Pillars squish away, the V spins and grows, the pillars return. Endless until the page is ready */
+.pl{position:fixed;inset:0;z-index:1000;display:grid;place-items:center;background:color-mix(in srgb,var(--bg) 58%,transparent);-webkit-backdrop-filter:blur(0);backdrop-filter:blur(0);opacity:0;visibility:hidden;pointer-events:none;transition:opacity .45s var(--ease),backdrop-filter .45s var(--ease),-webkit-backdrop-filter .45s var(--ease),visibility 0s linear .45s}
+.pl.is-on,html.pl-boot .pl{opacity:1;visibility:visible;pointer-events:auto;-webkit-backdrop-filter:blur(18px);backdrop-filter:blur(18px);transition-delay:0s}
+html.pl-boot .pl{animation:pl-failsafe 0s linear 6s forwards}
+@keyframes pl-failsafe{to{opacity:0;visibility:hidden;pointer-events:none}}
+.pl__mark{width:clamp(112px,17vw,170px);height:auto;overflow:visible;filter:drop-shadow(0 10px 24px color-mix(in srgb,var(--navy) 22%,transparent))}
+.pl-l,.pl-r,.pl-v{transform-box:fill-box;transform-origin:center;animation:pl-sq 2s cubic-bezier(.65,0,.35,1) infinite}
+.pl-v{animation-name:pl-v}
+@keyframes pl-sq{0%,12%{transform:scaleX(1);opacity:1}30%,66%{transform:scaleX(.03);opacity:0}86%,100%{transform:scaleX(1);opacity:1}}
+@keyframes pl-v{0%,24%{transform:rotate(0) scale(1)}44%{transform:rotate(180deg) scale(1.5)}68%,100%{transform:rotate(360deg) scale(1)}}
+@media (max-width:640px){.pl.is-on,html.pl-boot .pl{-webkit-backdrop-filter:blur(12px);backdrop-filter:blur(12px)}}
+@media (prefers-reduced-motion:reduce){.pl{display:none}}

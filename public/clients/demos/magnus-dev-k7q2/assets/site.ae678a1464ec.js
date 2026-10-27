@@ -81,6 +81,30 @@
     tick();
   });
 
+  /* page loader: shown while a page loads and while we leave for another page of the site */
+  safe(function () {
+    var pl = $("#pl"); if (!pl) return;
+    function hide() { root.classList.remove("pl-boot"); pl.classList.remove("is-on"); }
+    if (root.classList.contains("pl-boot")) {
+      var min = 1100;
+      var go = function () { setTimeout(hide, Math.max(0, min - (window.performance && performance.now ? performance.now() : 0))); };
+      if (d.readyState === "complete") go(); else window.addEventListener("load", go);
+    }
+    window.addEventListener("pageshow", function (e) { if (e.persisted) hide(); });
+    if (reduce) return;
+    d.addEventListener("click", function (e) {
+      if (e.defaultPrevented || e.button !== 0 || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
+      var a = e.target.closest && e.target.closest("a[href]"); if (!a) return;
+      if (a.target && a.target !== "_self") return;
+      if (a.hasAttribute("download") || /\.pdf($|\?)/i.test(a.pathname)) return;
+      if (a.origin !== location.origin) return;
+      if (a.pathname === location.pathname && a.search === location.search) return;
+      e.preventDefault(); var href = a.href;
+      pl.classList.add("is-on");
+      setTimeout(function () { location.href = href; }, 380);
+    });
+  });
+
   /* counters: real figures count up once when seen */
   var cnts = $$("[data-count]");
   function runCount(el) {
