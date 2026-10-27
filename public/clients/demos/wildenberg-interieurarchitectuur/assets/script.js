@@ -36,6 +36,10 @@
   try { if (sessionStorage.getItem('wb-dock') === '0' && dock) dock.hidden = true; } catch (_) {}
   dock && dock.querySelector('[data-dock-close]').addEventListener('click', () => { dock.hidden = true; try { sessionStorage.setItem('wb-dock', '0'); } catch (_) {} });
 
+  const cl = d.querySelector('[data-concept-line]');
+  try { if (sessionStorage.getItem('wb-dock') === '0' && cl) cl.hidden = true; } catch (_) {}
+  cl && cl.querySelector('[data-concept-close]').addEventListener('click', () => { cl.hidden = true; try { sessionStorage.setItem('wb-dock', '0'); } catch (_) {} });
+
   // ---------- reveals (rise / wipe); sweep reveals anything at or above the fold
   const rev = [...d.querySelectorAll('.rise, .wipe')];
   const show = el => el.classList.add('in');
@@ -80,7 +84,7 @@
     const vh = innerHeight, y = scrollY;
     headState();
     root.classList.toggle('scrolled', y > 60);
-    if (dock && y > 300) dock.classList.add('is-mini');
+    d.body.classList.toggle('mbar-on', y > vh * 0.8);
     if (frame && hero) {
       if (roomy()) {
         const p = clamp(y / (hero.offsetHeight - vh));
@@ -115,6 +119,12 @@
   addEventListener('pageshow', () => { sweep(); onScroll(); });
   addEventListener('load', sweep);
   featMode(); frameTick(); sweep();
+
+  // ---------- phone bar steps aside while Room Studio is on screen
+  const studioEl = d.querySelector('[data-roomstudio]');
+  if (studioEl && 'IntersectionObserver' in window) {
+    new IntersectionObserver(es => es.forEach(x => d.body.classList.toggle('mbar-off', x.isIntersecting)), { rootMargin: '0px 0px -10% 0px' }).observe(studioEl.closest('section') || studioEl);
+  }
 
   // ---------- project filter
   const grid = d.querySelector('[data-grid]');
