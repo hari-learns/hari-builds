@@ -9,15 +9,6 @@
   var store = { get: function (k) { try { return localStorage.getItem(k); } catch (e) { return null; } },
                 set: function (k, v) { try { localStorage.setItem(k, v); } catch (e) {} } };
 
-  /* ---- Room Studio: French strings that must be functions (the embed itself is the standard data-roomstudio div) */
-  try {
-    if (win.DELIN_RS_TEXT) $$("[data-roomstudio]").forEach(function (el) {
-      var rs = el.__rs; if (!rs) return;
-      Object.keys(win.DELIN_RS_TEXT).forEach(function (k) { rs.t[k] = win.DELIN_RS_TEXT[k]; });
-      if (typeof rs.draw === "function") rs.draw();
-    });
-  } catch (err) { console.warn("[roomstudio] text patch skipped:", err); }
-
   /* ---- header */
   var hd = $("[data-header]"), lastY = win.scrollY, cbar = $("[data-cbar]");
   function onHeader() {
@@ -103,8 +94,7 @@
     if (hero && !reduce) {
       var hh = hero.offsetHeight;
       if (y < hh * 1.2) {
-        if (heroMedia) heroMedia.style.setProperty("--hy", (y * 0.28).toFixed(1) + "px");
-        if (heroIn) { heroIn.style.setProperty("--ty", (y * -0.12).toFixed(1) + "px"); heroIn.style.setProperty("--to", clamp(1 - y / (hh * 0.75), 0, 1).toFixed(3)); }
+        if (heroMedia) heroMedia.style.setProperty("--hy", (y * 0.08).toFixed(1) + "px");
       }
     }
     if (deploy) {
@@ -115,7 +105,7 @@
     }
     if (!reduce) drifts.forEach(function (el) {
       var rr = el.getBoundingClientRect();
-      if (rr.bottom > -50 && rr.top < vh + 50) el.style.setProperty("--d", (-rr.top * 0.12).toFixed(1) + "px");
+      if (rr.bottom > -50 && rr.top < vh + 50) el.style.setProperty("--d", (-rr.top * 0.06).toFixed(1) + "px");
     });
   }
   var ticking = false;
