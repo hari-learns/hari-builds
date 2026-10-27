@@ -10,10 +10,13 @@
   var clamp = function (v, a, b) { return Math.max(a, Math.min(b, v)); };
 
   /* ---------- dock */
+  /* concept note: a slim line at the very top of the page (in the flow, never over content); the fixed header sits
+     just under it until it scrolls away; dismissed for the rest of the visit */
   var dock = $("#dock"), dx = $("#dock-x");
-  try { if (dock && sessionStorage.getItem("dock-x")) dock.hidden = true; } catch (e) {}
-  if (dx) dx.addEventListener("click", function () { dock.hidden = true; try { sessionStorage.setItem("dock-x", "1"); } catch (e) {} });
-  if (dock && w.innerWidth < 760) { setTimeout(function () { dock.hidden = true; }, 9000); w.addEventListener("scroll", function hideDock() { if (w.scrollY > 500) { dock.hidden = true; w.removeEventListener("scroll", hideDock); } }, { passive: true }); }
+  var noteH = function () { return dock && !dock.hidden ? dock.offsetHeight : 0; };
+  var closeNote = function () { if (!dock) return; dock.hidden = true; root.classList.remove("has-note"); root.style.setProperty("--note-y", "0px"); if (w.ScrollTrigger) w.ScrollTrigger.refresh(); };
+  try { if (dock && sessionStorage.getItem("dock-x")) closeNote(); } catch (e) {}
+  if (dx) dx.addEventListener("click", function () { closeNote(); try { sessionStorage.setItem("dock-x", "1"); } catch (e) {} });
 
   /* ---------- drawer */
   var drawer = $("#drawer"), burger = $("#burger"), bx = $("#burger-x");
@@ -31,10 +34,20 @@
 
   /* ---------- header state + phone bar */
   var hdr = $("#hdr"), bar = $(".bar"), lastY = w.scrollY;
-  var heroEl = $("#hero");
+  var heroEl = $("#hero"), rsOn = false;
+  var rsSecs = $$(".room, .rs-host");
+  if (bar && rsSecs.length && "IntersectionObserver" in w) {
+    var vis = new Set();
+    var rio = new IntersectionObserver(function (es) {
+      es.forEach(function (en) { if (en.isIntersecting) vis.add(en.target); else vis.delete(en.target); });
+      rsOn = vis.size > 0; onScrollUi();
+    });
+    rsSecs.forEach(function (x) { rio.observe(x); });
+  }
   function onScrollUi() {
     var y = w.scrollY;
-    if (bar && heroEl) bar.classList.toggle("is-hidden", y < w.innerHeight * 0.55);
+    if (bar) bar.classList.toggle("is-hidden", rsOn || (!!heroEl && y < w.innerHeight * 0.55));
+    root.style.setProperty("--note-y", Math.max(0, noteH() - y) + "px");
     if (hdr) {
       hdr.classList.toggle("is-scrolled", y > 40);
       var down = y > lastY + 4, up = y < lastY - 4;
@@ -111,32 +124,22 @@
     d.addEventListener("visibilitychange", function () { d.hidden ? stop() : play(); });
   }
 
-  /* ---------- Room Studio: the UI is fully Dutch via its JSON `text` option; only the enquiry e-mail the widget
-     composes itself is translated here (strings from the host's data-rs-mail attribute) */
+  /* ---------- Room Studio: the whole UI (incl. errors, aria labels and the enquiry e-mail) is Dutch through its JSON
+     `text` option. Here only (1) phone comfort CSS added inside its open shadow root (labels >= 13px, taps >= 44px) and
+     (2) the one image alt the widget does not route through `text` ("Your room" on the uploaded photo). */
+  var RS_CSS = ".caption,.badge.sm,.pv,.pal span,.th button{font-size:13px}.chip{min-height:44px;font-size:15px}" +
+    ".btn.sm{height:44px;font-size:15px}.btn{min-height:44px}.seg{height:48px}.seg button{font-size:15px}" +
+    ".dsg.sw3 .card .nm{font-size:14px}.st li{font-size:15px}.label{font-size:15px}" +
+    ".btn{white-space:normal;text-align:center;line-height:1.25}.btn.lg{height:auto;min-height:52px;padding-block:10px}" +
+    "@media (max-width:560px){.dz{min-height:240px;padding:28px 16px}.dsg.sw3 .card .nm{font-size:15px}}";
   function patchRoomStudio() {
     $$("[data-roomstudio]").forEach(function (el) {
-      var inst = el.__rs, M; if (!inst || inst.__nl) return;
-      try { M = JSON.parse(el.getAttribute("data-rs-mail") || "{}"); } catch (e) { return; }
-      inst.__nl = true;
-      var proto = Object.getPrototypeOf(inst);
-      var fmt = function (s, o) { return String(s).replace(/\{(\w+)\}/g, function (m, k) { return o[k] != null ? o[k] : m; }); };
-      var lc = function (s) { return String(s || "").toLowerCase(); };
-      inst.message = function () {
-        var o = this.s.lead, r = this.render, link = this.shareUrl();
-        var lines = [fmt(M.hello, { b: this.c.brand, room: lc((r && r.room) || this.s.room), s: (r && r.style) || this.style.label }),
-          link ? fmt(M.link, { u: link }) : "", r && r.notes ? fmt(M.asked, { t: r.notes }) : "", "",
-          M.name + ": " + o.name, o.phone ? M.phone + ": " + o.phone : "", o.email ? M.email + ": " + o.email : "", o.msg ? "\n" + o.msg : ""];
-        return lines.filter(function (l, i, a) { return l !== "" || a[i - 1] !== ""; }).join("\n").trim();
-      };
-      inst.send = function (via) {
-        if (via !== "mail") return proto.send.call(this, via);
-        var o = this.s.lead, c = this.c.contact || {};
-        if (!o.name.trim() || !(o.phone.trim() || o.email.trim())) return this.set({ error: this.t.needContact });
-        var subj = fmt(M.subject, { room: lc(this.s.room), s: (this.render && this.render.style) || "" });
-        location.href = "mailto:" + c.email + "?subject=" + encodeURIComponent(subj) + "&body=" + encodeURIComponent(this.message());
-        try { w.goatcounter && w.goatcounter.count && w.goatcounter.count({ path: "roomstudio-pass-mail", title: "Room Studio: pass-mail", event: true }); } catch (e) {}
-        this.set({ phase: "sent", sentName: o.name.trim().split(" ")[0], error: "" });
-      };
+      var r = el.shadowRoot, inst = el.__rs;
+      if (!r || el.__nl) return; el.__nl = true;
+      var st = d.createElement("style"); st.textContent = RS_CSS; r.appendChild(st);
+      var aRoom = (inst && inst.t && inst.t.aRoom) || "Uw ruimte";
+      var fix = function () { $$('img[alt="Your room"]', r).forEach(function (im) { im.alt = aRoom; }); };
+      new MutationObserver(fix).observe(r, { childList: true, subtree: true }); fix();
     });
   }
   if (d.readyState === "loading") d.addEventListener("DOMContentLoaded", patchRoomStudio); else patchRoomStudio();
@@ -159,19 +162,15 @@
 
   var mm = G.matchMedia();
 
-  /* aperture: the framed hero photo opens to full-bleed */
+  /* hero: their composition stays as on their site (framed photo on white, headline below); only the hairline draws
+     down and the frame drifts up a touch slower than the page (gentle parallax, desktop) */
   if (hero) {
-    var media = $(".hero__media", hero), line = $(".hero__line", hero), stage = $(".hero__stage", hero);
-    var setP = function (p) { media.style.setProperty("--p", p.toFixed(4)); hero.classList.toggle("is-open", p > (w.innerWidth >= 900 ? 0.6 : 0.9)); };
-    mm.add("(min-width: 900px) and (min-height: 640px)", function () {
-      var st = ST.create({ trigger: hero, start: "top top-=1", end: "+=90%", pin: stage, scrub: 0.6, onUpdate: function (s) { setP(s.progress); } });
-      return function () { st.kill(); setP(0); };
-    });
-    mm.add("(max-width: 899px), (max-height: 639px)", function () {
-      var st = ST.create({ trigger: hero, start: "top top", end: "bottom 30%", scrub: 0.4, onUpdate: function (s) { setP(clamp(s.progress * 1.6, 0, 1)); } });
-      return function () { st.kill(); setP(0); };
-    });
+    var line = $(".hero__line", hero), media = $(".hero__media", hero);
     if (line) G.fromTo(line, { scaleY: 0 }, { scaleY: 1, duration: 1.6, ease: "expo.out", delay: 0.6 });
+    mm.add("(min-width: 900px)", function () {
+      var tw = G.to(media, { yPercent: 8, ease: "none", scrollTrigger: { trigger: hero, start: "top top", end: "bottom top", scrub: true } });
+      return function () { tw.scrollTrigger && tw.scrollTrigger.kill(); G.set(media, { clearProps: "transform" }); };
+    });
   }
 
   /* zoom-out: their photos settle as they cross the screen */

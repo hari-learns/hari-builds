@@ -586,3 +586,39 @@ strong,b{font-weight:500}
 .bar__b--tool{background:var(--gold-ink);color:var(--white)}
 .bar__b--tool .i{color:var(--white)}
 @media (max-width:380px){.facts{grid-template-columns:minmax(0,1fr)}}
+
+/* ================= refinement pass (2026-10-27): their design language, phone comfort ================= */
+/* concept note: slim line at the very top, in the flow; header sits under it until it scrolls away */
+:root{--note-h:0px}
+:root:has(#dock:not([hidden])){--note-h:44px}
+body{padding-top:var(--note-h)}
+.dock{position:absolute;left:0;right:0;top:0;bottom:auto;max-width:none;height:var(--note-h);z-index:61;display:flex;align-items:center;justify-content:center;gap:4px;padding:0 0 0 var(--gut);background:var(--ground-2);color:var(--muted);font-size:13px;letter-spacing:.04em;line-height:1.3;box-shadow:none;border-bottom:1px solid var(--line)}
+.dock p{margin:0;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.dock button{color:var(--muted)}
+.dock__s{display:none}
+@media (max-width:759px){.dock{left:0;right:0;top:0;bottom:auto}.dock__l{display:none}.dock__s{display:inline}}
+@media (min-width:760px){.dock{left:0;right:0;top:0;bottom:auto}}
+.hdr{top:var(--note-y,var(--note-h))}
+.hero__stage{height:calc(100svh - var(--note-h))}
+/* their buttons: thin gold outline, small letter-spaced capitals; the primary keeps the outline and fills on hover */
+.btn--gold{background:transparent;color:var(--gold-ink);border-color:var(--gold-ink)}
+@media (hover:hover){.btn--gold:hover{background:var(--gold-ink);color:var(--white)}}
+.hero__acts .btn--line{border-color:transparent}
+@media (hover:hover){.hero__acts .btn--line:hover{background:transparent;color:var(--ink);border-color:transparent}}
+/* their page heads are centred (category intros, contact) */
+.phead .wrap{text-align:center}
+.phead .lead,.phead p{margin-inline:auto;max-width:44em}
+.phead .crumbs{justify-content:center}
+.pg-interieur .chips,.pg-architectuur .chips,.pg-renovatie .chips{justify-content:center}
+/* phone: never let the bottom bar cover the end of the page */
+@media (max-width:759px){body{padding-bottom:calc(56px + env(safe-area-inset-bottom))}}
+.pj-head>.wrap{text-align:center}
+.pj-head>.wrap .lead{margin-inline:auto;max-width:44em}
+.pj-head .crumbs,.phead .crumbs{display:flex;flex-wrap:wrap;justify-content:center}
+.phead .steps3{text-align:left;max-width:560px;margin-inline:auto}
+.phead .steps3 p,.phead .steps3 span{margin-inline:0}
+/* on the Room Studio page the bar keeps call + mail only (the tool is the page itself) */
+.pg-design-your-space .bar{grid-template-columns:1fr 1fr}
+.pg-design-your-space .bar__b--tool{display:none}
+.pj-head>.wrap .h1,.phead .h1{margin-inline:auto}
+.dock{font-size:14px;letter-spacing:.02em}
