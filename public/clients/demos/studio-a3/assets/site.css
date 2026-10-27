@@ -83,6 +83,13 @@ main a:not(.btn):not(.text-link):not(.pcard):not(.svc):not(.next-in):not(.hero-p
 .dock p { margin: 0; padding-block: 6px; }
 .dock button { flex: 0 0 44px; height: 44px; border: 0; background: none; color: var(--muted); cursor: pointer; display: grid; place-items: center; }
 .dock[hidden] { display: none; }
+.dk-short { display: none; }
+@media (max-width: 600px) {
+  .dock { min-height: 36px; padding-left: 12px; justify-content: space-between; }
+  .dock p { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .dk-long { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+  .dk-short { display: inline; }
+}
 
 /* header: white bar, black logo, spaced uppercase nav (as on studioa3.se) */
 .site-head { position: sticky; top: 0; z-index: 40; background: color-mix(in srgb, var(--white) 94%, transparent); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); border-bottom: 1px solid transparent; transition: border-color .4s var(--ease), transform .45s var(--ease); padding-top: env(safe-area-inset-top); }
@@ -474,7 +481,8 @@ figcaption { font-size: 14px; color: var(--muted); margin-top: 10px; }
   .phone-bar a { display: flex; align-items: center; justify-content: center; min-height: 56px; color: var(--strong); }
   .pb-main { flex: 1; font-size: 14px; letter-spacing: .1em; text-transform: uppercase; border-right: 1px solid var(--line); }
   .pb-ico { width: 64px; border-left: 1px solid var(--line); }
-  .site-foot { padding-bottom: calc(64px + env(safe-area-inset-bottom)); }
+  .site-foot { padding-bottom: calc(72px + env(safe-area-inset-bottom)); }
+  body { scroll-padding-bottom: 72px; }
 }
 
 /* reveals: quiet fade + small lift */

@@ -52,7 +52,7 @@
   if (bar && "IntersectionObserver" in w) {
     var offs = new Set();
     var bio = new IntersectionObserver(function (es) { es.forEach(function (x) { if (x.isIntersecting) offs.add(x.target); else offs.delete(x.target); }); bar.classList.toggle("is-off", offs.size > 0); });
-    $$(".contact, .site-foot, .cta-band").forEach(function (el) { bio.observe(el); });
+    $$(".contact, .site-foot, .cta-band, .studio, .ds-tool, .ds-head, .eform").forEach(function (el) { bio.observe(el); });
   }
 
   /* concept dock */
