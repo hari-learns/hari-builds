@@ -11,17 +11,11 @@
   var vh = W.innerHeight, vw = W.innerWidth;
 
   /* ---------- header + drawer ---------- */
-  var head = $("[data-head]"), hero = $("[data-hero]"), lastY = W.scrollY, dockEl = $("[data-dock]"), dockShownAt = 0;
+  var head = $("[data-head]"), hero = $("[data-hero]"), lastY = W.scrollY;
   function headState() {
     if (!head) return;
     var y = W.scrollY, limit = hero ? hero.offsetHeight - head.offsetHeight - 10 : 30;
     head.classList.toggle("is-solid", y > limit || !hero);
-    if (dockEl) {
-      var start = hero ? vh * 0.6 : 0, small = W.innerWidth < 900;
-      if (y >= start && !dockShownAt) dockShownAt = Date.now();
-      var timedOut = dockShownAt && Date.now() - dockShownAt > 9000 && !dockEl.matches(":focus-within, :hover");
-      dockEl.classList.toggle("is-away", y < start || timedOut);
-    }
     var hide = y > 500 && y > lastY + 4 && !d.body.classList.contains("menu-open");
     if (y < lastY - 4 || y < 200) head.classList.remove("is-hidden"); else if (hide) head.classList.add("is-hidden");
     lastY = y;
@@ -157,7 +151,6 @@
   W.addEventListener("pageshow", function () { measure(); onScroll(); });
   if (d.fonts && d.fonts.ready) d.fonts.ready.then(function () { measure(); onScroll(); });
   measure(); headState(); scenes(); sweep();
-  setInterval(function () { if (dockEl && dockShownAt && !dockEl.classList.contains("is-away")) headState(); }, 1500);
 
   /* ---------- testimonials row ---------- */
   var qrow = $("[data-q-row]");
@@ -225,11 +218,31 @@
     W.location.href = "mailto:" + mf.getAttribute("data-to") + "?subject=" + encodeURIComponent(mf.getAttribute("data-subject") + " - " + g("name")) + "&body=" + encodeURIComponent(body);
   });
 
-  /* ---------- concept dock ---------- */
-  var dock = $("[data-dock]");
-  if (dock) {
-    try { if (sessionStorage.getItem("ei-dock") === "0") dock.hidden = true; } catch (e) {}
-    var dc = $("[data-dock-close]", dock);
-    if (dc) dc.addEventListener("click", function () { dock.hidden = true; try { sessionStorage.setItem("ei-dock", "0"); } catch (e) {} });
+  /* ---------- concept note (in the header: never covers content) ---------- */
+  var dc = $("[data-dock-close]");
+  if (dc) dc.addEventListener("click", function () {
+    de.classList.remove("has-note"); try { sessionStorage.setItem("ei-dock", "0"); } catch (e) {}
+    measure(); onScroll();
+  });
+
+  /* ---------- Room Studio: phone floor on the host page (tap targets 44 px, labels 13 px) ---------- */
+  var RS_CSS = ".chip{height:auto!important;min-height:44px!important}li i{font-size:13px!important}.caption{font-size:13px!important}.nm{font-size:13px!important}.body{font-size:16px!important}";
+  function rsFloor() {
+    $$("[data-roomstudio]").forEach(function (host) {
+      var sr = host.shadowRoot; if (!sr || sr.querySelector("style[data-ei]")) return;
+      var st = d.createElement("style"); st.setAttribute("data-ei", ""); st.textContent = RS_CSS; sr.appendChild(st);
+    });
+  }
+  if ($("[data-roomstudio]")) { var rsTries = 0, rsT = setInterval(function () { rsFloor(); if (++rsTries > 40 || $$("[data-roomstudio]").every(function (h) { return h.shadowRoot && h.shadowRoot.querySelector("style[data-ei]"); })) clearInterval(rsT); }, 250); }
+
+  /* ---------- action bar steps aside while Room Studio is on screen ---------- */
+  var bar = $(".actionbar"), tools = $$("[data-roomstudio]");
+  if (bar && tools.length && "IntersectionObserver" in W) {
+    var vis = new Set();
+    var tio = new IntersectionObserver(function (es) {
+      es.forEach(function (e) { if (e.isIntersecting) vis.add(e.target); else vis.delete(e.target); });
+      var on = vis.size > 0; bar.classList.toggle("is-away", on); d.body.classList.toggle("bar-away", on);
+    }, { rootMargin: "0px 0px -10% 0px" });
+    tools.forEach(function (t) { tio.observe(t.closest(".rs-wrap") || t); });
   }
 })();
