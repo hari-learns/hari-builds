@@ -798,6 +798,9 @@ address{font-style:normal}
 .fzd .ex-grid{grid-template-columns:minmax(0,5fr) minmax(0,6fr)}
 .fzd .ex-calc{order:-1}
 .fzd .ex-near{border-right:0;border-left:1px solid var(--ink)}
+.tbb{min-height:100svh;display:flex;align-items:center;padding:calc(var(--hdr) + 60px) 0 80px;background:var(--paper)}
+.tbb-h{max-width:14ch;margin-bottom:8px}
+.tbb>.wrap{width:100%}
 /* site plan */
 .pl{background:var(--paper-2)}
 .pl-grid{display:grid;grid-template-columns:minmax(0,4fr) minmax(0,8fr);gap:clamp(28px,5vw,80px);align-items:start}

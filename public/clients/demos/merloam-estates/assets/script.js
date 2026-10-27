@@ -334,7 +334,7 @@
       var why = li ? $(".fzr-why", li).outerHTML : "";
       var wa = li ? $(".fzr-wa", li).href : "https://wa.me/" + WA;
       lastY = scrollY;
-      load(p.url).then(function (c) {
+      load(p.frag || p.url).then(function (c) {
         var big = p.img.replace(/-\d+\.webp$/, function (m) { return m; });
         if (li) $(".fzr-img img", li).style.viewTransitionName = "fz-hero";
         vt(function () {
