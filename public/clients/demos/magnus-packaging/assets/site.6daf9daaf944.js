@@ -40,6 +40,47 @@
   sweep();
   if (reduce) rvs.forEach(activate);
 
+  /* hero slideshow: crossfade, pause on hover/focus/hidden tab/off-screen, pause button, swipe */
+  safe(function () {
+    var hero = $("[data-hero]"); if (!hero) return;
+    var slides = $$(".hslide", hero), dots = $$(".hdot", hero), pauseBtn = $("[data-pause]", hero);
+    if (slides.length < 2) return;
+    var cur = 0, timer = null, userPaused = reduce, hover = false, focus = false, seen = true, delay = 5200;
+    function show(n) {
+      n = (n + slides.length) % slides.length; if (n === cur) return;
+      hero.classList.add("is-started");
+      slides[cur].classList.remove("is-on"); slides[cur].setAttribute("aria-hidden", "true"); slides[cur].tabIndex = -1;
+      dots[cur].classList.remove("is-on"); dots[cur].removeAttribute("aria-current");
+      cur = n;
+      slides[cur].classList.add("is-on"); slides[cur].removeAttribute("aria-hidden"); slides[cur].removeAttribute("tabindex");
+      dots[cur].classList.add("is-on"); dots[cur].setAttribute("aria-current", "true");
+    }
+    function stop() { if (timer) { clearTimeout(timer); timer = null; } }
+    function tick() { stop(); if (userPaused || hover || focus || !seen || d.hidden) return; timer = setTimeout(function () { show(cur + 1); tick(); }, delay); }
+    dots.forEach(function (b, i) { b.addEventListener("click", function () { show(i); tick(); }); });
+    function setPause(p) {
+      userPaused = p; pauseBtn.classList.toggle("is-paused", p);
+      var l = pauseBtn.getAttribute(p ? "data-play-l" : "data-pause-l"); pauseBtn.setAttribute("aria-label", l); tick();
+    }
+    pauseBtn.classList.toggle("is-paused", userPaused);
+    if (userPaused) pauseBtn.setAttribute("aria-label", pauseBtn.getAttribute("data-play-l"));
+    pauseBtn.addEventListener("click", function () { setPause(!userPaused); });
+    hero.addEventListener("mouseenter", function () { hover = true; stop(); });
+    hero.addEventListener("mouseleave", function () { hover = false; tick(); });
+    hero.addEventListener("focusin", function () { focus = true; stop(); });
+    hero.addEventListener("focusout", function () { focus = false; tick(); });
+    d.addEventListener("visibilitychange", tick);
+    if ("IntersectionObserver" in window) new IntersectionObserver(function (es) { seen = es[0].isIntersecting; tick(); }, { threshold: 0.25 }).observe(hero);
+    var x0 = null;
+    hero.addEventListener("touchstart", function (e) { x0 = e.touches[0].clientX; }, { passive: true });
+    hero.addEventListener("touchend", function (e) {
+      if (x0 === null) return; var dx = e.changedTouches[0].clientX - x0; x0 = null;
+      if (Math.abs(dx) > 40) { show(cur + (dx < 0 ? 1 : -1)); tick(); }
+    }, { passive: true });
+    window.addEventListener("load", function () { $$("img", hero).forEach(function (im) { im.loading = "eager"; }); tick(); });
+    tick();
+  });
+
   /* counters: real figures count up once when seen */
   var cnts = $$("[data-count]");
   function runCount(el) {
