@@ -45,7 +45,7 @@ section{min-width:0}
 /* concept dock: thin strip above the header, scrolls away, dismissible */
 .dock{display:flex;align-items:center;justify-content:center;gap:4px 14px;flex-wrap:wrap;background:var(--band);color:var(--ink-2);font-size:14px;line-height:1.35;padding:2px 52px 2px 16px;position:relative;text-align:center}
 .dock p{margin:0;padding:8px 0}
-@media (max-width:560px){.dock{font-size:14px;padding:0 48px 0 12px;gap:0 10px;justify-content:flex-start;text-align:left}.dock p{padding:6px 0}.dock a{display:none}}
+@media (max-width:560px){.dock{font-size:14px;padding:0 48px 0 12px;gap:0 10px;justify-content:flex-start;text-align:left}.dock p{padding:6px 0}aside.dock a{display:none}}
 .dock a{color:var(--ink-1);display:inline-flex;align-items:center;min-height:44px;min-width:44px}
 .dock button{position:absolute;right:4px;top:50%;transform:translateY(-50%);width:44px;height:44px;border:0;background:none;cursor:pointer;display:grid;place-items:center;color:var(--ink-2)}
 .dock.is-hidden{display:none}
