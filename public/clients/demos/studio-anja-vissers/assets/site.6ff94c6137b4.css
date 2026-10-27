@@ -622,3 +622,6 @@ body{padding-top:var(--note-h)}
 .pg-design-your-space .bar__b--tool{display:none}
 .pj-head>.wrap .h1,.phead .h1{margin-inline:auto}
 .dock{font-size:14px;letter-spacing:.02em}
+
+/* readability: hero eyebrow at 16px on every width */
+.hero .hero__eyebrow{font-size:16px}
