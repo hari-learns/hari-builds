@@ -1,0 +1,15 @@
+/* Tokens only. Their colours: charcoal #22221F / #1C1C1B, gold #B78F16 (--btn-yellow), grey #52514A, stone #B2B0A2, paper #F9F9F9. */
+@font-face{font-family:"Didact Gothic";src:local("Century Gothic"),url("fonts/DidactGothic-latin.woff2") format("woff2");font-weight:400;font-style:normal;font-display:swap}
+:root{
+  --ink:#22221f;--ink-2:#1c1c1b;--ink-3:#2e2e2a;--grey:#52514a;--muted:#5d5c55;--stone:#b2b0a2;
+  --paper:#f7f6f2;--paper-2:#efede6;--white:#ffffff;
+  --gold:#b78f16;--gold-hover:#c09516;--gold-text:#7d6110;--on-gold:#1c1c1b;
+  --on-ink:#f4f2ec;--on-ink-muted:#bdbab0;--line:#dcd9cf;--line-ink:#3d3c37;
+  --shade-0:#1c1c1b00;--shade-1:#1c1c1b8c;--shade-2:#1c1c1bd9;--veil:#1c1c1b40;
+  --font:"Century Gothic","Didact Gothic","URW Gothic",ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif;
+  --track-xl:.22em;--track-l:.16em;--track-s:.08em;
+  --ease:cubic-bezier(.2,.7,.1,1);--ease-out:cubic-bezier(.16,1,.3,1);
+  --gut:clamp(16px,4vw,48px);--maxw:1320px;
+  --s1:clamp(8px,1vw,12px);--s2:clamp(16px,2vw,24px);--s3:clamp(24px,3.4vw,44px);--s4:clamp(44px,6vw,88px);--s5:clamp(64px,10vw,150px);
+  --head-h:72px;--mbar-h:64px;
+}
