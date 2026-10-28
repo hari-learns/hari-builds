@@ -1,0 +1,12 @@
+:root{
+  --ink:#14181a; --ink-2:#1f2629; --paper:#f4f1eb; --paper-2:#ebe6dc; --white:#ffffff; --black:#0b0d0e;
+  --line:#d8d1c4; --line-dark:#323a3e;
+  --muted:#565d62; --muted-dark:#aab2b6;
+  --red:#cf2a1c; --red-hi:#ee3124; --red-dark:#a81f14; --red-text:#b3231a;
+  --bronze:#5e3d1b; --bronze-2:#7b5127; --bronze-ink:#f3e6d3; --bronze-line:#8f6a3f;
+  --green:#4c5a4b;
+  --f-sans:"Archivo",system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;
+  --f-mono:"DM Mono",ui-monospace,SFMono-Regular,Menlo,monospace;
+  --gutter:clamp(16px,4.5vw,48px); --max:1320px;
+  --hdr:64px; --bar:68px;
+}
