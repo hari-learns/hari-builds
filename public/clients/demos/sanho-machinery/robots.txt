@@ -1,0 +1,3 @@
+User-agent: *
+Disallow: /clients/
+Sitemap: https://hharan.site/clients/demos/sanho-machinery/sitemap.xml
