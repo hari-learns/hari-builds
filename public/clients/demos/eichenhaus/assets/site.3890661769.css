@@ -347,11 +347,11 @@ dialog::backdrop { background: color-mix(in srgb, var(--black) 82%, transparent)
 .bar .btn { flex: 1 1 0; min-height: 48px; padding: 0 12px; }
 .bar .btn-ghost { flex: 0 0 38%; }
 @media (min-width: 900px) { .bar { display: none; } body { padding-bottom: 0; } }
-.dock { position: fixed; left: 12px; right: 12px; bottom: calc(var(--bar-h) + 12px + env(safe-area-inset-bottom)); z-index: 45; display: flex; align-items: center; gap: 4px; background: var(--ink); color: var(--paper); border-radius: var(--r); padding-left: 14px; font-size: .875rem; line-height: 1.35; box-shadow: 0 8px 30px color-mix(in srgb, var(--black) 40%, transparent); max-width: 560px; }
-.dock p { margin: 0; padding: 8px 0; flex: 1; }
-.dock button { flex: none; width: 44px; height: 44px; background: transparent; border: 0; color: var(--paper); font-size: 1.4rem; cursor: pointer; }
+.dock { display: flex; align-items: center; gap: 4px; background: var(--ink); color: var(--paper); padding-left: var(--gut); font-size: .875rem; line-height: 1.35; }
+.dock p { margin: 0; padding: 6px 0; flex: 1; }
+.dock button { flex: none; width: 44px; height: 44px; background: transparent; border: 0; color: var(--paper); font-size: 1.5rem; cursor: pointer; }
 .dock[hidden] { display: none; }
-@media (min-width: 900px) { .dock { left: 16px; right: auto; bottom: 16px; } }
+
 
 /* reveal */
 .js .rv { opacity: 0; transform: translateY(20px); transition: opacity .8s var(--ease), transform .8s var(--ease); }
@@ -364,3 +364,8 @@ dialog::backdrop { background: color-mix(in srgb, var(--black) 82%, transparent)
 }
 
 .legal a, .small a, .contact p a { display: inline-flex; align-items: center; min-height: 44px; overflow-wrap: anywhere; }
+
+.deg { font-family: var(--text); font-weight: 500; font-size: .9em; letter-spacing: 0; }
+.f-top { position: sticky; top: calc(var(--hdr-h) + 6px); z-index: 30; display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 8px 12px; margin: 0 0 14px; background: var(--paper); border: 1px solid var(--line); border-radius: var(--r); box-shadow: 0 6px 18px color-mix(in srgb, var(--black) 10%, transparent); }
+.f-top span { font: 500 1.05rem/1.2 var(--display); }
+.f-bar { scroll-margin-top: calc(var(--hdr-h) + 80px); }

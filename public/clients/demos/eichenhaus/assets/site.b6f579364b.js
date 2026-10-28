@@ -129,6 +129,7 @@
     var q = new URLSearchParams(location.search);
     function build() {
       root.innerHTML =
+        '<div class="f-top"><span class="f-topcount" aria-hidden="true"></span><button class="btn btn-sm" type="button" data-jump>Treffer ansehen</button></div>' +
         '<fieldset class="f-step"><legend><span>1</span>Was soll entstehen?</legend><div class="chips" data-k="room"></div></fieldset>' +
         '<fieldset class="f-step"><legend><span>2</span>Welches Holz oder welche Oberfläche?</legend><div class="chips" data-k="wood"></div></fieldset>' +
         '<fieldset class="f-step"><legend><span>3</span>Welcher Charakter gefällt Ihnen?</legend><div class="chips" data-k="ch"></div></fieldset>' +
@@ -160,6 +161,7 @@
       });
       var res = D.items.filter(function (it) { return match(it); });
       $(".f-count", root).textContent = res.length + (res.length === 1 ? " Projekt" : " Projekte") + " aus der Werkstatt" + (st.room || st.wood || st.ch ? " passen zu Ihrer Auswahl" : "");
+      $(".f-topcount", root).textContent = res.length + (res.length === 1 ? " Projekt" : " Projekte");
       $("[data-reset]", root).hidden = !(st.room || st.wood || st.ch);
       var grid = $(".f-grid", root), roomName = {};
       D.rooms.forEach(function (r) { roomName[r.id] = r.t; });
@@ -257,6 +259,7 @@
         var again = $('.chip[data-k="' + k + '"][data-id="' + id + '"]', root); if (again) again.focus();
         return;
       }
+      if (t.matches("[data-jump]")) { var g = $(".f-bar", root); if (g) g.scrollIntoView({ behavior: matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth", block: "start" }); return; }
       if (t.matches("[data-reset]")) { st.room = st.wood = st.ch = null; st.shown = limit; render(); return; }
       if (t.matches("[data-more]")) { st.shown += step; render(); return; }
       if (t.matches("[data-pick]")) { var id2 = t.getAttribute("data-pick"); pick(id2); var nb = $('[data-pick="' + id2 + '"]', root); if (nb) nb.focus(); return; }
