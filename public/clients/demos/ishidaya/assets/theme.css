@@ -1,0 +1,11 @@
+/* colour tokens only. Sources: dusk indigo + lantern amber from the inn's own night photo, plum/brown/charcoal from its printed pamphlet */
+:root{
+  --ink:#14111c; --ink-2:#1d1a2a; --ink-3:#2a2640; --night:#0e0c15;
+  --cream:#f4ece0; --muted:#bdb4c8; --amber:#e8b65c; --amber-hi:#f2c878; --on-amber:#1c1208;
+  --paper:#f5efe4; --paper-2:#ebe2d1; --paper-3:#dfd3bd; --paper-ink:#1c1822; --paper-muted:#5b5047; --paper-accent:#7a4a1f;
+  --iris:#a28fdb;
+  --c-sakura:#d98fae; --c-iris:#7e68c0; --c-pool:#3e9ac4; --c-momiji:#c4492f;
+  --line-d:rgba(244,236,222,.2); --line-p:rgba(28,24,34,.18);
+  --scrim:rgba(14,12,21,.62); --scrim-hdr:rgba(20,17,28,.94); --shadow:rgba(14,12,21,.28);
+  --pin:rgba(232,150,40,.78); --pin-ring:rgba(122,74,31,.95); --white:#ffffff;
+}
