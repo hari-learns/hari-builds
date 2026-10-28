@@ -860,3 +860,5 @@ em { font-style: normal; color: var(--indigo); }
 .stage__pp:hover::before, .mq__pp:hover::before, .copy:hover::before, .stage__pp:focus-visible::before, .copy:focus-visible::before { transform: scaleY(1); }
 .stage__pp[data-pressed], .copy[data-pressed] { transform: scale(.98); }
 @media (prefers-reduced-motion: reduce) { .btn::before, .stage__pp::before, .mq__pp::before, .copy::before { transition: none !important; } .btn, .stage__pp, .copy { transition: none !important; } }
+.btn.hdr__cta { display: none; }
+@media (min-width: 1280px) { .btn.hdr__cta { display: inline-flex; } }
