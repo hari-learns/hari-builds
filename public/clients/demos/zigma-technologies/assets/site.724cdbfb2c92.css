@@ -834,3 +834,29 @@ em { font-style: normal; color: var(--indigo); }
 .tbbdlg__big span { overflow-wrap: anywhere; }
 @media (hover: hover) { .tbbdlg__big:hover { border-color: var(--indigo); box-shadow: var(--sh-hover); } }
 .tbbdlg__addr { font-size: .9375rem; color: var(--ink-2); }
+
+/* ================= buttons: square, mono, fill-wipe (house system after hexp.studio) ================= */
+.btn { --fill: var(--paper); --tx-h: var(--indigo); position: relative; overflow: hidden; isolation: isolate; display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+  min-height: 44px; padding: 0 20px; border: 0; border-radius: 0; background: var(--indigo); color: var(--paper); box-shadow: none;
+  font: 500 .875rem/1 var(--f-mono); letter-spacing: .04em; text-transform: none; transform: none;
+  transition: color .35s cubic-bezier(.25, .46, .45, .94), box-shadow .35s cubic-bezier(.25, .46, .45, .94), transform .5s cubic-bezier(.16, 1, .3, 1); }
+.btn::before { content: ""; position: absolute; inset: 0; z-index: -1; background: var(--fill); transform: scaleY(0); transform-origin: bottom; transition: transform .45s cubic-bezier(.16, 1, .3, 1); }
+.btn:hover::before, .btn:focus-visible::before { transform: scaleY(1); }
+.btn:hover, .btn:focus-visible { color: var(--tx-h); background: var(--indigo); border-color: transparent; box-shadow: inset 0 0 0 1px var(--indigo); }
+.btn:active { transform: scale(.98); }
+.btn[data-pressed] { transform: scale(.98); box-shadow: none; }
+.btn--ghost { --fill: var(--ink); --tx-h: var(--paper); background: transparent; color: var(--ink); box-shadow: inset 0 0 0 1px var(--line-2); }
+.btn--ghost:hover, .btn--ghost:focus-visible { background: transparent; color: var(--paper); box-shadow: inset 0 0 0 1px var(--ink); }
+.btn .i { width: 16px; height: 16px; }
+.hero__cta .btn, .genq .btn, .tbbdlg .btn, .fo__send { min-height: 52px; padding: 0 28px; font-size: .9375rem; }
+.theme-deep .btn { --fill: var(--deep); --tx-h: var(--on-deep); background: var(--on-deep); color: var(--deep); box-shadow: none; }
+.theme-deep .btn:hover, .theme-deep .btn:focus-visible { background: var(--on-deep); color: var(--on-deep); box-shadow: inset 0 0 0 1px var(--on-deep); }
+.theme-deep .btn--ghost { --fill: var(--on-deep); --tx-h: var(--deep); background: transparent; color: var(--on-deep); box-shadow: inset 0 0 0 1px var(--deep-line); }
+.theme-deep .btn--ghost:hover, .theme-deep .btn--ghost:focus-visible { background: transparent; color: var(--deep); box-shadow: inset 0 0 0 1px var(--on-deep); }
+.btn:focus-visible { outline: 2px solid var(--cyan-ink); outline-offset: 3px; }
+.stage__pp, .mq__pp, .copy { position: relative; overflow: hidden; isolation: isolate; border-radius: 0; box-shadow: inset 0 0 0 1px var(--line-2); border: 0; transition: color .35s cubic-bezier(.25, .46, .45, .94); }
+.stage__pp::before, .mq__pp::before, .copy::before { content: ""; position: absolute; inset: 0; z-index: -1; background: var(--ink); transform: scaleY(0); transform-origin: bottom; transition: transform .45s cubic-bezier(.16, 1, .3, 1); }
+.stage__pp:hover, .mq__pp:hover, .copy:hover, .stage__pp:focus-visible, .copy:focus-visible { color: var(--paper); }
+.stage__pp:hover::before, .mq__pp:hover::before, .copy:hover::before, .stage__pp:focus-visible::before, .copy:focus-visible::before { transform: scaleY(1); }
+.stage__pp[data-pressed], .copy[data-pressed] { transform: scale(.98); }
+@media (prefers-reduced-motion: reduce) { .btn::before, .stage__pp::before, .mq__pp::before, .copy::before { transition: none !important; } .btn, .stage__pp, .copy { transition: none !important; } }
