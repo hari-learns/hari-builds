@@ -97,7 +97,7 @@
     }
     function matches(s) {
       var all = D.projects.map(function (p) { return { t: p.t, cfg: p.cfg, f: p.f, ty: p.ty, u: p.u, im: p.im, c: p.c, m: p.m }; })
-        .concat(D.recent.map(function (r) { return { t: r.t, cfg: r.cfg, f: r.f, ty: r.ty, u: "", im: "", c: r.cl ? "Client: " + r.cl : "", m: "Announced 2026", recent: true }; }));
+        .concat(D.recent.map(function (r) { return { t: r.t, cfg: r.cfg, f: r.f, ty: r.ty, u: "", im: "", c: r.cl ? "Client: " + r.cl : "", m: "Appointed 2026 (announced on LinkedIn)", recent: true }; }));
       all.forEach(function (p) { p.score = Math.abs(p.f - s.f) + (s.ty ? (p.ty === s.ty ? -0.4 : 0.6) : 0); });
       all.sort(function (a, b) { return a.score - b.score; });
       return all.slice(0, 3);
@@ -125,10 +125,10 @@
         var m = matches(s), cmp = '<div class="cmp">' + stack({ f: s.f, g: 1, p: 0, b: 0, roof: 1 }, s.f, "You", true);
         m.forEach(function (p, i) { var o = p.cfg ? parse(p.cfg) : { f: p.f, g: 1 }; cmp += stack(o, p.f, "#" + (i + 1), false); });
         cmp += "</div>";
-        var html = cmp;
+        var html = cmp + '<p class="note">Each bar is one floor. Outlined bar: your building. Tan: ground and roof. Dashed: basements. Projects marked "Appointed 2026" are announced, not necessarily completed.</p>';
         m.forEach(function (p, i) {
           var diff = p.f === s.f ? "same height" : (Math.abs(p.f - s.f) + (Math.abs(p.f - s.f) === 1 ? " floor " : " floors ") + (p.f > s.f ? "taller" : "lower"));
-          var inner = (p.im ? '<img src="' + esc(p.im) + '" alt="' + esc(p.t) + ' (image from Ideal)" width="96" height="72" loading="lazy">' : '<span class="noimg">+' + p.f + '</span>') +
+          var inner = (p.im ? '<img src="' + esc(p.im) + '" alt="' + esc(p.t) + ' (image from Ideal)" width="96" height="72" loading="lazy">' : '<span class="noimg">' + p.f + ' fl.</span>') +
             '<div><b>#' + (i + 1) + " " + esc(p.t) + '</b><span class="mono">' + esc(p.cfg || "") + " · " + diff + '</span><span>' + esc(p.recent ? [p.c, p.m].filter(Boolean).join(" · ") : [p.c ? "Consultant: " + p.c : "", p.m ? "Main contractor: " + p.m : ""].filter(Boolean).join(" · ")) + '</span></div>';
           html += p.u ? '<a class="mcard" href="' + esc(p.u) + '">' + inner + '</a>' : '<div class="mcard">' + inner + '</div>';
         });
