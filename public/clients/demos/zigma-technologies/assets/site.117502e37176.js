@@ -225,7 +225,7 @@
     var NAVY = col("--indigo", "#2d2f91"), RED = col("--red", "#ec1b23");
     var D, S, N, phone, CW = 0, CH = 0, dpr = Math.min(2, window.devicePixelRatio || 1), cams = {}, origin = [0, 0];
     var pos = [], from = [], to = [], delay = [], shapeNow = 0, edgeShape = 0, ea = 0, z = 0, tnP = 0, inP = 0;
-    var running = false, visible = true, why = {}, last = 0, seed = 7, districts = [], maxR = 1, indiaR = 1;
+    var running = false, visible = true, why = {}, last = 0, seed = 7, maxR = 1, indiaR = 1, mp = 1;
     function rnd() { seed = (seed * 16807) % 2147483647; return seed / 2147483647; }
     function deg2box(lon, y) { return [(lon - S.geo.lon0) / S.geo.lonSpan * 1000, (S.geo.lat0 + y) / S.geo.latSpan * 1250]; }
     function size() {
@@ -288,6 +288,7 @@
       var step = STEPS[si];
       st += dt;
       var p = Math.min(1, st / step.d);
+      mp = step.t === "morph" || step.t === "morphzoom" ? p : 1;
       if (step.t === "morph" || step.t === "morphzoom") { morphAt(p); ea = Math.max(0, 1 - p / .14); }
       else { if (edgeShape !== shapeNow) { edgeShape = shapeNow; ea = 0; } ea = Math.min(1, ea + dt / 320); }
       if (step.t === "zoom") z = p;
@@ -311,23 +312,30 @@
       if (shapeNow === 4 && sh.arcs) pulses.push({ arc: sh.arcs[Math.floor(rnd() * sh.arcs.length)], t0: tnow, d: 2000 });
       else if (shapeNow !== 3 && sh.e.length) { var ed = sh.e[Math.floor(rnd() * sh.e.length)]; pulses.push({ a: ed[0], b: ed[1], t0: tnow, d: 650 }); }
     }
+    function lines(c, list, alpha, width) {
+      /* a deduplicated mesh: every border once, thin and light */
+      ctx.globalAlpha = alpha; ctx.strokeStyle = NAVY; ctx.lineWidth = width; ctx.lineJoin = "round"; ctx.lineCap = "round"; ctx.beginPath();
+      list.forEach(function (ln) {
+        ctx.moveTo(c.ox + ln[0] * c.k, c.oy + ln[1] * c.k);
+        for (var n = 2; n < ln.length; n += 2) ctx.lineTo(c.ox + ln[n] * c.k, c.oy + ln[n + 1] * c.k);
+      });
+      ctx.stroke();
+    }
+    function reveal(c, r) { ctx.beginPath(); ctx.arc(c.ox + origin[0] * c.k, c.oy + origin[1] * c.k, Math.max(0.1, r * c.k), 0, 6.2832); ctx.clip(); }
     function drawMap(c) {
-      /* their district map, traced: exact curves, revealed outward from Tamil Nadu */
-      var T = D.tnT, s = c.k * T[2];
-      ctx.save();
-      ctx.beginPath(); ctx.arc(c.ox + origin[0] * c.k, c.oy + origin[1] * c.k, Math.max(0.1, ease3(tnP) * maxR * c.k * 1.05), 0, 6.2832); ctx.clip();
-      ctx.setTransform(dpr * s, 0, 0, dpr * s, dpr * (c.ox + T[0] * c.k), dpr * (c.oy + T[1] * c.k));
-      ctx.globalAlpha = Math.min(1, tnP * 1.4); ctx.strokeStyle = NAVY; ctx.lineWidth = (phone ? 1 : 1.1) / s; ctx.lineJoin = "round";
-      districts.forEach(function (p2) { ctx.stroke(p2); });
+      /* Tamil Nadu: district partitions light, state outline one notch stronger, drawn in outward from Tamil Nadu */
+      var a = Math.min(1, tnP * 1.4), zf = 1 - .55 * ease3(z);
+      ctx.save(); reveal(c, ease3(tnP) * maxR * 1.05);
+      lines(c, D.tn_mesh.inner, a * .42 * zf, phone ? .8 : .9);
+      lines(c, D.tn_mesh.outline, a * .72, phone ? 1 : 1.1);
       ctx.restore();
-      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
     }
     function drawIndia(c) {
-      ctx.save();
-      ctx.beginPath(); ctx.arc(c.ox + origin[0] * c.k, c.oy + origin[1] * c.k, Math.max(0.1, ease3(inP) * indiaR * 1.04 * c.k), 0, 6.2832); ctx.clip();
-      ctx.globalAlpha = Math.min(1, inP * 1.4); ctx.strokeStyle = NAVY; ctx.lineWidth = 1.1; ctx.lineJoin = "round"; ctx.beginPath();
-      D.india_line.forEach(function (q, n) { var x = c.ox + q[0] * c.k, y = c.oy + q[1] * c.k; if (n) ctx.lineTo(x, y); else ctx.moveTo(x, y); });
-      ctx.closePath(); ctx.stroke(); ctx.restore();
+      var a = Math.min(1, inP * 1.4);
+      ctx.save(); reveal(c, ease3(inP) * indiaR * 1.04);
+      lines(c, D.india_mesh.inner, a * .34, phone ? .7 : .8);
+      lines(c, D.india_mesh.outline, a * .62, phone ? .9 : 1);
+      ctx.restore();
     }
     function draw(tnow) {
       var c = cam(), t = tnow / 1000;
@@ -338,7 +346,7 @@
       var sh = S.shapes[shapeNow], esh = edgeShape >= 0 ? S.shapes[edgeShape] : null;
       if (esh && ea > 0.01 && esh.e.length) {
         ctx.globalAlpha = ea * (edgeShape === 4 ? .5 : .66); ctx.strokeStyle = NAVY; ctx.lineWidth = 1; ctx.beginPath();
-        esh.e.forEach(function (ed) { var a = pos[ed[0]], b = pos[ed[1]]; ctx.moveTo(X(a[0]), Y(a[1])); ctx.lineTo(X(b[0]), Y(b[1])); });
+        esh.e.forEach(function (ed) { var a = pos[ed[0]], b = pos[ed[1]]; if (!a || !b) { if (!W.__zgw) { W.__zgw = 1; console.warn("[hero] edge", edgeShape, shapeNow, pos.length, si); } return; } ctx.moveTo(X(a[0]), Y(a[1])); ctx.lineTo(X(b[0]), Y(b[1])); });
         ctx.stroke();
       }
       var small = phone ? 1.3 : 1.2, big = phone ? 2.7 : 2.5, shrink = 1 - .4 * ease3(z);
@@ -350,8 +358,13 @@
           if (al < .02) continue;
           ctx.globalAlpha = al; ctx.fillStyle = NAVY; ctx.beginPath(); ctx.arc(x, y, small * shrink, 0, 6.2832); ctx.fill();
         } else {
-          var f = fxScale(i, role, t, pos[i][0]);
-          ctx.globalAlpha = f < 1 ? .35 : 1; ctx.fillStyle = RED; ctx.beginPath(); ctx.arc(x, y, big * Math.max(1, f) * shrink, 0, 6.2832); ctx.fill();
+          /* red nodes only once their shape has formed: Tamil Nadu dots pop in after the boundaries draw, outward;
+             India's arc ends after its outline; device features at the end of the morph. Never during a morph. */
+          var show = shapeNow === 3 ? Math.max(0, Math.min(1, (tnP - .5 - (delay[i] || 0) * .35) / .15))
+            : shapeNow === 4 ? Math.max(0, Math.min(1, (inP - .55) / .25)) : Math.max(0, Math.min(1, (mp - .86) / .14));
+          if (show <= 0) continue;
+          var f = fxScale(i, role, t, pos[i][0]), pop = show < 1 ? .6 + .4 * show + .25 * Math.sin(show * 3.1416) : 1;
+          ctx.globalAlpha = (f < 1 ? .35 : 1) * show; ctx.fillStyle = RED; ctx.beginPath(); ctx.arc(x, y, (shapeNow === 3 ? 2.6 : big) * Math.max(1, f) * pop * shrink, 0, 6.2832); ctx.fill();
         }
       }
       ctx.fillStyle = RED;
@@ -399,10 +412,9 @@
     window.addEventListener("resize", function () { clearTimeout(rs); rs = setTimeout(function () { if (!S) return; size(); if (!running) draw(performance.now()); }, 120); }, { passive: true });
     fetch(cv.getAttribute("data-src")).then(function (r) { return r.json(); }).then(function (data) {
       D = data; phone = top.getBoundingClientRect().width < 700; S = phone ? D.p : D.d; N = S.n;
-      districts = D.districts.map(function (x) { return new Path2D(x.d); });
       origin = deg2box(79.9, -12.4);
       var tp = pts(3); maxR = Math.max.apply(null, tp.map(function (q) { return Math.hypot(q[0] - origin[0], q[1] - origin[1]); }));
-      indiaR = Math.max.apply(null, D.india_line.map(function (q) { return Math.hypot(q[0] - origin[0], q[1] - origin[1]); }));
+      D.india_mesh.outline.forEach(function (ln) { for (var n = 0; n < ln.length; n += 2) indiaR = Math.max(indiaR, Math.hypot(ln[n] - origin[0], ln[n + 1] - origin[1])); });
       size();
       if (RM) { pos = pts(0); shapeNow = 0; edgeShape = 0; ea = 1; draw(0); return; }
       whenIntroDone(function () {
