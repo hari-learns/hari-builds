@@ -1,3 +1,0 @@
-User-agent: *
-Allow: /
-Sitemap: https://hharan.site/clients/demos/hyllen-co/sitemap.xml
