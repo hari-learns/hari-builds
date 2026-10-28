@@ -1,0 +1,14 @@
+BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:-//Eichenhaus//Tag des Schreiners//DE
+BEGIN:VEVENT
+UID:tds-2026@eichenhaus.de
+DTSTAMP:20261028T120000Z
+DTSTART;TZID=Europe/Berlin:20261107T110000
+DTEND;TZID=Europe/Berlin:20261107T170000
+RRULE:FREQ=DAILY;COUNT=2
+SUMMARY:Tag des Schreiners im Eichenhaus
+LOCATION:Am Mühlfeld 4\, 63846 Laufach
+DESCRIPTION:Hausmesse mit Spessartholz-Entdeckertour um 14 Uhr\, Beratung\, Selbst schreinern und Abverkaeufen.
+END:VEVENT
+END:VCALENDAR
