@@ -1,0 +1,26 @@
+/* Tokens only: KAM Design palette from their site.css (#9496b3 lavender, rgba(85,83,116) deep lavender, #272727 / #3e3e3e ink) */
+@font-face { font-family: Figtree; font-weight: 300; font-style: normal; font-display: swap; src: url(fonts/figtree-300.woff2) format("woff2"); }
+@font-face { font-family: Figtree; font-weight: 400; font-style: normal; font-display: swap; src: url(fonts/figtree-400.woff2) format("woff2"); }
+@font-face { font-family: Figtree; font-weight: 500; font-style: normal; font-display: swap; src: url(fonts/figtree-500.woff2) format("woff2"); }
+:root {
+  --lav: #9496b3;
+  --lav-deep: #555374;
+  --lav-ink: #46445f;
+  --lav-soft: #e9e9f1;
+  --ink: #272727;
+  --body: #3e3e3e;
+  --muted: #5f5f6b;
+  --paper: #ffffff;
+  --mist: #f6f6f8;
+  --on-dark: #ffffff;
+  --veil: rgba(39, 39, 39, .58);
+  --veil-2: rgba(39, 39, 39, .0);
+  --shade: rgba(39, 39, 39, .08);
+  --font: Figtree, "Effra", "Helvetica Neue", Arial, sans-serif;
+  --ease: cubic-bezier(.2, .7, .1, 1);
+  --gut: clamp(16px, 4vw, 56px);
+  --max: 1240px;
+  --head-h: 76px;
+  --bar-h: 0px;
+}
+@media (max-width: 959px) { :root { --head-h: 64px; --bar-h: 64px; } }
