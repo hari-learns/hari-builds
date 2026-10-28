@@ -326,7 +326,7 @@
       /* Tamil Nadu: district partitions light, state outline one notch stronger, drawn in outward from Tamil Nadu */
       var a = Math.min(1, tnP * 1.4), zf = 1 - .55 * ease3(z);
       ctx.save(); reveal(c, ease3(tnP) * maxR * 1.05);
-      lines(c, D.tn_mesh.inner, a * .42 * zf, phone ? .8 : .9);
+      lines(c, D.tn_mesh.inner, a * .42 * Math.max(0, 1 - 1.6 * ease3(z)), phone ? .8 : .9);
       lines(c, D.tn_mesh.outline, a * .72, phone ? 1 : 1.1);
       ctx.restore();
     }
@@ -345,8 +345,8 @@
       if (inP > 0.005) drawIndia(c);
       var sh = S.shapes[shapeNow], esh = edgeShape >= 0 ? S.shapes[edgeShape] : null;
       if (esh && ea > 0.01 && esh.e.length) {
-        ctx.globalAlpha = ea * (edgeShape === 4 ? .5 : .66); ctx.strokeStyle = NAVY; ctx.lineWidth = 1; ctx.beginPath();
-        esh.e.forEach(function (ed) { var a = pos[ed[0]], b = pos[ed[1]]; if (!a || !b) { if (!W.__zgw) { W.__zgw = 1; console.warn("[hero] edge", edgeShape, shapeNow, pos.length, si); } return; } ctx.moveTo(X(a[0]), Y(a[1])); ctx.lineTo(X(b[0]), Y(b[1])); });
+        ctx.globalAlpha = ea * (edgeShape === 4 ? .35 : .66); ctx.strokeStyle = NAVY; ctx.lineWidth = 1; ctx.beginPath();
+        esh.e.forEach(function (ed) { var a = pos[ed[0]], b = pos[ed[1]]; if (!a || !b) { return; } ctx.moveTo(X(a[0]), Y(a[1])); ctx.lineTo(X(b[0]), Y(b[1])); });
         ctx.stroke();
       }
       var small = phone ? 1.3 : 1.2, big = phone ? 2.7 : 2.5, shrink = 1 - .4 * ease3(z);
@@ -363,6 +363,7 @@
           var show = shapeNow === 3 ? Math.max(0, Math.min(1, (tnP - .5 - (delay[i] || 0) * .35) / .15))
             : shapeNow === 4 ? Math.max(0, Math.min(1, (inP - .55) / .25)) : Math.max(0, Math.min(1, (mp - .86) / .14));
           if (show <= 0) continue;
+          if (role === 5) { var kf = fxScale(i, role, t, pos[i][0]); ctx.globalAlpha = .38 * show; ctx.fillStyle = NAVY; ctx.beginPath(); ctx.arc(x, y, big * .8 * kf * shrink, 0, 6.2832); ctx.fill(); continue; }
           var f = fxScale(i, role, t, pos[i][0]), pop = show < 1 ? .6 + .4 * show + .25 * Math.sin(show * 3.1416) : 1;
           ctx.globalAlpha = (f < 1 ? .35 : 1) * show; ctx.fillStyle = RED; ctx.beginPath(); ctx.arc(x, y, (shapeNow === 3 ? 2.6 : big) * Math.max(1, f) * pop * shrink, 0, 6.2832); ctx.fill();
         }
