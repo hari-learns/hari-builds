@@ -1,0 +1,11 @@
+:root{
+ --paper:#faf7f2;--paper-2:#f1ebe2;--white:#ffffff;--ink:#1d1a19;--ink-2:#2b2726;
+ --muted:#5c5551;--line:#ddd3c6;--red:#a3161c;--red-lo:#7d1015;--red-tint:#f7e4e3;
+ --grey:#4a4745;--on-dark:#f7f2eb;--on-dark-muted:#cfc5ba;--wa:#14753f;--ok:#14753f;
+ --serif:"Newsreader",Georgia,"Times New Roman",serif;--sans:"Hanken Grotesk",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+ --r:14px;--r-lg:22px;--shadow:0 1px 2px rgba(29,26,25,.06),0 10px 30px -12px rgba(29,26,25,.25);
+}
+:root{--scrim:rgba(20,17,16,.6);--scrim-2:rgba(20,17,16,.25);--hero-l:linear-gradient(90deg,rgba(20,17,16,.86) 0%,rgba(20,17,16,.55) 45%,rgba(20,17,16,.05) 100%);--hero-b:linear-gradient(0deg,rgba(20,17,16,.7),rgba(20,17,16,0) 45%);--glass:rgba(255,255,255,.96);--line-dark:rgba(255,255,255,.18);}
+@font-face{font-family:"Newsreader";font-style:normal;font-weight:300 500;font-display:swap;src:url(fonts/Newsreader-normal-300-500.woff2) format("woff2")}
+@font-face{font-family:"Newsreader";font-style:italic;font-weight:300 500;font-display:swap;src:url(fonts/Newsreader-italic-300-500.woff2) format("woff2")}
+@font-face{font-family:"Hanken Grotesk";font-style:normal;font-weight:400 600;font-display:swap;src:url(fonts/HankenGrotesk-normal-400-600.woff2) format("woff2")}

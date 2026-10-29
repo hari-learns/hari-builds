@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://hexp.studio/clients/demos/bhatnagars-real-estate/sitemap.xml

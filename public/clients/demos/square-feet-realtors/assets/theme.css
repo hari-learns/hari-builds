@@ -1,0 +1,33 @@
+/* tokens only: red and blue from their logo (#ed1c24, #0095da) deepened for text contrast, a deep ink, warm paper */
+:root {
+  --ink: #0f1a26;
+  --ink-2: #172636;
+  --ink-3: #22364a;
+  --red: #ed1c24;
+  --red-deep: #c4121a;
+  --red-lo: #9e0d13;
+  --blue: #0095da;
+  --blue-deep: #00659a;
+  --blue-soft: #e5f4fb;
+  --paper: #f8f6f2;
+  --paper-2: #efece6;
+  --white: #ffffff;
+  --line: #ded9d0;
+  --muted: #55606b;
+  --on-dark: #f3f6f9;
+  --on-dark-muted: #b9c6d2;
+  --wa: #0b7a45;
+  --ok: #17673f;
+  --warn: #8a3b12;
+  --gold: #e8b64a;
+  --font-display: "Newsreader", Georgia, "Times New Roman", serif;
+  --font-body: "Hanken Grotesk", system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+  --gutter: clamp(16px, 4.5vw, 44px);
+  --maxw: 1240px;
+  --radius: 10px;
+  --radius-lg: 18px;
+  --ease: cubic-bezier(.22, .8, .24, 1);
+  --shadow: 0 1px 2px rgba(15, 26, 38, .06), 0 10px 30px -14px rgba(15, 26, 38, .3);
+  --shadow-lg: 0 30px 80px -30px rgba(15, 26, 38, .6);
+  --header-h: 68px;
+}

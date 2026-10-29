@@ -1,0 +1,8 @@
+:root{
+--ink:#0e0f11;--ink-2:#181a1d;--paper:#f7f3ec;--paper-2:#eee8dc;--white:#ffffff;
+--muted:#5b564d;--gold:#d2ab52;--gold-ink:#7a5815;--on-dark:#f4efe6;--on-dark-muted:#b9b2a4;
+--wa:#146c3b;--ok:#146c3b;--danger:#9b2c2c;
+--line:rgba(14,15,17,.14);--line-dark:rgba(244,239,230,.18);--scrim:rgba(14,15,17,.72);--glass:rgba(14,15,17,.55);
+--shadow:0 18px 40px -18px rgba(14,15,17,.35);
+--f-display:"Newsreader",Georgia,"Times New Roman",serif;--f-body:"Hanken Grotesk",system-ui,-apple-system,"Segoe UI",sans-serif;
+}
