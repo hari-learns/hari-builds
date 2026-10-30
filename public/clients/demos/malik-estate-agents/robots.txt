@@ -1,3 +1,0 @@
-User-agent: *
-Allow: /
-Sitemap: https://hexp.studio/clients/demos/malik-estate-agents/sitemap.xml
